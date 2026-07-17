@@ -31,7 +31,14 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip setuptools
-          pip install -r requirements.txt
+          # nfl_data_py 0.3.3 hard-pins pandas<2.0,numpy<2.0 (no prebuilt
+          # wheel for Python 3.12 -- forces a broken source build). Its
+          # actual code only needs numpy/pandas/appdirs at import time, and
+          # works fine on modern versions (verified against a clean venv
+          # matching this runner) -- so install it with --no-deps and supply
+          # modern versions of everything it actually needs ourselves.
+          pip install --no-deps nfl_data_py
+          pip install pandas numpy pyarrow scikit-learn scipy requests appdirs
 
       - name: Generate predictions
         working-directory: scripts

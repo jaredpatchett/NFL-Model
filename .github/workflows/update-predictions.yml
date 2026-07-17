@@ -1,0 +1,50 @@
+name: Update NFL Lines Predictions
+
+# Runs on a schedule during the season, plus lets you trigger it manually.
+# Mirrors the wc-7-dashboard cron pattern, but as its own independent
+# workflow in its own repo -- see README's "fully independent project" note.
+#
+# Cadence: Tue/Wed/Thu/Fri at 13:00 UTC. Lines move most in the days after a
+# week's games post and settle by kickoff, so a few updates a week during
+# that window is enough -- there's no live in-game element to this model.
+# Adjust the cron below if you want tighter coverage close to kickoff.
+on:
+  schedule:
+    - cron: "0 13 * * 2,3,4,5"
+  workflow_dispatch: {}  # manual "Run workflow" button in the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  update-predictions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip setuptools
+          pip install -r requirements.txt
+
+      - name: Generate predictions
+        working-directory: scripts
+        run: python generate_predictions.py
+
+      - name: Commit and push if data changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/nfl_lines.json data/nfl_lines.js
+          if git diff --cached --quiet; then
+            echo "No changes to predictions -- nothing to commit."
+          else
+            git commit -m "Auto-update NFL lines predictions [skip ci]"
+            git push
+          fi

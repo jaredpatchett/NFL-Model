@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-28T15:10:43.980347+00:00",
+  "generated_at": "2026-07-29T15:03:41.175379+00:00",
   "season": 2026,
   "week": 1,
   "model_notes": {
@@ -24,14 +24,14 @@
       "market": {
         "spread_line": 3.5,
         "total_line": 44.5,
-        "home_moneyline": -192.0,
-        "away_moneyline": 160.0,
-        "home_implied_prob": 0.6575
+        "home_moneyline": -198.0,
+        "away_moneyline": 164.0,
+        "home_implied_prob": 0.6644
       },
       "edges": {
         "spread_edge": 2.44,
         "total_edge": 3.59,
-        "moneyline_edge": 0.0168
+        "moneyline_edge": 0.0099
       }
     },
     {
@@ -124,14 +124,14 @@
       "market": {
         "spread_line": 7.0,
         "total_line": 49.5,
-        "home_moneyline": -325.0,
-        "away_moneyline": 260.0,
-        "home_implied_prob": 0.7647
+        "home_moneyline": -310.0,
+        "away_moneyline": 250.0,
+        "home_implied_prob": 0.7561
       },
       "edges": {
         "spread_edge": -1.59,
         "total_edge": -0.82,
-        "moneyline_edge": -0.1052
+        "moneyline_edge": -0.0965
       }
     },
     {
@@ -249,14 +249,14 @@
       "market": {
         "spread_line": 3.0,
         "total_line": 38.5,
-        "home_moneyline": -148.0,
-        "away_moneyline": 124.0,
-        "home_implied_prob": 0.5968
+        "home_moneyline": -155.0,
+        "away_moneyline": 130.0,
+        "home_implied_prob": 0.6078
       },
       "edges": {
         "spread_edge": -0.53,
         "total_edge": 3.24,
-        "moneyline_edge": -0.0223
+        "moneyline_edge": -0.0333
       }
     },
     {
@@ -299,14 +299,14 @@
       "market": {
         "spread_line": 3.5,
         "total_line": 40.5,
-        "home_moneyline": -198.0,
-        "away_moneyline": 164.0,
-        "home_implied_prob": 0.6644
+        "home_moneyline": -205.0,
+        "away_moneyline": 170.0,
+        "home_implied_prob": 0.6721
       },
       "edges": {
         "spread_edge": -4.46,
         "total_edge": 4.3,
-        "moneyline_edge": -0.1934
+        "moneyline_edge": -0.2011
       }
     },
     {

@@ -114,11 +114,17 @@ def load_id_crosswalk() -> pd.DataFrame:
     snap counts) and other ID systems. Needed because nflverse snap counts are keyed
     by Pro-Football-Reference ID, not GSIS ID — without this crosswalk, any merge of
     snap counts onto play-by-play-derived features silently matches nothing.
+
+    Also carries `team` -- this is a fantasy-community-maintained player
+    database, updated with current-season signings/trades/rookies well before
+    nflverse's own roster/pbp data exists for that season. Used by
+    player_td_features.py to correct a candidate player's team for a season
+    that hasn't started yet (2026 rosters aren't in nflverse at all pre-kickoff).
     """
     def _fetch(_seasons=None):
         _require_nfl()
         df = nfl.import_ids()
-        df = df[["gsis_id", "pfr_id", "name", "position"]].dropna(
+        df = df[["gsis_id", "pfr_id", "name", "position", "team"]].dropna(
             subset=["gsis_id", "pfr_id"]
         )
         return df.drop_duplicates(subset=["pfr_id"]).reset_index(drop=True)

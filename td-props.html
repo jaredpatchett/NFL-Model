@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NFL TD Props — PitchEdge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B0E14;
+    --surface:#131826;
+    --surface-2:#1A2032;
+    --line:#232A3D;
+    --text:#E8EAED;
+    --text-dim:#8B93A7;
+    --text-faint:#5A6178;
+    --gold:#D4A73C;
+    --gold-dim:#8A7127;
+    --green:#35E08A;
+    --blue:#4FC3F7;
+    --amber:#FFB020;
+    --grey:#7C8798;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Space Grotesk',sans-serif;
+    min-height:100vh;
+  }
+  .num{font-family:'IBM Plex Mono',monospace;}
+
+  header{
+    padding:40px 24px 20px;
+    border-bottom:1px solid var(--line);
+    max-width:1180px;
+    margin:0 auto;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    letter-spacing:0.12em;
+    color:var(--gold);
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  h1{
+    font-size:clamp(28px,4vw,42px);
+    font-weight:700;
+    margin:0 0 8px;
+    letter-spacing:-0.01em;
+  }
+  .meta{
+    color:var(--text-dim);
+    font-size:14px;
+    font-family:'IBM Plex Mono',monospace;
+  }
+
+  main{max-width:1180px;margin:0 auto;padding:24px 24px 80px;}
+
+  .caveat{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-left:3px solid var(--gold-dim);
+    padding:14px 18px;
+    font-size:13px;
+    color:var(--text-dim);
+    border-radius:4px;
+    margin-bottom:24px;
+    line-height:1.5;
+  }
+
+  .controls{
+    display:flex;
+    gap:8px;
+    margin-bottom:20px;
+    flex-wrap:wrap;
+  }
+  .pos-filter{
+    border:1px solid var(--line);
+    cursor:pointer;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    font-weight:600;
+    padding:6px 13px;
+    border-radius:8px;
+    background:var(--surface);
+    color:var(--text-dim);
+    transition:all .12s;
+  }
+  .pos-filter.active{
+    border-color:var(--green);
+    background:rgba(53,224,138,.1);
+    color:var(--green);
+  }
+
+  table{width:100%;border-collapse:collapse;font-size:14px;}
+  thead th{
+    text-align:left;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--text-faint);
+    padding:10px 10px;
+    border-bottom:1px solid var(--line);
+    font-weight:500;
+    white-space:nowrap;
+    cursor:pointer;
+    user-select:none;
+  }
+  thead th:hover{color:var(--text-dim);}
+  thead th.num-col{text-align:right;}
+  tbody td{
+    padding:12px 10px;
+    border-bottom:1px solid var(--line);
+    vertical-align:middle;
+  }
+  tbody tr:hover{background:var(--surface);}
+  .player-cell{font-weight:600;}
+  .postag{
+    display:inline-block;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    font-weight:600;
+    color:var(--text-faint);
+    background:var(--surface-2);
+    border-radius:3px;
+    padding:1px 5px;
+    margin-right:6px;
+  }
+  .matchup-cell{color:var(--text-dim);font-family:'IBM Plex Mono',monospace;font-size:13px;}
+  .cell-num{font-family:'IBM Plex Mono',monospace;text-align:right;color:var(--text-dim);}
+  .cell-model{font-family:'IBM Plex Mono',monospace;text-align:right;font-weight:600;color:var(--text);}
+  .tier-badge{
+    display:inline-block;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    font-weight:700;
+    width:20px;
+    height:20px;
+    line-height:20px;
+    text-align:center;
+    border-radius:5px;
+  }
+  .tier-A{background:rgba(53,224,138,.15);color:var(--green);}
+  .tier-B{background:rgba(79,195,247,.15);color:var(--blue);}
+  .tier-C{background:rgba(255,176,32,.15);color:var(--amber);}
+  .tier-D{background:rgba(124,135,152,.12);color:var(--grey);}
+
+  footer{
+    max-width:1180px;margin:0 auto;padding:0 24px 40px;
+    color:var(--text-faint);font-size:12px;font-family:'IBM Plex Mono',monospace;
+    line-height:1.6;
+  }
+
+  @media (max-width:760px){
+    thead th:nth-child(4),tbody td:nth-child(4),
+    thead th:nth-child(5),tbody td:nth-child(5){display:none;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">PitchEdge · Anytime TD Model</div>
+  <h1 id="page-title">Loading…</h1>
+  <div class="meta">Generated <span id="generated-at">—</span> · <span id="training-note">—</span></div>
+</header>
+
+<main>
+  <div class="caveat" id="caveat"></div>
+
+  <div class="controls" id="pos-controls"></div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Player</th>
+        <th>Matchup</th>
+        <th class="num-col">Snap%</th>
+        <th class="num-col">RZ%</th>
+        <th class="num-col">I-5%</th>
+        <th class="num-col">xTD</th>
+        <th class="num-col" id="sort-model">Model</th>
+        <th style="text-align:center">Tier</th>
+      </tr>
+    </thead>
+    <tbody id="players-body"></tbody>
+  </table>
+</main>
+
+<footer>
+  Leakage-safe trailing opportunity shares (4-game window) + implied team total, logistic regression, validated on held-out 2024 season (AUC 0.70, beats baseline LogLoss 0.506 vs 0.549).
+  Tier reflects MODEL CONFIDENCE only (probability level) — no live sportsbook odds connected yet, so this is not a value/edge tier the way the spread model's edges are.
+  Candidate pool is last season's active players corrected for known offseason moves; true rookies and very recent transactions may be missing until real current-season data exists.
+</footer>
+
+<script src="data/player_td.js"></script>
+<script>
+(function(){
+  const data = window.PLAYER_TD_DATA;
+  if(!data){
+    document.getElementById('page-title').textContent = "No data found — run scripts/generate_player_predictions.py";
+    return;
+  }
+
+  document.getElementById('page-title').textContent = `Week ${data.week}, ${data.season} — Anytime TD`;
+  document.getElementById('generated-at').textContent = new Date(data.generated_at).toLocaleString('en-US', {
+    dateStyle:'medium', timeStyle:'short'
+  });
+  document.getElementById('training-note').textContent = `trained on ${data.model_notes.training_rows.toLocaleString()} player-games`;
+  document.getElementById('caveat').textContent = data.model_notes.caveat;
+
+  let posFilter = 'ALL';
+  const positions = ['ALL', 'QB', 'RB', 'WR', 'TE'];
+
+  function renderControls(){
+    const el = document.getElementById('pos-controls');
+    el.innerHTML = positions.map(p => `
+      <button class="pos-filter ${p===posFilter?'active':''}" data-pos="${p}">${p}</button>
+    `).join('');
+    el.querySelectorAll('.pos-filter').forEach(btn => {
+      btn.addEventListener('click', () => { posFilter = btn.dataset.pos; render(); });
+    });
+  }
+
+  function fmtPct(x){ return x==null ? '—' : (x*100).toFixed(0)+'%'; }
+  function fmtNum(x){ return x==null ? '—' : x.toFixed(2); }
+
+  function render(){
+    renderControls();
+    const rows = data.players.filter(p => posFilter==='ALL' || p.position===posFilter);
+    const tbody = document.getElementById('players-body');
+    tbody.innerHTML = rows.map(p => `
+      <tr>
+        <td class="player-cell"><span class="postag">${p.position}</span>${p.player_name} <span style="color:var(--text-faint);font-weight:400">· ${p.team}</span></td>
+        <td class="matchup-cell">${p.matchup}</td>
+        <td class="cell-num">${fmtPct(p.usage.snap_share)}</td>
+        <td class="cell-num">${fmtPct(p.usage.rz_target_share)}</td>
+        <td class="cell-num">${fmtPct(p.usage.inside5_carry_share)}</td>
+        <td class="cell-num">${fmtNum(p.usage.xtd_per_game)}</td>
+        <td class="cell-model">${fmtPct(p.model.anytime_td_prob)}</td>
+        <td style="text-align:center"><span class="tier-badge tier-${p.model.tier}">${p.model.tier}</span></td>
+      </tr>
+    `).join('');
+  }
+
+  render();
+})();
+</script>
+
+</body>
+</html>

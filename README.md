@@ -160,6 +160,108 @@ needed (static HTML). The GitHub Actions workflow's default `GITHUB_TOKEN`
 permissions are already set (`contents: write`) — no extra secrets needed
 for this workflow as written.
 
+**CI fix applied after first real deploy**: `nfl_data_py` hard-pins
+`pandas<2.0,numpy<2.0` in its own package metadata, which has no prebuilt
+wheel for Python 3.12 and forces a broken source build on a fresh GitHub
+Actions runner (`ModuleNotFoundError: No module named 'pkg_resources'`).
+Confirmed its actual code only needs numpy/pandas/appdirs at import time and
+works fine on modern versions (tested end-to-end against a clean venv
+matching the runner). Fix: install it with `--no-deps`, then install modern
+pandas/numpy/etc. directly — both the workflow and `requirements.txt`/README
+setup instructions do this now.
+
+## Prediction logging (new this session)
+
+`generate_predictions.py` now writes THREE things, not two:
+
+- `data/nfl_lines.json` / `.js` — current snapshot, **overwritten** every
+  run. This is what the dashboard reads. It only ever shows the latest
+  prediction — nothing about last week's version survives here.
+- `data/predictions_log.jsonl` — **append-only**, one line per (game, run).
+  Every cron run (Tue-Fri in season) adds a fresh timestamped row for every
+  game in the upcoming week, even if nothing changed since the last run.
+  Nothing already logged is ever modified or removed.
+
+**Why this exists**: every validation done on this project so far (Layer 2,
+Track B margin/total) has checked model calibration against CLOSING lines —
+useful for sanity-checking the model, but explicitly NOT a valid
+profitability backtest per the blueprint's own core principle (backtest with
+the price actually available at prediction time, never hindsight/closing
+prices). `predictions_log.jsonl` is how that gets fixed: it's a genuine
+pre-game record — what the model said, what the market showed, days before
+any outcome was known. Once enough weeks accumulate, join this log against
+final scores (already in the schedule data once games are played, keyed by
+`game_id`) for a real time-stamped edge/ROI analysis. There's no reason to
+wait for the regular season to start collecting this — the log already has
+its first real entries from Week 1 2026's pre-season market lines.
+
+No backtest/analysis script consumes this log yet — that's the natural next
+step once a few weeks of real data accumulate.
+
+## Track A: Anytime-TD player props (new this session — Layers 3/4 built)
+
+Layer 2 (team TD counts) was already validated. This session built the
+piece that actually produces a bettable per-player number:
+
+- `scripts/player_td_features.py` — the hard part. Leakage-safe trailing
+  opportunity shares per player (carry/target/inside-5/red-zone share, snap
+  share) via the same shift-before-aggregate mechanism as `rolling_features.py`.
+  **The upcoming-week problem, again, worse this time**: nflverse doesn't
+  publish 2026 rosters at all yet (confirmed — 403). Solved the same way as
+  Track B's pace fix — manufacture one stub row per CANDIDATE player for the
+  upcoming week (all count columns NaN, since a future game's stats are
+  genuinely unknown, not zero) and let the existing trailing logic pick up
+  real prior games naturally. Candidate pool = players with meaningful
+  trailing usage in the last 8 weeks of the most recently completed season,
+  with current team corrected against `nfl_data_py`'s ID crosswalk (a
+  fantasy-community-maintained database that's updated with trades/signings
+  well before nflverse's own roster data exists for a new season).
+  **Verified this actually caught real 2025 offseason moves** — Aaron
+  Rodgers → PIT, Kirk Cousins → LV both resolved correctly.
+- `scripts/player_td_model.py` — Layers 3 (allocate team TDs across players)
+  and 4 (calibrated probability) combined into one logistic regression
+  rather than two separate stages, given the time budget ahead of Week 1.
+  Time-based validation (train 2021-2023, validate held-out 2024): **AUC
+  0.70, LogLoss 0.506 vs 0.549 baseline**, calibration tracks reasonably
+  well across probability buckets (see script output for the full table).
+  Coefficients are football-sane: carry/target share, implied_team_total,
+  snap_share all positive; fullback position negative.
+- `scripts/generate_player_predictions.py` — production script, same
+  pattern as Track B's: trains on all available history, predicts the
+  upcoming week, writes `data/player_td.json`/`.js` (overwritten snapshot)
+  and appends to `data/player_td_log.jsonl` (persistent history, same
+  reasoning as `predictions_log.jsonl` above). **Verified against the real
+  2026 Week 1 slate**: Saquon Barkley tops the board at 71% anytime-TD
+  probability — correct real-world sanity check for a bell-cow goal-line
+  back.
+- `td-props.html` — dashboard styled to match a reference design: Player /
+  Matchup / Snap% / RZ% / Inside-5% / xTD / Model probability / Tier, with
+  position filters. Tier here is a MODEL CONFIDENCE tier (probability
+  level), not a value/edge tier like Track B's — there's no market to
+  compare against yet, see below.
+
+**NO LIVE ODDS CONNECTED — this is the main honest gap.** Output is model
+probability and usage shares only; no BEST PRICE / IMPLIED / EDGE / EV
+columns. Player-prop odds specifically need The Odds API's *paid* tier
+(unlike game lines, which are on the free tier — see Track B notes above).
+Get an Odds API key to unlock this, or keep using model-only output.
+
+**ROSTER FRESHNESS CAVEAT**: the candidate pool is last season's active
+players corrected for known trades/signings. True rookies with zero prior
+NFL usage (no trailing history to build from at all) and any very recent
+retirement the ID crosswalk hasn't caught yet won't appear. This resolves
+itself automatically once real 2026 game data starts flowing in — Week 1's
+actual snap counts will fold into next week's trailing features the normal
+way.
+
+**Test coverage gap, flagged honestly**: `player_td_features.py` doesn't
+have a dedicated synthetic unit test file the way the other modules do
+(time tradeoff to get the real model built and validated before Week 1).
+It reuses the already-tested `rolling_features.py` trailing engine
+directly, and was checked thoroughly against real data (candidate pool
+size, correct team corrections, sane top-of-board predictions) rather than
+synthetic fixtures. Worth adding a proper test file when there's time.
+
 ## Architecture
 
 Static-site + scheduled-job pattern: Python scripts in `scripts/` fetch data
@@ -174,11 +276,19 @@ soccer repo's hand-appended JSON).
 
 ## Setup
 
-    pip install -r requirements.txt
+    pip install --upgrade pip setuptools
+    pip install --no-deps nfl_data_py
+    pip install pandas numpy pyarrow scikit-learn scipy requests appdirs
 
-(If `pip install pandas` tries to build from source and fails on
-`ModuleNotFoundError: No module named 'pkg_resources'`, run
-`pip install setuptools` first, then retry with `--only-binary=:all:`.)
+nfl_data_py's own package metadata hard-pins `pandas<2.0,numpy<2.0`, which
+has no prebuilt wheel for Python 3.12 and forces pip to build pandas from
+source, which then fails with `ModuleNotFoundError: No module named
+'pkg_resources'`. nfl_data_py's actual code only needs numpy/pandas/appdirs
+at import time and works fine on modern versions (verified against a clean
+venv matching a GitHub Actions runner) — hence `--no-deps` then installing
+modern versions directly, rather than a plain `pip install -r
+requirements.txt`. The GitHub Actions workflow already does this correctly;
+this is only relevant for local setup.
 
 ## What to run
 
@@ -190,7 +300,9 @@ soccer repo's hand-appended JSON).
     python scripts/team_td_model.py          # trains + validates Layer 2 (TD props)
     python scripts/game_features.py 2024     # builds team-game model table (Track B)
     python scripts/game_lines_model.py       # trains + validates margin/total/moneyline
-    python scripts/generate_predictions.py   # production: predicts upcoming week, writes data/
+    python scripts/generate_predictions.py         # production: Track B, writes data/nfl_lines.*
+    python scripts/player_td_model.py              # trains + validates Track A (anytime TD)
+    python scripts/generate_player_predictions.py  # production: Track A, writes data/player_td.*
 
 ## Data sources decided
 

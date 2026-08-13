@@ -1,12 +1,14 @@
-name: Update NFL Lines Predictions
+name: Update NFL Predictions
 
 # Runs on a schedule during the season, plus lets you trigger it manually.
-# Mirrors the wc-7-dashboard cron pattern, but as its own independent
-# workflow in its own repo -- see README's "fully independent project" note.
+# Generates BOTH tracks in one run: spread/total/moneyline (Track B) and
+# anytime-TD player probabilities (Track A). Mirrors the wc-7-dashboard cron
+# pattern, but as its own independent workflow in its own repo -- see
+# README's "fully independent project" note.
 #
 # Cadence: Tue/Wed/Thu/Fri at 13:00 UTC. Lines move most in the days after a
 # week's games post and settle by kickoff, so a few updates a week during
-# that window is enough -- there's no live in-game element to this model.
+# that window is enough -- there's no live in-game element to either model.
 # Adjust the cron below if you want tighter coverage close to kickoff.
 on:
   schedule:
@@ -40,18 +42,23 @@ jobs:
           pip install --no-deps nfl_data_py
           pip install pandas numpy pyarrow scikit-learn scipy requests appdirs
 
-      - name: Generate predictions
+      - name: Generate spread/total/moneyline predictions (Track B)
         working-directory: scripts
         run: python generate_predictions.py
+
+      - name: Generate anytime-TD predictions (Track A)
+        working-directory: scripts
+        run: python generate_player_predictions.py
 
       - name: Commit and push if data changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/nfl_lines.json data/nfl_lines.js data/predictions_log.jsonl
+          git add data/player_td.json data/player_td.js data/player_td_log.jsonl
           if git diff --cached --quiet; then
             echo "No changes to predictions -- nothing to commit."
           else
-            git commit -m "Auto-update NFL lines predictions [skip ci]"
+            git commit -m "Auto-update NFL predictions (lines + TD props) [skip ci]"
             git push
           fi

@@ -227,6 +227,24 @@ def main():
             },
         })
 
+    # ---- Power ratings: one row per team, already computed internally for
+    # every team-week (opponent-adjusted SRS-style rating) -- just wasn't
+    # exposed in the output before. `upcoming` has one row per team (both
+    # home/away perspectives), so a dedupe on team is all that's needed.
+    power_ratings = (
+        upcoming[["team", "power_rating", "asof_roll4_team_plays"]]
+        .drop_duplicates(subset=["team"])
+        .sort_values("power_rating", ascending=False)
+    )
+    power_ratings_out = [
+        {
+            "team": r["team"],
+            "net_rating": round(float(r["power_rating"]), 2),
+            "pace": round(float(r["asof_roll4_team_plays"]), 1) if pd.notna(r["asof_roll4_team_plays"]) else None,
+        }
+        for _, r in power_ratings.iterrows()
+    ]
+
     output = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "season": season,
@@ -244,6 +262,7 @@ def main():
             ),
         },
         "games": games,
+        "power_ratings": power_ratings_out,
     }
 
     out_dir = os.path.dirname(os.path.abspath(OUT_JSON))

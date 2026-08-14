@@ -42,6 +42,7 @@ from game_features import build_game_model_table
 from game_lines_model import (
     FEATURE_COLS, MIN_GAMES_PRIOR, moneyline_to_implied_prob, prob_to_fair_moneyline,
 )
+import odds_api
 
 # Generous range -- seasons that don't exist in the source data are silently
 # filtered out (see nfl_data._fetch_schedules), so this is safe to over-request.
@@ -123,23 +124,63 @@ def main():
     upcoming["pred_total"] = total_model.predict(X_up_total)
     upcoming["model_win_prob"] = norm.cdf(upcoming["pred_margin"] / margin_resid_std)
     upcoming["model_fair_moneyline"] = upcoming["model_win_prob"].apply(prob_to_fair_moneyline)
-    upcoming["market_win_prob"] = upcoming["team_moneyline"].apply(
-        lambda ml: moneyline_to_implied_prob(ml) if pd.notna(ml) else np.nan
-    )
-    upcoming["spread_edge"] = upcoming["pred_margin"] - upcoming["team_spread_line"]
-    upcoming["total_edge"] = upcoming["pred_total"] - upcoming["total_line"]
-    upcoming["moneyline_edge"] = upcoming["model_win_prob"] - upcoming["market_win_prob"]
 
     # ---- Build output: one entry per GAME (not per team-perspective row) ----
+    print("\nFetching live odds (The Odds API)...")
+    live_odds = odds_api.fetch_game_odds()
+    if live_odds is not None:
+        print(f"  Got live odds for {len(live_odds)} games.")
+    else:
+        print("  No live odds available -- using schedule-riding lines only (no EV, edges still computed).")
+
     home_rows = upcoming[upcoming["is_home"] == 1].set_index(["season", "week", "game_id"])
     games = []
     for (s, w, gid), row in home_rows.iterrows():
+        live = None
+        if live_odds is not None:
+            match = live_odds[
+                (live_odds["home_team"] == row["team"]) & (live_odds["away_team"] == row["opponent"])
+            ]
+            if len(match):
+                live = match.iloc[0]
+
+        # Prefer live odds when available; fall back to the schedule-riding
+        # lines (still real market data, just not necessarily current/best-price).
+        if live is not None and pd.notna(live["live_home_spread_point"]):
+            spread_line = float(live["live_home_spread_point"])
+            spread_price = live["live_home_spread_price"]
+            total_line = float(live["live_total_point"])
+            home_ml = live["live_home_moneyline"]
+            away_ml = live["live_away_moneyline"]
+            market_source = "live"
+        else:
+            spread_line = row["team_spread_line"]
+            spread_price = None
+            total_line = row["total_line"]
+            home_ml = row["team_moneyline"]
+            away_ml = row["opp_moneyline"]
+            market_source = "schedule_fallback"
+
+        spread_edge = float(row["pred_margin"]) - spread_line if pd.notna(spread_line) else None
+        total_edge = float(row["pred_total"]) - total_line if pd.notna(total_line) else None
+        home_implied = moneyline_to_implied_prob(home_ml) if pd.notna(home_ml) else None
+        moneyline_edge = (
+            float(row["model_win_prob"]) - home_implied if home_implied is not None else None
+        )
+        # EV per $1 stake at the best available home moneyline price.
+        home_ev = None
+        if pd.notna(home_ml):
+            p = float(row["model_win_prob"])
+            profit = home_ml / 100 if home_ml > 0 else 100 / -home_ml
+            home_ev = round(p * profit - (1 - p), 4)
+
         games.append({
             "game_id": gid,
             "season": int(s),
             "week": int(w),
             "home_team": row["team"],
             "away_team": row["opponent"],
+            "market_source": market_source,  # "live" (The Odds API) or "schedule_fallback"
             "model": {
                 "pred_home_margin": round(float(row["pred_margin"]), 2),
                 "pred_total": round(float(row["pred_total"]), 2),
@@ -147,20 +188,18 @@ def main():
                 "home_fair_moneyline": round(float(row["model_fair_moneyline"]), 1),
             },
             "market": {
-                "spread_line": row["team_spread_line"],  # home perspective
-                "total_line": row["total_line"],
-                "home_moneyline": row["team_moneyline"],
-                "away_moneyline": row["opp_moneyline"],
-                "home_implied_prob": (
-                    round(float(row["market_win_prob"]), 4) if pd.notna(row["market_win_prob"]) else None
-                ),
+                "spread_line": spread_line,  # home perspective
+                "spread_price": spread_price,
+                "total_line": total_line,
+                "home_moneyline": home_ml,
+                "away_moneyline": away_ml,
+                "home_implied_prob": round(home_implied, 4) if home_implied is not None else None,
             },
             "edges": {
-                "spread_edge": round(float(row["spread_edge"]), 2),
-                "total_edge": round(float(row["total_edge"]), 2),
-                "moneyline_edge": (
-                    round(float(row["moneyline_edge"]), 4) if pd.notna(row["moneyline_edge"]) else None
-                ),
+                "spread_edge": round(spread_edge, 2) if spread_edge is not None else None,
+                "total_edge": round(total_edge, 2) if total_edge is not None else None,
+                "moneyline_edge": round(moneyline_edge, 4) if moneyline_edge is not None else None,
+                "home_moneyline_ev": home_ev,
             },
         })
 
@@ -207,6 +246,7 @@ def main():
             "pred_total": g["model"]["pred_total"],
             "home_win_prob": g["model"]["home_win_prob"],
             "home_fair_moneyline": g["model"]["home_fair_moneyline"],
+            "market_source": g["market_source"],
             "market_spread_line": g["market"]["spread_line"],
             "market_total_line": g["market"]["total_line"],
             "market_home_moneyline": g["market"]["home_moneyline"],
@@ -215,6 +255,7 @@ def main():
             "spread_edge": g["edges"]["spread_edge"],
             "total_edge": g["edges"]["total_edge"],
             "moneyline_edge": g["edges"]["moneyline_edge"],
+            "home_moneyline_ev": g["edges"]["home_moneyline_ev"],
         })
 
     with open(OUT_LOG, "a") as f:

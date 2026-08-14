@@ -4,9 +4,14 @@ TD player probabilities). Same pattern as generate_predictions.py (Track B):
 trains on all played history, predicts the upcoming week, writes a current
 snapshot (overwritten) + appends to a persistent log (never overwritten).
 
-NO LIVE ODDS: this only outputs model probabilities (MODEL / xTD / usage
-shares) -- no BEST PRICE / IMPL / EDGE / EV columns. Those need The Odds
-API's player-prop plan (paid tier), which isn't connected. See README.
+LIVE ODDS: fetches real anytime-TD prices via The Odds API when
+ODDS_API_KEY is set (falls back to model-only output otherwise -- see
+odds_api.py). NAME MATCHING is the tricky part: our internal player_name is
+abbreviated ("S.Barkley", from nflverse weekly data) but the Odds API
+returns full names ("Saquon Barkley"). Matched via the ID crosswalk's
+`merge_name` field (gsis_id -> normalized full name) against the same
+normalization applied to the Odds API's player names -- NOT via player_name
+directly, which would never match.
 
 ROSTER FRESHNESS CAVEAT: see player_td_features.py's module docstring --
 the candidate pool is last season's active players, corrected against a
@@ -33,6 +38,7 @@ from player_td_features import build_player_td_table
 from player_td_model import FEATURE_COLS, POSITIONS, MIN_GAMES_PRIOR, _prep
 from nfl_data import load_pbp, load_snaps, load_id_crosswalk, load_schedules
 from features import build_player_week_features
+import odds_api
 
 ALL_SEASONS = list(range(2021, 2028))
 
@@ -60,6 +66,13 @@ def find_upcoming_week(sched: pd.DataFrame) -> tuple[int, int] | None:
         return None
     row = unplayed[["season", "week"]].drop_duplicates().sort_values(["season", "week"]).iloc[0]
     return int(row["season"]), int(row["week"])
+
+
+def load_id_crosswalk_names() -> pd.DataFrame:
+    """player_id -> merge_name (normalized full name), for matching against
+    The Odds API's free-text player names. See module docstring."""
+    xwalk = load_id_crosswalk()
+    return xwalk[["gsis_id", "merge_name"]].rename(columns={"gsis_id": "player_id"}).dropna()
 
 
 def main():
@@ -115,9 +128,54 @@ def main():
     upcoming["model_prob"] = model.predict_proba(X_up)[:, 1]
     upcoming["tier"] = upcoming["model_prob"].apply(_tier)
 
+    # ---- Live odds: game odds first (for event_ids), then per-event player props ----
+    print("\nFetching live odds (The Odds API)...")
+    live_games = odds_api.fetch_game_odds()
+    live_props = None
+    if live_games is not None:
+        # Only need event_ids for games actually in our upcoming slate.
+        our_matchups = set(zip(upcoming["posteam"], upcoming["opponent"]))
+        relevant_events = live_games[
+            live_games.apply(lambda r: (r["home_team"], r["away_team"]) in our_matchups
+                              or (r["away_team"], r["home_team"]) in our_matchups, axis=1)
+        ]
+        print(f"  {len(relevant_events)} of {len(live_games)} live games match our upcoming slate.")
+        live_props = odds_api.fetch_player_td_odds(relevant_events)
+    if live_props is not None:
+        print(f"  Got anytime-TD prices for {len(live_props)} player-lines.")
+    else:
+        print("  No live player-prop odds available -- model-only output.")
+
+    # Name-matching join key: merge_name (normalized full name), NOT
+    # player_name (abbreviated "S.Barkley" -- would never match "Saquon Barkley").
+    xwalk_names = load_id_crosswalk_names()
+    upcoming = upcoming.merge(xwalk_names, on="player_id", how="left")
+    if live_props is not None:
+        live_props = live_props.rename(columns={"player_name_norm": "merge_name"})
+        upcoming = upcoming.merge(
+            live_props[["merge_name", "live_anytime_td_price"]].drop_duplicates(subset=["merge_name"]),
+            on="merge_name", how="left",
+        )
+    else:
+        upcoming["live_anytime_td_price"] = np.nan
+
     # ---- Build output ----
     players = []
     for _, r in upcoming.sort_values("model_prob", ascending=False).iterrows():
+        price = r.get("live_anytime_td_price")
+        market = None
+        if pd.notna(price):
+            implied = odds_api.american_to_implied_prob(price)
+            p = float(r["model_prob"])
+            profit = price / 100 if price > 0 else 100 / -price
+            ev = round(p * profit - (1 - p), 4)
+            market = {
+                "anytime_td_price": int(price),
+                "implied_prob": round(implied, 4),
+                "edge": round(p - implied, 4),
+                "ev": ev,
+            }
+
         players.append({
             "player_id": r["player_id"],
             "player_name": r["player_name"],
@@ -135,8 +193,25 @@ def main():
                 "anytime_td_prob": round(float(r["model_prob"]), 4),
                 "tier": r["tier"],
             },
-            "market": None,  # no live odds source connected -- see README
+            "market": market,  # None if no live odds or no name match found
         })
+
+    matched_count = int(upcoming["live_anytime_td_price"].notna().sum()) if live_props is not None else 0
+    if live_props is not None:
+        caveat = (
+            f"Live odds connected -- {matched_count} of {len(upcoming)} players matched to a real "
+            f"anytime-TD price this run (unmatched players show usage/model only, either no line "
+            f"posted yet for that player or a name-matching miss). Candidate pool is last season's "
+            f"active players corrected for known offseason trades; true rookies and any very recent "
+            f"retirements the crosswalk hasn't caught are not included yet."
+        )
+    else:
+        caveat = (
+            "No live sportsbook odds this run (ODDS_API_KEY not set, or the API call failed -- see "
+            "logs) -- model probability and usage shares only, no price/edge/EV. Candidate pool is "
+            "last season's active players corrected for known offseason trades; true rookies and any "
+            "very recent retirements the crosswalk hasn't caught are not included yet."
+        )
 
     output = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -144,12 +219,7 @@ def main():
         "week": week,
         "model_notes": {
             "training_rows": len(train),
-            "caveat": (
-                "No live sportsbook odds connected -- model probability and usage shares "
-                "only, no price/edge/EV. Candidate pool is last season's active players "
-                "corrected for known offseason trades; true rookies and any very recent "
-                "retirements the crosswalk hasn't caught are not included yet."
-            ),
+            "caveat": caveat,
         },
         "players": players,
     }

@@ -120,11 +120,16 @@ def load_id_crosswalk() -> pd.DataFrame:
     nflverse's own roster/pbp data exists for that season. Used by
     player_td_features.py to correct a candidate player's team for a season
     that hasn't started yet (2026 rosters aren't in nflverse at all pre-kickoff).
+
+    Also carries `merge_name` -- a normalized full name (lowercase, no
+    punctuation), used by generate_player_predictions.py to match this
+    crosswalk's gsis_id against The Odds API's free-text player names (which
+    are full names like "Saquon Barkley", not our abbreviated "S.Barkley").
     """
     def _fetch(_seasons=None):
         _require_nfl()
         df = nfl.import_ids()
-        df = df[["gsis_id", "pfr_id", "name", "position", "team"]].dropna(
+        df = df[["gsis_id", "pfr_id", "name", "position", "team", "merge_name"]].dropna(
             subset=["gsis_id", "pfr_id"]
         )
         return df.drop_duplicates(subset=["pfr_id"]).reset_index(drop=True)

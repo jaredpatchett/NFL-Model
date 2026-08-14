@@ -91,6 +91,28 @@ def fit_ridge(train: pd.DataFrame, target_col: str):
     return model, scaler, residual_std
 
 
+def fit_total_residual(train: pd.DataFrame):
+    """
+    Market-blended total: predicts the DEVIATION from total_line, not the
+    total itself, using heavy regularization (alpha=20000). See
+    game_lines_model.py's train_total_residual() docstring for the full
+    reasoning -- an alpha sweep this session showed the market's own total
+    line beats this feature set at every regularization strength tried, so
+    the responsible choice is heavy shrinkage toward "trust the market"
+    rather than a locally-tuned alpha that would just be fitting noise.
+    Caller must add total_line back: pred_total = total_line + model output.
+    """
+    TOTAL_ALPHA = 20000
+    X = train[FEATURE_COLS]
+    y_resid = train["game_total"] - train["total_line"]
+    scaler = StandardScaler()
+    X_s = scaler.fit_transform(X)
+    model = Ridge(alpha=TOTAL_ALPHA)
+    model.fit(X_s, y_resid)
+    resid_std = float(np.std(y_resid - model.predict(X_s)))
+    return model, scaler, resid_std
+
+
 def main():
     print("Building game model table (all available seasons)...")
     full = build_game_model_table(ALL_SEASONS)
@@ -106,7 +128,7 @@ def main():
     print(f"Training rows (all played history, cold-start-filtered): {len(played)}")
 
     margin_model, margin_scaler, margin_resid_std = fit_ridge(played, "team_margin")
-    total_model, total_scaler, total_resid_std = fit_ridge(played, "game_total")
+    total_model, total_scaler, total_resid_std = fit_total_residual(played)
 
     upcoming = full[(full["season"] == season) & (full["week"] == week)].copy()
     upcoming = _prep_upcoming(upcoming, played["rest_days"].median(), played["opp_rest_days"].median())
@@ -121,7 +143,9 @@ def main():
     X_up_margin = margin_scaler.transform(upcoming[FEATURE_COLS])
     X_up_total = total_scaler.transform(upcoming[FEATURE_COLS])
     upcoming["pred_margin"] = margin_model.predict(X_up_margin)
-    upcoming["pred_total"] = total_model.predict(X_up_total)
+    # Market-blended: total_line (schedule-riding, same anchor used in training)
+    # + a heavily-regularized predicted deviation. See fit_total_residual().
+    upcoming["pred_total"] = upcoming["total_line"] + total_model.predict(X_up_total)
     upcoming["model_win_prob"] = norm.cdf(upcoming["pred_margin"] / margin_resid_std)
     upcoming["model_fair_moneyline"] = upcoming["model_win_prob"].apply(prob_to_fair_moneyline)
 
@@ -212,8 +236,11 @@ def main():
             "total_residual_std": round(total_resid_std, 2),
             "training_games": len(played),
             "caveat": (
-                "Total-points model is weaker than margin (see README) -- "
-                "treat total_edge with more skepticism than spread_edge."
+                "Total prediction is anchored to the market total line with a heavily-"
+                "regularized model nudge on top -- an alpha sweep found no feature-set "
+                "signal that beats the market's own total at any regularization strength "
+                "(see README). Treat total_edge as low-confidence -- likely near-zero "
+                "true edge -- unlike spread_edge, which showed real skill over baseline."
             ),
         },
         "games": games,

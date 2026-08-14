@@ -44,10 +44,14 @@ jobs:
 
       - name: Generate spread/total/moneyline predictions (Track B)
         working-directory: scripts
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: python generate_predictions.py
 
       - name: Generate anytime-TD predictions (Track A)
         working-directory: scripts
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: python generate_player_predictions.py
 
       - name: Commit and push if data changed

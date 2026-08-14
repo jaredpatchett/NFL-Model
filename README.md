@@ -185,10 +185,12 @@ time-stamped (not closing) lines for a real profitability check.
   `data/nfl_lines.json`/`.js` if changed, pushes. Standard `workflow_dispatch`
   manual trigger included too. **Independent workflow, independent repo** —
   no shared cron with `wc-7-dashboard`.
-- `index.html` — static dashboard reading `data/nfl_lines.js`. Dark
-  data-terminal aesthetic (this is a solo quant tool, not a consumer app):
-  a "largest spread edge" callout up top, full sortable-by-edge game table
-  below. No build step — Cloudflare Pages can serve this directory as-is.
+- `index.html` — **single, unified dashboard** (consolidated this session —
+  see "Dashboard consolidation" below) reading both `data/nfl_lines.js` and
+  `data/player_td.js`, with a tab switcher between "Spreads / Totals / ML"
+  and "Anytime TD Props." Dark data-terminal aesthetic (this is a solo quant
+  tool, not a consumer app). No build step — Cloudflare Pages serves this
+  directory as-is.
 
 **One real production wrinkle already handled**: play-by-play data doesn't
 exist for a season with zero games played (confirmed — 2026 pbp pull 404s
@@ -213,6 +215,52 @@ works fine on modern versions (tested end-to-end against a clean venv
 matching the runner). Fix: install it with `--no-deps`, then install modern
 pandas/numpy/etc. directly — both the workflow and `requirements.txt`/README
 setup instructions do this now.
+
+## Dashboard consolidation (new this session)
+
+Originally two separate HTML files — `index.html` (Track B) and
+`td-props.html` (Track A) — reflecting that they're genuinely two different
+models under the hood (different targets, different training, different
+data files). That's an implementation detail, not something a user should
+have to navigate between two pages for. Merged into a single `index.html`
+with a tab switcher ("TD Props" / "Lines"), loading both `data/nfl_lines.js`
+and `data/player_td.js`. `td-props.html` removed — no redirect needed, this
+is a personal tool with no external links to it. Nothing about the
+underlying two-track architecture changed, only the presentation layer.
+
+**Second visual redesign (later in the same session)**: rebuilt again to
+match a more sophisticated reference design ("Gridiron" style) the user
+provided — near-black `#0A0B0F` background, blue `#3E7BFA` primary accent
+(replacing the green theme from the first redesign), team-colored accent
+bars per row (full 32-team NFL color map, with a few teams' colors swapped
+to their secondary shade — CHI/LV/NE/SEA — since their primary colors are
+too close to black to read against this background), a stat-strip header
+(6 real computed metrics per view), and market-tabbed Edge Board (Spread /
+Total / Moneyline sub-views within the Lines tab, matching the reference's
+tab pattern) plus a new **Power Ratings panel** ranking all 32 teams by net
+rating with a proportional bar visualization.
+
+**Backend addition to support this**: `generate_predictions.py` now also
+exports a `power_ratings` array (team, net_rating, pace) in
+`data/nfl_lines.json` — this data already existed internally (the SRS-style
+rating every team gets each week) but wasn't previously exposed in the
+output JSON.
+
+**What was deliberately left out, and why**: the reference design's
+"Matchup Projector" (single-game deep dive with a simulated margin-
+distribution histogram and a waterfall decomposition of the prediction into
+per-feature contributions), CLV/bankroll equity-curve tracking, and a
+Futures panel are NOT built here. The waterfall decomposition is
+genuinely buildable later (the margin model is linear/Ridge, so real
+per-feature contribution values exist and could be exported) but needs a
+new per-game data export, not just an HTML change. CLV tracking needs real
+completed games (see `backtest.py` — reports ~0 results until the season
+starts). Futures aren't modeled at all. The reference mockup's own bankroll
+counter and CLV chart were driven by `Math.random()` — fabricated for the
+demo — so nothing equivalent was carried over here; this dashboard only
+ever shows numbers the pipeline actually computed. "PLAY" unit sizing is
+included (matching the reference's visual pattern) but explicitly labeled
+as an edge-threshold heuristic, not a validated Kelly/bankroll system.
 
 ## Prediction logging (new this session)
 
@@ -278,17 +326,18 @@ piece that actually produces a bettable per-player number:
   2026 Week 1 slate**: Saquon Barkley tops the board at 71% anytime-TD
   probability — correct real-world sanity check for a bell-cow goal-line
   back.
-- `td-props.html` — dashboard styled to match a reference design: Player /
-  Matchup / Snap% / RZ% / Inside-5% / xTD / Model probability / Tier, with
-  position filters. Tier here is a MODEL CONFIDENCE tier (probability
-  level), not a value/edge tier like Track B's — there's no market to
-  compare against yet, see below.
+- **TD props tab** in `index.html` (originally a separate `td-props.html` —
+  merged into the unified dashboard, see "Dashboard consolidation" below):
+  Player / Matchup / Snap% / RZ% / Inside-5% / xTD / Model probability /
+  Best Price / Edge / EV / Tier, with position filters. Tier here is a
+  MODEL CONFIDENCE tier (probability level), separate from Edge (a market
+  value tier) since a high-confidence player and a good-value player aren't
+  always the same thing.
 
-**NO LIVE ODDS CONNECTED — this is the main honest gap.** Output is model
-probability and usage shares only; no BEST PRICE / IMPLIED / EDGE / EV
-columns. Player-prop odds specifically need The Odds API's *paid* tier
-(unlike game lines, which are on the free tier — see Track B notes above).
-Get an Odds API key to unlock this, or keep using model-only output.
+**Live odds connected** (see "Live odds: The Odds API" section below) —
+Best Price / Edge / EV populate from The Odds API when `ODDS_API_KEY` is
+set; rows show "—" for those columns otherwise (no key, or that book/player
+isn't posted yet).
 
 **ROSTER FRESHNESS CAVEAT**: the candidate pool is last season's active
 players corrected for known trades/signings. True rookies with zero prior

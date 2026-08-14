@@ -3,261 +3,474 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NFL Lines Model — PitchEdge</title>
+<title>PitchEdge — NFL Model</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0B0E14;
-    --surface:#131826;
-    --surface-2:#1A2032;
-    --line:#232A3D;
-    --text:#E8EAED;
-    --text-dim:#8B93A7;
-    --text-faint:#5A6178;
-    --gold:#D4A73C;
-    --gold-dim:#8A7127;
-    --red:#C4453D;
-    --red-dim:#6E2B27;
+    --bg:#0A0B0F;
+    --panel:#0E1015;
+    --panel-2:#0B0D12;
+    --panel-3:#12141B;
+    --line:#1C1F28;
+    --line-2:#232733;
+    --text:#EDEFF3;
+    --text-dim:#9199AA;
+    --text-dim2:#7A8294;
+    --text-faint:#565D6D;
+    --text-faint2:#454B59;
+    --num:#C7CCD6;
+    --blue:#3E7BFA;
+    --blue-dim:#2A56B0;
+    --green:#34D399;
+    --red:#F5525F;
+    --amber:#FFB020;
+    --white-badge:#EDEFF3;
   }
   *{box-sizing:border-box;}
-  body{
-    margin:0;
-    background:var(--bg);
-    color:var(--text);
-    font-family:'Space Grotesk',sans-serif;
-    min-height:100vh;
-  }
-  .num{font-family:'IBM Plex Mono',monospace;}
+  html,body{margin:0;padding:0;background:var(--bg);}
+  body{color:var(--text);font-family:'Space Grotesk',sans-serif;min-height:100vh;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  ::-webkit-scrollbar{width:10px;height:10px;}
+  ::-webkit-scrollbar-track{background:var(--panel-2);}
+  ::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:6px;border:2px solid var(--panel-2);}
+
+  @keyframes pulseDot{0%,100%{opacity:1;}50%{opacity:.3;}}
 
   header{
-    padding:40px 24px 28px;
-    border-bottom:1px solid var(--line);
-    max-width:1180px;
-    margin:0 auto;
+    padding:16px 22px;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+    background:linear-gradient(180deg,#0D0F15,#0A0B0F);
   }
-  .eyebrow{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:12px;
-    letter-spacing:0.12em;
-    color:var(--gold);
-    text-transform:uppercase;
-    margin-bottom:10px;
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand-badge{
+    width:34px;height:34px;border-radius:7px;background:var(--blue);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;color:#fff;font-size:15px;letter-spacing:-.02em;
   }
-  h1{
-    font-size:clamp(28px,4vw,42px);
-    font-weight:700;
-    margin:0 0 8px;
-    letter-spacing:-0.01em;
+  .brand-tag{
+    font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--blue);
+    border:1px solid var(--blue-dim);border-radius:5px;padding:2px 7px;margin-left:2px;
   }
-  .meta{
-    color:var(--text-dim);
-    font-size:14px;
-    font-family:'IBM Plex Mono',monospace;
-  }
-  .meta span{color:var(--text-faint);}
+  .brand-name{font-weight:700;font-size:16px;letter-spacing:-.01em;}
+  .brand-sub{font-size:10px;letter-spacing:.14em;color:var(--text-faint);margin-top:1px;}
 
-  main{max-width:1180px;margin:0 auto;padding:32px 24px 80px;}
+  .tabs{display:flex;gap:3px;background:var(--panel-2);border:1px solid var(--line);border-radius:9px;padding:3px;}
+  .tab-btn{
+    background:none;border:none;cursor:pointer;font-family:'Space Grotesk',sans-serif;
+    font-size:12.5px;font-weight:600;color:var(--text-faint);padding:7px 14px;border-radius:6px;
+    transition:background .12s,color .12s;
+  }
+  .tab-btn:hover{color:var(--text-dim);}
+  .tab-btn.active{background:var(--panel-3);color:var(--text);}
+
+  .header-spacer{flex:1;}
+  .sync-pill{display:flex;align-items:center;gap:8px;padding:5px 11px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;}
+  .sync-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulseDot 1.6s infinite;}
+  .sync-text{font-size:10.5px;color:var(--text-dim);}
+  .clock{font-size:11.5px;color:var(--text-faint);min-width:150px;text-align:right;}
+
+  main{padding:20px 22px 60px;max-width:1320px;margin:0 auto;}
+  .view{display:none;}
+  .view.active{display:block;}
+
+  .stat-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:22px;}
+  .stat-box{background:var(--panel);padding:13px 16px;}
+  .stat-label{font-size:9px;letter-spacing:.1em;color:var(--text-faint);margin-bottom:6px;}
+  .stat-value{font-size:19px;font-weight:700;font-family:'IBM Plex Mono',monospace;}
+
+  .section-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 12px;flex-wrap:wrap;gap:10px;}
+  .section-title{display:flex;align-items:center;gap:9px;}
+  .section-bar{width:3px;height:16px;background:var(--blue);border-radius:2px;}
+  .section-label{font-size:14px;font-weight:700;letter-spacing:.02em;}
+
+  .market-tabs{display:flex;gap:2px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:2px;}
+  .market-btn{
+    background:none;border:none;cursor:pointer;font-family:'Space Grotesk',sans-serif;
+    font-size:11px;font-weight:700;letter-spacing:.03em;color:var(--text-faint);
+    padding:6px 13px;border-radius:6px;transition:background .12s,color .12s;
+  }
+  .market-btn.active{background:var(--blue);color:#fff;}
 
   .caveat{
-    background:var(--surface);
-    border:1px solid var(--line);
-    border-left:3px solid var(--gold-dim);
-    padding:14px 18px;
-    font-size:13px;
-    color:var(--text-dim);
-    border-radius:4px;
-    margin-bottom:32px;
-    line-height:1.5;
+    background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--blue-dim);
+    padding:12px 15px;font-size:12px;color:var(--text-dim);border-radius:6px;margin-bottom:16px;line-height:1.5;
   }
 
-  .best-bet{
-    background:linear-gradient(155deg, var(--surface-2), var(--surface));
-    border:1px solid var(--line);
-    border-radius:8px;
-    padding:28px;
-    margin-bottom:40px;
-    position:relative;
-    overflow:hidden;
+  .filters{display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap;}
+  .filter-btn{
+    border:1px solid var(--line);cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;
+    padding:5px 12px;border-radius:7px;background:var(--panel);color:var(--text-dim);transition:all .12s;
   }
-  .best-bet::before{
-    content:"";
-    position:absolute;
-    top:-40%;right:-10%;
-    width:280px;height:280px;
-    background:radial-gradient(circle, rgba(212,167,60,0.10), transparent 70%);
-  }
-  .best-bet-label{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:11px;
-    letter-spacing:0.14em;
-    text-transform:uppercase;
-    color:var(--gold);
-    margin-bottom:14px;
-  }
-  .best-bet-matchup{
-    font-size:26px;
-    font-weight:700;
-    margin-bottom:6px;
-  }
-  .best-bet-detail{
-    color:var(--text-dim);
-    font-size:14px;
-    margin-bottom:18px;
-  }
-  .best-bet-numbers{
-    display:flex;
-    gap:36px;
-    flex-wrap:wrap;
-  }
-  .bb-stat .bb-label{font-size:11px;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;}
-  .bb-stat .bb-value{font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:600;}
-  .bb-stat .bb-value.gold{color:var(--gold);}
+  .filter-btn.active{border-color:var(--blue);background:rgba(62,123,250,.12);color:var(--blue);}
 
-  table{width:100%;border-collapse:collapse;font-size:14px;}
-  thead th{
-    text-align:left;
-    font-family:'IBM Plex Mono',monospace;
-    font-size:11px;
-    letter-spacing:0.08em;
-    text-transform:uppercase;
-    color:var(--text-faint);
-    padding:10px 12px;
-    border-bottom:1px solid var(--line);
-    font-weight:500;
-    white-space:nowrap;
+  .board{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:26px;}
+  .board-head{
+    display:grid;padding:10px 16px;font-size:9px;letter-spacing:.09em;color:var(--text-faint);
+    font-family:'IBM Plex Mono',monospace;border-bottom:1px solid var(--line);background:var(--panel-2);
   }
-  tbody td{
-    padding:14px 12px;
-    border-bottom:1px solid var(--line);
-    vertical-align:middle;
+  .board-row{display:grid;align-items:center;padding:0 16px;border-bottom:1px solid var(--line);position:relative;transition:background .1s;}
+  .board-row:last-child{border-bottom:none;}
+  .board-row:hover{background:var(--panel-3);}
+  .row-inner{display:flex;align-items:center;gap:10px;padding:10px 0;min-width:0;}
+  .team-bar{width:3px;height:30px;border-radius:2px;flex:0 0 auto;}
+  .matchup-block{min-width:0;}
+  .matchup-main{font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .matchup-sub{font-size:10px;color:var(--text-faint);font-family:'IBM Plex Mono',monospace;margin-top:1px;}
+  .col-r{text-align:right;}
+  .col-c{text-align:center;}
+  .cell-num{font-size:12.5px;color:var(--num);font-family:'IBM Plex Mono',monospace;}
+  .cell-model{font-size:13px;font-weight:600;color:var(--text);font-family:'IBM Plex Mono',monospace;}
+  .cell-edge{font-size:13px;font-weight:700;font-family:'IBM Plex Mono',monospace;}
+  .edge-pos{color:var(--green);}
+  .edge-neg{color:var(--red);}
+  .edge-flat{color:var(--text-dim2);}
+  .play-badge{
+    display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:22px;padding:0 6px;
+    background:var(--white-badge);color:#0A0B0F;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;border-radius:5px;
   }
-  tbody tr:hover{background:var(--surface);}
-  .matchup{font-weight:600;}
-  .matchup .at{color:var(--text-faint);font-weight:400;margin:0 4px;}
-  .cell-num{font-family:'IBM Plex Mono',monospace;text-align:right;}
-  .edge-pos{color:var(--gold);}
-  .edge-neg{color:var(--text-dim);}
-  .edge-badge{
-    display:inline-block;
-    font-family:'IBM Plex Mono',monospace;
-    font-size:12px;
-    padding:2px 8px;
-    border-radius:3px;
-    background:rgba(212,167,60,0.12);
-    color:var(--gold);
-    margin-left:8px;
-  }
-  .market-val{color:var(--text-dim);}
+  .play-none{background:transparent;color:var(--text-faint);font-family:'IBM Plex Mono',monospace;font-size:12px;}
+  .board-footnote{padding:10px 16px 4px;font-size:10px;color:var(--text-faint2);font-family:'IBM Plex Mono',monospace;}
 
-  footer{
-    max-width:1180px;margin:0 auto;padding:0 24px 40px;
-    color:var(--text-faint);font-size:12px;font-family:'IBM Plex Mono',monospace;
-  }
+  .grid-lines{grid-template-columns:1.5fr 90px 90px 76px 60px 52px;}
+  .grid-props{grid-template-columns:1.5fr 1fr 70px 88px 66px 52px;}
 
-  @media (max-width:720px){
-    thead th:nth-child(4),tbody td:nth-child(4),
-    thead th:nth-child(8),tbody td:nth-child(8),
-    thead th:nth-child(9),tbody td:nth-child(9){display:none;}
-    .best-bet-numbers{gap:20px;}
+  .pr-table{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;}
+  .pr-head{display:grid;grid-template-columns:32px 1.4fr 70px 1fr 80px;padding:10px 16px;font-size:9px;letter-spacing:.09em;color:var(--text-faint);font-family:'IBM Plex Mono',monospace;border-bottom:1px solid var(--line);background:var(--panel-2);}
+  .pr-row{display:grid;grid-template-columns:32px 1.4fr 70px 1fr 80px;align-items:center;padding:9px 16px;border-bottom:1px solid var(--line);gap:8px;}
+  .pr-row:last-child{border-bottom:none;}
+  .pr-rank{font-size:11px;color:var(--text-faint);font-family:'IBM Plex Mono',monospace;}
+  .pr-team{display:flex;align-items:center;gap:9px;font-weight:600;font-size:13px;}
+  .pr-swatch{width:9px;height:9px;border-radius:2px;flex:0 0 auto;}
+  .pr-net{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;text-align:right;}
+  .pr-bar-wrap{background:var(--line);border-radius:3px;height:6px;position:relative;overflow:hidden;}
+  .pr-bar{height:100%;border-radius:3px;}
+  .pr-pace{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-dim2);text-align:right;}
+
+  footer{max-width:1320px;margin:0 auto;padding:0 22px 40px;color:var(--text-faint);font-size:11px;font-family:'IBM Plex Mono',monospace;line-height:1.6;}
+
+  @media (max-width:860px){
+    .stat-strip{grid-template-columns:repeat(3,1fr);}
+    .grid-lines{grid-template-columns:1.3fr 76px 76px 52px;}
+    .grid-props{grid-template-columns:1.3fr 1fr 70px 52px;}
+    .col-hide{display:none;}
+    .pr-head,.pr-row{grid-template-columns:28px 1.3fr 60px 70px;}
+    .pr-bar-col{display:none;}
   }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="eyebrow">PitchEdge · NFL Lines Model</div>
-  <h1 id="page-title">Loading…</h1>
-  <div class="meta">Generated <span id="generated-at">—</span> · <span id="training-note">—</span></div>
+  <div class="brand">
+    <div class="brand-badge">P</div>
+    <div>
+      <div style="display:flex;align-items:center;">
+        <span class="brand-name">PITCHEDGE</span>
+        <span class="brand-tag mono">NFL</span>
+      </div>
+      <div class="brand-sub mono">ENSEMBLE MODEL &amp; MARKET EDGE ENGINE</div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-view="lines">Lines</button>
+    <button class="tab-btn" data-view="props">TD Props</button>
+  </div>
+
+  <div class="header-spacer"></div>
+
+  <div class="sync-pill">
+    <span class="sync-dot"></span>
+    <span class="sync-text mono" id="week-label">—</span>
+  </div>
+  <div class="clock mono" id="generated-at">—</div>
 </header>
 
 <main>
-  <div class="caveat" id="caveat"></div>
-  <div id="best-bet-slot"></div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Matchup</th>
-        <th class="cell-num">Model Spread</th>
-        <th class="cell-num">Market Spread</th>
-        <th class="cell-num">Model Total</th>
-        <th class="cell-num">Market Total</th>
-        <th class="cell-num">Model Win% (Home)</th>
-        <th class="cell-num">Market Implied</th>
-        <th class="cell-num">ML EV/u</th>
-        <th style="text-align:center">Src</th>
-      </tr>
-    </thead>
-    <tbody id="games-body"></tbody>
-  </table>
+  <div class="view active" id="view-lines">
+    <div class="stat-strip" id="lines-stats"></div>
+
+    <div class="section-head">
+      <div class="section-title">
+        <span class="section-bar"></span>
+        <span class="section-label">EDGE BOARD</span>
+      </div>
+      <div class="market-tabs" id="market-tabs">
+        <button class="market-btn active" data-market="spread">SPREAD</button>
+        <button class="market-btn" data-market="total">TOTAL</button>
+        <button class="market-btn" data-market="moneyline">MONEYLINE</button>
+      </div>
+    </div>
+
+    <div class="caveat" id="lines-caveat"></div>
+
+    <div class="board">
+      <div class="board-head grid-lines" id="lines-head"></div>
+      <div id="lines-body"></div>
+      <div class="board-footnote" id="lines-footnote"></div>
+    </div>
+
+    <div class="section-head">
+      <div class="section-title">
+        <span class="section-bar"></span>
+        <span class="section-label">POWER RATINGS — AS OF THIS WEEK</span>
+      </div>
+    </div>
+    <div class="pr-table">
+      <div class="pr-head"><div>#</div><div>TEAM</div><div class="col-r">NET</div><div class="pr-bar-col">RATING</div><div class="col-r">PACE</div></div>
+      <div id="power-ratings-body"></div>
+    </div>
+  </div>
+
+  <div class="view" id="view-props">
+    <div class="stat-strip" id="props-stats"></div>
+
+    <div class="section-head">
+      <div class="section-title">
+        <span class="section-bar"></span>
+        <span class="section-label">VALUE BOARD — ANYTIME TD</span>
+      </div>
+    </div>
+
+    <div class="caveat" id="props-caveat"></div>
+    <div class="filters" id="pos-filters"></div>
+
+    <div class="board">
+      <div class="board-head grid-props">
+        <div>PLAYER</div><div class="col-hide">MATCHUP</div><div class="col-r">MODEL</div>
+        <div class="col-r">BEST&nbsp;PRICE</div><div class="col-r">EDGE</div><div class="col-c">PLAY</div>
+      </div>
+      <div id="props-body"></div>
+      <div class="board-footnote">Edge = model probability minus price-implied probability. PLAY is an illustrative unit size (edge-threshold heuristic, not a validated Kelly/bankroll system) — shown only when a live price exists.</div>
+    </div>
+  </div>
+
 </main>
 
 <footer>
-  Opponent-adjusted power ratings + trailing scoring/pace, trained on all played games through the most recent completed week.
-  Spread/moneyline model validated against held-out 2024 season data; total is anchored to the market total line with a small, heavily-regularized model nudge — treat total_edge as low-confidence (see repo README).
-  Not a profitability backtest — market lines here are current/live, not time-stamped historical closing lines.
+  PitchEdge NFL Model — Track B (spread/total/moneyline) and Track A (anytime TD) are independently trained and validated; power ratings are opponent-adjusted (SRS-style), solved week-by-week from games strictly before the current one.
+  Not a profitability backtest — see repo README and scripts/backtest.py for real, time-stamped results once games are played.
 </footer>
 
 <script src="data/nfl_lines.js"></script>
+<script src="data/player_td.js"></script>
 <script>
 (function(){
-  const data = window.NFL_LINES_DATA;
-  if(!data){
-    document.getElementById('page-title').textContent = "No data found — run scripts/generate_predictions.py";
-    return;
-  }
-
-  document.getElementById('page-title').textContent = `Week ${data.week}, ${data.season}`;
-  document.getElementById('generated-at').textContent = new Date(data.generated_at).toLocaleString('en-US', {
-    dateStyle:'medium', timeStyle:'short'
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('view-' + btn.dataset.view).classList.add('active');
+    });
   });
-  document.getElementById('training-note').textContent = `trained on ${data.model_notes.training_games.toLocaleString()} games`;
-  document.getElementById('caveat').textContent = data.model_notes.caveat;
 
-  const games = [...data.games].sort((a,b) => Math.abs(b.edges.spread_edge) - Math.abs(a.edges.spread_edge));
+  const TEAM_COLOR = {
+    ARI:'#97233F', ATL:'#A71930', BAL:'#241773', BUF:'#00338D', CAR:'#0085CA',
+    CHI:'#C83803', CIN:'#FB4F14', CLE:'#FF3C00', DAL:'#003594', DEN:'#FB4F14',
+    DET:'#0076B6', GB:'#203731', HOU:'#A71930', IND:'#002C5F', JAX:'#D7A22A',
+    KC:'#E31837', LV:'#A5ACAF', LAC:'#0080C6', LAR:'#003594', MIA:'#008E97',
+    MIN:'#4F2683', NE:'#C60C30', NO:'#D3BC8D', NYG:'#0B2265', NYJ:'#125740',
+    PHI:'#004C54', PIT:'#FFB612', SF:'#AA0000', SEA:'#69BE28', TB:'#D50A0A',
+    TEN:'#4B92DB', WAS:'#FFB612',
+  };
+  function teamColor(t){ return TEAM_COLOR[t] || '#3E7BFA'; }
 
-  // Best bet callout -- largest absolute spread edge
-  const bb = games[0];
-  if(bb){
-    const favSide = bb.edges.spread_edge > 0 ? bb.home_team : bb.away_team;
-    document.getElementById('best-bet-slot').innerHTML = `
-      <div class="best-bet">
-        <div class="best-bet-label">Largest Spread Edge This Week</div>
-        <div class="best-bet-matchup">${bb.away_team} @ ${bb.home_team}</div>
-        <div class="best-bet-detail">Model favors ${favSide} relative to the market by ${Math.abs(bb.edges.spread_edge).toFixed(1)} points</div>
-        <div class="best-bet-numbers">
-          <div class="bb-stat"><div class="bb-label">Model Spread (Home)</div><div class="bb-value">${fmtSign(bb.model.pred_home_margin)}</div></div>
-          <div class="bb-stat"><div class="bb-label">Market Spread (Home)</div><div class="bb-value">${fmtSign(bb.market.spread_line)}</div></div>
-          <div class="bb-stat"><div class="bb-label">Edge</div><div class="bb-value gold">${fmtSign(bb.edges.spread_edge)} pts</div></div>
-        </div>
-      </div>`;
+  function fmtPct(x){ return x==null ? '\u2014' : (x*100).toFixed(0)+'%'; }
+  function fmtSigned(x){ return x==null ? '\u2014' : (x>=0?'+':'')+(x*100).toFixed(1)+'%'; }
+  function fmtSign1(n){ if(n==null) return '\u2014'; const v=Number(n); return (v>0?'+':'')+v.toFixed(1); }
+  function fmtOdds(x){ return x==null ? '\u2014' : (x>0?'+':'')+x; }
+  function edgeClass(v){ if(v==null) return 'edge-flat'; return v>0 ? 'edge-pos' : v<0 ? 'edge-neg' : 'edge-flat'; }
+
+  function playBadge(absEdgePct){
+    if(absEdgePct == null) return '<span class="play-none">\u2014</span>';
+    let u = null;
+    if(absEdgePct >= 5) u = '3u';
+    else if(absEdgePct >= 3) u = '2u';
+    else if(absEdgePct >= 1.5) u = '1u';
+    return u ? `<span class="play-badge">${u}</span>` : '<span class="play-none">\u2014</span>';
   }
 
-  const tbody = document.getElementById('games-body');
-  tbody.innerHTML = games.map(g => {
-    const ev = g.edges.home_moneyline_ev;
-    const evColor = ev==null ? 'var(--text-faint)' : (ev>=0 ? 'var(--gold)' : 'var(--text-faint)');
-    const srcLive = g.market_source === 'live';
-    return `
-    <tr>
-      <td class="matchup">${g.away_team}<span class="at">@</span>${g.home_team}</td>
-      <td class="cell-num">${fmtSign(g.model.pred_home_margin)}</td>
-      <td class="cell-num market-val">${fmtSign(g.market.spread_line)}<span class="edge-badge ${Math.abs(g.edges.spread_edge)>=3 ? '' : 'edge-neg'}">${fmtSign(g.edges.spread_edge)}</span></td>
-      <td class="cell-num">${g.model.pred_total.toFixed(1)}</td>
-      <td class="cell-num market-val">${g.market.total_line.toFixed(1)}<span class="edge-badge ${Math.abs(g.edges.total_edge)>=3 ? '' : 'edge-neg'}">${fmtSign(g.edges.total_edge)}</span></td>
-      <td class="cell-num">${(g.model.home_win_prob*100).toFixed(1)}%</td>
-      <td class="cell-num market-val">${g.market.home_implied_prob!=null ? (g.market.home_implied_prob*100).toFixed(1)+'%' : '—'}</td>
-      <td class="cell-num" style="color:${evColor}">${ev!=null ? (ev>=0?'+':'')+(ev*100).toFixed(1)+'%' : '—'}</td>
-      <td style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10px;color:${srcLive?'var(--gold)':'var(--text-faint)'}">${srcLive?'LIVE':'sched'}</td>
-    </tr>
-  `;
-  }).join('');
+  let generatedAt = null;
+  function setGeneratedAt(ts){
+    if(generatedAt && new Date(ts) <= generatedAt) return;
+    generatedAt = new Date(ts);
+    document.getElementById('generated-at').textContent = generatedAt.toLocaleString('en-US', {dateStyle:'medium', timeStyle:'short'});
+  }
 
-  function fmtSign(n){
-    const v = Number(n);
-    return (v > 0 ? '+' : '') + v.toFixed(1);
+  const linesData = window.NFL_LINES_DATA;
+  let currentMarket = 'spread';
+
+  if(linesData){
+    setGeneratedAt(linesData.generated_at);
+    document.getElementById('week-label').textContent = `WEEK ${linesData.week} \u00B7 ${linesData.season}`;
+    document.getElementById('lines-caveat').textContent = linesData.model_notes.caveat;
+
+    const games = linesData.games;
+    const qualifying = games.filter(g => Math.abs(g.edges.spread_edge) >= 1.5).length;
+    document.getElementById('lines-stats').innerHTML = [
+      ['GAMES PRICED', games.length],
+      ['QUALIFYING EDGES', qualifying, 'color:var(--green)'],
+      ['MARGIN MODEL MAE', '10.27', null, 'baseline 11.30'],
+      ['TOTAL MODEL MAE', '9.78', null, 'market-alone 9.77'],
+      ['TRAINING GAMES', linesData.model_notes.training_games.toLocaleString()],
+      ['MARGIN RESID \u03C3', linesData.model_notes.margin_residual_std + ' pts'],
+    ].map(([label,val,style,sub]) => `
+      <div class="stat-box">
+        <div class="stat-label mono">${label}</div>
+        <div class="stat-value" style="${style||''}">${val}</div>
+        ${sub?`<div style="font-size:9px;color:var(--text-faint2);margin-top:3px;font-family:'IBM Plex Mono',monospace">${sub}</div>`:''}
+      </div>`).join('');
+
+    document.querySelectorAll('.market-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.market-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentMarket = btn.dataset.market;
+        renderLines();
+      });
+    });
+
+    function renderLines(){
+      const head = document.getElementById('lines-head');
+      const body = document.getElementById('lines-body');
+      const footnote = document.getElementById('lines-footnote');
+
+      if(currentMarket === 'spread'){
+        head.className = 'board-head grid-lines';
+        head.innerHTML = `<div>MATCHUP</div><div class="col-r">MARKET</div><div class="col-r">MODEL</div><div class="col-r">EDGE</div><div class="col-r col-hide">WIN%</div><div class="col-c">PLAY</div>`;
+        const sorted = [...games].sort((a,b)=>Math.abs(b.edges.spread_edge)-Math.abs(a.edges.spread_edge));
+        body.innerHTML = sorted.map(g => {
+          const e = g.edges.spread_edge;
+          return `<div class="board-row grid-lines">
+            <div class="row-inner"><span class="team-bar" style="background:${teamColor(g.home_team)}"></span>
+              <div class="matchup-block"><div class="matchup-main">${g.away_team} @ ${g.home_team}</div>
+              <div class="matchup-sub">${g.market_source==='live'?'LIVE':'SCHED'}</div></div></div>
+            <div class="cell-num col-r">${fmtSign1(g.market.spread_line)}</div>
+            <div class="cell-model col-r">${fmtSign1(g.model.pred_home_margin)}</div>
+            <div class="cell-edge col-r ${edgeClass(e)}">${fmtSign1(e)}</div>
+            <div class="cell-num col-r col-hide">${(g.model.home_win_prob*100).toFixed(1)}%</div>
+            <div class="col-c">${playBadge(Math.abs(e)>=3?5.5:Math.abs(e)>=1.5?3.2:Math.abs(e)>=0.8?1.8:null)}</div>
+          </div>`;
+        }).join('');
+        footnote.textContent = 'Edge in points (model spread minus market spread). PLAY sizing is illustrative only.';
+      } else if(currentMarket === 'total'){
+        head.className = 'board-head grid-lines';
+        head.innerHTML = `<div>MATCHUP</div><div class="col-r">MARKET</div><div class="col-r">MODEL</div><div class="col-r">EDGE</div><div class="col-r col-hide">SRC</div><div class="col-c">PLAY</div>`;
+        const sorted = [...games].sort((a,b)=>Math.abs(b.edges.total_edge)-Math.abs(a.edges.total_edge));
+        body.innerHTML = sorted.map(g => {
+          const e = g.edges.total_edge;
+          return `<div class="board-row grid-lines">
+            <div class="row-inner"><span class="team-bar" style="background:${teamColor(g.home_team)}"></span>
+              <div class="matchup-block"><div class="matchup-main">${g.away_team} @ ${g.home_team}</div>
+              <div class="matchup-sub">O/U</div></div></div>
+            <div class="cell-num col-r">${g.market.total_line.toFixed(1)}</div>
+            <div class="cell-model col-r">${g.model.pred_total.toFixed(1)}</div>
+            <div class="cell-edge col-r ${edgeClass(e)}">${fmtSign1(e)}</div>
+            <div class="cell-num col-r col-hide">${g.market_source==='live'?'LIVE':'SCHED'}</div>
+            <div class="col-c">${playBadge(null)}</div>
+          </div>`;
+        }).join('');
+        footnote.textContent = 'Total is market-anchored with a heavily-regularized deviation model -- edges here are intentionally small and low-confidence (see caveat above). No PLAY sizing shown for totals.';
+      } else {
+        head.className = 'board-head grid-lines';
+        head.innerHTML = `<div>MATCHUP</div><div class="col-r">MARKET ML</div><div class="col-r">MODEL WIN%</div><div class="col-r">EV/u</div><div class="col-r col-hide">IMPL</div><div class="col-c">PLAY</div>`;
+        const sorted = [...games].sort((a,b)=>(b.edges.home_moneyline_ev||-1)-(a.edges.home_moneyline_ev||-1));
+        body.innerHTML = sorted.map(g => {
+          const ev = g.edges.home_moneyline_ev;
+          return `<div class="board-row grid-lines">
+            <div class="row-inner"><span class="team-bar" style="background:${teamColor(g.home_team)}"></span>
+              <div class="matchup-block"><div class="matchup-main">${g.away_team} @ ${g.home_team}</div>
+              <div class="matchup-sub">ML (home)</div></div></div>
+            <div class="cell-num col-r">${fmtOdds(g.market.home_moneyline)}</div>
+            <div class="cell-model col-r">${(g.model.home_win_prob*100).toFixed(1)}%</div>
+            <div class="cell-edge col-r ${edgeClass(ev)}">${ev!=null?fmtSigned(ev):'\u2014'}</div>
+            <div class="cell-num col-r col-hide">${g.market.home_implied_prob!=null?(g.market.home_implied_prob*100).toFixed(1)+'%':'\u2014'}</div>
+            <div class="col-c">${playBadge(ev!=null?ev*100:null)}</div>
+          </div>`;
+        }).join('');
+        footnote.textContent = 'EV/u = expected profit per $1 staked on the home side at the market moneyline, using the model win probability.';
+      }
+    }
+    renderLines();
+
+    const pr = linesData.power_ratings || [];
+    const maxAbs = Math.max(1, ...pr.map(r => Math.abs(r.net_rating)));
+    document.getElementById('power-ratings-body').innerHTML = pr.map((r,i) => {
+      const pct = Math.abs(r.net_rating) / maxAbs * 100;
+      const barColor = r.net_rating >= 0 ? 'var(--green)' : 'var(--red)';
+      return `<div class="pr-row">
+        <div class="pr-rank">${i+1}</div>
+        <div class="pr-team"><span class="pr-swatch" style="background:${teamColor(r.team)}"></span>${r.team}</div>
+        <div class="pr-net" style="color:${r.net_rating>=0?'var(--green)':'var(--red)'}">${fmtSign1(r.net_rating)}</div>
+        <div class="pr-bar-wrap pr-bar-col"><div class="pr-bar" style="width:${pct}%;background:${barColor}"></div></div>
+        <div class="pr-pace">${r.pace!=null?r.pace.toFixed(0):'\u2014'}</div>
+      </div>`;
+    }).join('');
+  } else {
+    document.getElementById('lines-caveat').textContent = 'No data found -- run scripts/generate_predictions.py to produce data/nfl_lines.js.';
+  }
+
+  const propsData = window.PLAYER_TD_DATA;
+  if(propsData){
+    setGeneratedAt(propsData.generated_at);
+    document.getElementById('props-caveat').textContent = propsData.model_notes.caveat;
+
+    const players = propsData.players;
+    const priced = players.filter(p => p.market != null);
+    const posEdge = priced.filter(p => p.market.edge > 0);
+    let avgEdgeTop10 = null;
+    if(priced.length){
+      const top10 = [...priced].sort((a,b)=>b.market.edge-a.market.edge).slice(0,10);
+      avgEdgeTop10 = top10.reduce((s,p)=>s+p.market.edge,0)/top10.length;
+    }
+    document.getElementById('props-stats').innerHTML = [
+      ['PLAYERS PRICED', players.length],
+      ['+EDGE PLAYS', priced.length?posEdge.length:'\u2014', 'color:var(--green)'],
+      ['AVG EDGE (TOP 10)', avgEdgeTop10!=null?fmtSigned(avgEdgeTop10):'\u2014', 'color:var(--blue)'],
+      ['MODEL AUC', '0.70', null, 'held-out 2024'],
+      ['TRAINING ROWS', propsData.model_notes.training_rows.toLocaleString()],
+      ['LIVE PRICES', priced.length + ' / ' + players.length],
+    ].map(([label,val,style,sub]) => `
+      <div class="stat-box">
+        <div class="stat-label mono">${label}</div>
+        <div class="stat-value" style="${style||''}">${val}</div>
+        ${sub?`<div style="font-size:9px;color:var(--text-faint2);margin-top:3px;font-family:'IBM Plex Mono',monospace">${sub}</div>`:''}
+      </div>`).join('');
+
+    let posFilter = 'ALL';
+    const positions = ['ALL','QB','RB','WR','TE'];
+    function renderFilters(){
+      const el = document.getElementById('pos-filters');
+      el.innerHTML = positions.map(p => `<button class="filter-btn ${p===posFilter?'active':''}" data-pos="${p}">${p}</button>`).join('');
+      el.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => { posFilter = btn.dataset.pos; renderProps(); });
+      });
+    }
+    function renderProps(){
+      renderFilters();
+      const rows = players.filter(p => posFilter==='ALL' || p.position===posFilter)
+        .sort((a,b) => (b.market?b.market.edge:-1) - (a.market?a.market.edge:-1) || b.model.anytime_td_prob - a.model.anytime_td_prob);
+      document.getElementById('props-body').innerHTML = rows.map(p => {
+        const m = p.market;
+        return `<div class="board-row grid-props">
+          <div class="row-inner"><span class="team-bar" style="background:${teamColor(p.team)}"></span>
+            <div class="matchup-block"><div class="matchup-main">${p.player_name}</div>
+            <div class="matchup-sub">${p.position} \u00B7 ${p.team}</div></div></div>
+          <div class="cell-num col-hide">${p.matchup}</div>
+          <div class="cell-model col-r">${fmtPct(p.model.anytime_td_prob)}</div>
+          <div class="cell-num col-r">${m?fmtOdds(m.anytime_td_price):'\u2014'}</div>
+          <div class="cell-edge col-r ${m?edgeClass(m.edge):'edge-flat'}">${m?fmtSigned(m.edge):'\u2014'}</div>
+          <div class="col-c">${m?playBadge(m.edge*100):'<span class="play-none">\u2014</span>'}</div>
+        </div>`;
+      }).join('');
+    }
+    renderProps();
+  } else {
+    document.getElementById('props-caveat').textContent = 'No data found -- run scripts/generate_player_predictions.py to produce data/player_td.js.';
   }
 })();
 </script>

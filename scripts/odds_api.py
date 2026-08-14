@@ -231,3 +231,29 @@ def american_to_implied_prob(price: float) -> float:
     if price > 0:
         return 100 / (price + 100)
     return -price / (-price + 100)
+
+
+def json_default(obj):
+    """
+    Pass as `default=` to json.dump/json.dumps anywhere output might contain
+    values pulled from a pandas DataFrame/Series. numpy.float64 happens to
+    subclass Python's float (so it silently serializes fine), but
+    numpy.int64 does NOT subclass int -- it raises TypeError with no
+    indication of WHERE the offending value came from. This bit the live-
+    odds integration immediately: American odds prices (moneylines, spread
+    prices) come back as int64 once they've passed through a DataFrame,
+    even if they started life as plain Python ints in odds_api.py's own
+    row-construction code -- a DataFrame column is always numpy-backed
+    regardless of what Python type went in, so casting at construction time
+    doesn't help; the fix has to be at serialization time.
+    """
+    import numpy as np
+    if isinstance(obj, np.integer):
+        return int(obj)
+    if isinstance(obj, np.floating):
+        return float(obj)
+    if isinstance(obj, np.bool_):
+        return bool(obj)
+    if isinstance(obj, np.ndarray):
+        return obj.tolist()
+    raise TypeError(f"Object of type {type(obj).__name__} is not JSON serializable")

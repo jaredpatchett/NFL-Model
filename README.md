@@ -262,6 +262,56 @@ directly, and was checked thoroughly against real data (candidate pool
 size, correct team corrections, sane top-of-board predictions) rather than
 synthetic fixtures. Worth adding a proper test file when there's time.
 
+## Live odds: The Odds API (new this session)
+
+Both tracks now fetch real sportsbook odds via `scripts/odds_api.py` and
+compute genuine edge/EV — not just model probability. Degrades gracefully:
+if `ODDS_API_KEY` isn't set or a call fails, both production scripts fall
+back to model-only output rather than crashing.
+
+**Correction to something stated earlier in this project**: current
+(non-historical) player-prop odds — including anytime-TD — are included on
+The Odds API's **free tier** (500 credits/month). Only *historical*
+player-prop data requires a paid plan. Earlier notes here said props needed
+a paid tier; that was wrong (or at least outdated) — checked against the
+live docs this session.
+
+- **Track B** (`generate_predictions.py`): one bulk call for h2h/spreads/
+  totals across ALL games (3 credits/run — cost doesn't scale with game
+  count). Best price selected across all returned bookmakers per side.
+  Falls back to the schedule-riding lines (already-existing behavior) when
+  no live odds are available for a game. Output now includes `market_source`
+  ("live" or "schedule_fallback") and a real moneyline EV per $1 stake.
+- **Track A** (`generate_player_predictions.py`): one event-odds call PER
+  GAME for `player_anytime_td` (no bulk endpoint exists for additional
+  markets) — costs len(games) credits per run. **The name-matching problem**:
+  our internal `player_name` is abbreviated ("S.Barkley," from nflverse
+  weekly data) but the API returns full names ("Saquon Barkley") — matched
+  via the ID crosswalk's `merge_name` field (added to `load_id_crosswalk()`
+  this session), normalized identically on both sides via `odds_api.normalize_name()`.
+- **Credit budget**: at the current cadence (4 runs/week × ~16 games × 18
+  weeks), both tracks combined use ~1,368 credits/season — comfortably
+  inside the free tier's ~2,250/season budget (500/mo × ~4.5 months), with
+  room for manual test runs. Re-check this math if cadence or game count
+  assumptions change.
+- **Tested against mocked responses, not a live key** (none was available
+  in the build environment) — `test_odds_api.py` validates parsing logic
+  (best-price selection, team-name mapping, name normalization, graceful
+  no-key fallback) against realistic fixtures matching the documented
+  schema, 15/15 passing. Also ran a full mocked integration test simulating
+  a real Barkley anytime-TD price end-to-end through
+  `generate_player_predictions.py` — model 70.96% vs market-implied 59.18%,
+  edge +11.77%, EV +19.9%, correct at every step. **Worth a real smoke test
+  once a key is live** — documented schemas can drift from reality, and
+  this hasn't been checked against the actual API response yet.
+
+**To activate**: add your key as a GitHub repo secret named `ODDS_API_KEY`
+(Settings → Secrets and variables → Actions → New repository secret). The
+workflow already passes it through to both prediction steps — no other
+config needed. Trigger the workflow manually once and check the Action log
+for `[odds api] ... credits remaining` lines to confirm it's actually
+pulling live data rather than silently falling back.
+
 ## Architecture
 
 Static-site + scheduled-job pattern: Python scripts in `scripts/` fetch data
@@ -296,6 +346,7 @@ this is only relevant for local setup.
     python scripts/test_features.py          # offline, should be 10/10
     python scripts/test_rolling_features.py  # offline, should be 12/12
     python scripts/test_power_ratings.py     # offline, should be 5/5
+    python scripts/test_odds_api.py          # offline (mocked), should be 15/15
     python scripts/team_features.py 2024     # builds team-week model table
     python scripts/team_td_model.py          # trains + validates Layer 2 (TD props)
     python scripts/game_features.py 2024     # builds team-game model table (Track B)

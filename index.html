@@ -157,7 +157,9 @@
   }
 
   @media (max-width:720px){
-    thead th:nth-child(4),tbody td:nth-child(4){display:none;}
+    thead th:nth-child(4),tbody td:nth-child(4),
+    thead th:nth-child(8),tbody td:nth-child(8),
+    thead th:nth-child(9),tbody td:nth-child(9){display:none;}
     .best-bet-numbers{gap:20px;}
   }
 </style>
@@ -184,6 +186,8 @@
         <th class="cell-num">Market Total</th>
         <th class="cell-num">Model Win% (Home)</th>
         <th class="cell-num">Market Implied</th>
+        <th class="cell-num">ML EV/u</th>
+        <th style="text-align:center">Src</th>
       </tr>
     </thead>
     <tbody id="games-body"></tbody>
@@ -232,7 +236,11 @@
   }
 
   const tbody = document.getElementById('games-body');
-  tbody.innerHTML = games.map(g => `
+  tbody.innerHTML = games.map(g => {
+    const ev = g.edges.home_moneyline_ev;
+    const evColor = ev==null ? 'var(--text-faint)' : (ev>=0 ? 'var(--gold)' : 'var(--text-faint)');
+    const srcLive = g.market_source === 'live';
+    return `
     <tr>
       <td class="matchup">${g.away_team}<span class="at">@</span>${g.home_team}</td>
       <td class="cell-num">${fmtSign(g.model.pred_home_margin)}</td>
@@ -241,8 +249,11 @@
       <td class="cell-num market-val">${g.market.total_line.toFixed(1)}<span class="edge-badge ${Math.abs(g.edges.total_edge)>=3 ? '' : 'edge-neg'}">${fmtSign(g.edges.total_edge)}</span></td>
       <td class="cell-num">${(g.model.home_win_prob*100).toFixed(1)}%</td>
       <td class="cell-num market-val">${g.market.home_implied_prob!=null ? (g.market.home_implied_prob*100).toFixed(1)+'%' : '—'}</td>
+      <td class="cell-num" style="color:${evColor}">${ev!=null ? (ev>=0?'+':'')+(ev*100).toFixed(1)+'%' : '—'}</td>
+      <td style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10px;color:${srcLive?'var(--gold)':'var(--text-faint)'}">${srcLive?'LIVE':'sched'}</td>
     </tr>
-  `).join('');
+  `;
+  }).join('');
 
   function fmtSign(n){
     const v = Number(n);

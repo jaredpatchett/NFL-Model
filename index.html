@@ -196,7 +196,7 @@
 
 <footer>
   Opponent-adjusted power ratings + trailing scoring/pace, trained on all played games through the most recent completed week.
-  Spread/moneyline model validated against held-out 2024 season data; total-points model is comparatively weak (see repo README).
+  Spread/moneyline model validated against held-out 2024 season data; total is anchored to the market total line with a small, heavily-regularized model nudge — treat total_edge as low-confidence (see repo README).
   Not a profitability backtest — market lines here are current/live, not time-stamped historical closing lines.
 </footer>
 

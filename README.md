@@ -101,11 +101,10 @@ Separate model track from the TD props above — same data foundation
     - **Margin (spread)**: Ridge MAE 10.27 vs baseline 11.30 — beats baseline,
       correctly-signed coefficients (own rating +, opponent rating -, home
       field +).
-    - **Total points**: Ridge/GBM MAE ~10.1 vs baseline 10.14 — barely beats
-      baseline. Total points is a genuinely hard target (weather, game
-      script); this is a known limitation of power-rating approaches, not a
-      bug, and is a good candidate for future improvement (pace/EPA features,
-      weather data).
+    - **Total points**: market-blended, revisited and fixed this session
+      (see "Total points: market-blended fix" section below) — was weak,
+      now anchored to the market total with a heavily-regularized deviation
+      model on top, MAE 9.776 essentially matching market-alone (9.768).
     - **Moneyline**: win probability via normal CDF of projected margin
       (residual std ~13.2 pts), converted to fair odds. Lands slightly more
       conservative than market-implied probability, as expected (market
@@ -121,9 +120,54 @@ props above.
 for historical player-prop odds), moneyline/spread/total odds are available
 on The Odds API's free/cheap tier — cheaper path to live odds for this track.
 
-Next steps for Track B: improve the total-points model (weather, pace/EPA
-features), pull live odds via The Odds API, build the edge/pricing
-comparison, backtest with genuinely time-stamped (not closing) lines.
+## Total points: market-blended fix (new this session)
+
+The original from-scratch total model (predict game_total directly from
+power ratings + trailing pace/scoring) never beat a naive mean-guess
+baseline by much (MAE ~10.1 vs baseline 10.14). Revisited this session with
+two changes:
+
+1. **Added weather/pace features** (dome flag, wind, temp, trailing plays)
+   in an earlier pass — helped bias/RMSE, barely moved MAE.
+2. **Market-blended residual approach** (this session): instead of
+   predicting the total from scratch, anchor to the market's own
+   `total_line` (legitimately available pre-kickoff, not leakage) and
+   predict the RESIDUAL (deviation from that anchor) using the same
+   feature set.
+
+**Honest finding from an alpha (regularization strength) sweep**: the
+market's own total_line, used ALONE with zero model input, beats the
+residual model at every regularization strength tried — from alpha=5
+(MAE 10.00) through alpha=100,000 (MAE 9.770), approaching but never
+crossing market-alone's MAE of 9.768. This isn't a tuning problem; it's
+evidence this feature set doesn't contain genuine signal beyond what's
+already priced into the market total.
+
+**Response**: rather than ship a model that's measurably worse than just
+trusting the market, or fabricate a smaller alpha that happened to look
+better on this one validation season (overfitting to 2024's noise), the
+model now uses heavy regularization (alpha=20,000) — final result:
+**MAE 9.776, RMSE 12.586 — statistically indistinguishable from market-
+alone (MAE 9.768, RMSE 12.587)**, while still preserving a small,
+football-sane directional nudge (wind negative, power rating positive,
+trailing pace positive). Production (`generate_predictions.py`) now
+computes `pred_total = total_line + model_residual` instead of predicting
+the total from scratch.
+
+**What this means for `total_edge` going forward**: treat it as
+low-confidence — the model doesn't have a demonstrated edge on totals the
+way it does on spreads. Deviations from the market total shown in the
+dashboard are now small (typically <1 point) by design, reflecting that
+honest uncertainty rather than presenting a fabricated confident number.
+Real improvement here would need genuinely new signal (EPA/success-rate
+features, or weather forecast data beyond what's already in the schedule
+pull) — not more tuning of the current feature set, which has been shown
+not to contain it.
+
+Next steps for Track B: find genuinely new total-points signal (EPA/
+success-rate features — bigger lift, not yet started), build a proper
+edge/pricing backtest once enough logged weeks accumulate, genuinely
+time-stamped (not closing) lines for a real profitability check.
 
 ## Automation & dashboard (new this session)
 

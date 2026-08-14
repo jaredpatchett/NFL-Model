@@ -356,6 +356,45 @@ config needed. Trigger the workflow manually once and check the Action log
 for `[odds api] ... credits remaining` lines to confirm it's actually
 pulling live data rather than silently falling back.
 
+## Backtest (new this session)
+
+`scripts/backtest.py` joins the persistent prediction logs
+(`data/predictions_log.jsonl`, `data/player_td_log.jsonl`) against REAL,
+now-known game outcomes — genuinely different from `game_lines_model.py` /
+`player_td_model.py`'s validation, which checks calibration against
+CLOSING lines from a historical dataset. This uses the actual logged
+snapshots: timestamped predictions made before any outcome was known,
+accumulated automatically by every cron run.
+
+**Which snapshot counts as "the bet"**: a game gets logged every run
+between when it enters the upcoming slate and kickoff — multiple snapshots
+across the week. The backtest uses the LAST snapshot before kickoff per
+game/player (the freshest information actually available), not every
+snapshot as if each were a separate bet. Earlier snapshots stay in the log
+untouched, for anyone who wants to study how a prediction moved over the
+week.
+
+**What it reports**:
+- Track B: ATS record + ROI, totals (O/U) record + ROI, moneyline record +
+  ROI, at the logged prediction vs. the logged market line.
+- Track A: hit rate, AUC/LogLoss/Brier on realized outcomes, and ROI if
+  betting every logged player vs. only positive-edge picks (using the
+  actual logged price when one exists).
+
+**Price approximation**: the log records the market LINE for spread/totals
+but not the per-side PRICE (only moneyline prices are logged) — standard
+`-110` is assumed for ATS/totals ROI, a reasonable default but an
+approximation. Moneyline ROI uses the actual logged price.
+
+**Tested against synthetic fixtures, not real results yet** — as of this
+build the regular season hasn't started, so both tracks currently report
+"0 games/players have outcomes available" (correctly — there's nothing to
+join against yet). `test_backtest.py` validates the join/ROI logic itself
+against hand-computable fixtures (22/22 checks passing) so it's trustworthy
+the moment real results start flowing in. Not wired into the automated
+cron — run manually (`python scripts/backtest.py`) whenever you want a
+fresh report; it doesn't generate new predictions, only evaluates old ones.
+
 ## Architecture
 
 Static-site + scheduled-job pattern: Python scripts in `scripts/` fetch data
@@ -391,6 +430,7 @@ this is only relevant for local setup.
     python scripts/test_rolling_features.py  # offline, should be 12/12
     python scripts/test_power_ratings.py     # offline, should be 5/5
     python scripts/test_odds_api.py          # offline (mocked), should be 15/15
+    python scripts/test_backtest.py          # offline (synthetic), should be 22/22
     python scripts/team_features.py 2024     # builds team-week model table
     python scripts/team_td_model.py          # trains + validates Layer 2 (TD props)
     python scripts/game_features.py 2024     # builds team-game model table (Track B)
@@ -398,6 +438,7 @@ this is only relevant for local setup.
     python scripts/generate_predictions.py         # production: Track B, writes data/nfl_lines.*
     python scripts/player_td_model.py              # trains + validates Track A (anytime TD)
     python scripts/generate_player_predictions.py  # production: Track A, writes data/player_td.*
+    python scripts/backtest.py                     # reports real results once games are played
 
 ## Data sources decided
 

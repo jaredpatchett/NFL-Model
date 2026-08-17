@@ -493,6 +493,133 @@ histogram bins, correct situational flags for a real dome team), and the
 close button works. Not just "the JS parses," an actual interaction was
 exercised end-to-end.
 
+## Blueprint qualification screen (new this session)
+
+Track A now implements the eligibility screen and A/B/C/D tier framework
+from `NFL_Touchdown_Betting_Model_Blueprint.pdf`, a document the user
+uploaded partway through this project. Important context: **that PDF
+existed before this session but wasn't given to Claude until now** — the
+model built earlier was based on the general principles that made it into
+this README (opportunity over recent scoring, calibration, time-based
+backtesting), not this document's specific hard thresholds. This closes
+that gap for the parts of the PDF that are actually formula-complete.
+
+**Implemented** (`scripts/blueprint_qualification.py`), directly from the
+PDF's own stated numbers:
+- Snap share ≥ 70% (Section 2's hard minimum)
+- TD projection ≥ 30% (mapped to the calibrated model probability)
+- Projection must exceed market implied probability at all (hard
+  disqualifier), with 4%/6% edge thresholds feeding the A/B tier (Section 7)
+- Meaningful red-zone role — red-zone target share OR inside-5 carry share
+  above 5% (the PDF names "weak or disappearing red-zone role" as a
+  disqualifier but doesn't give an exact number; 5% is this build's
+  interpretation, not a value taken directly from the document — worth
+  revisiting if it's not the right bar)
+- Recent-TD-regression check (Section 2 + Section 11's "chasing recent
+  touchdowns" blind spot) — trailing actual TDs meaningfully exceeding
+  trailing expected TDs flags a hard disqualify
+- Tiers: **A** = edge≥6%, EV≥12%. **B** = edge≥4%, EV≥7%. **C** = passes
+  every hard filter but below B's edge/EV. **D** = fails any hard filter.
+  **U** = unrated — no live price to evaluate edge/EV against yet (NOT the
+  same as D; a player can look great on every non-market criterion and
+  still be "U" simply because no sportsbook has posted a line on them yet)
+
+**Deliberately not implemented** — named in the PDF without a formula,
+not a build shortcut:
+- **HEAT windows, "2 of 3 at 60+"** (Section 2) — named without a
+  formula. The user's own screenshot of their existing tool has HEAT
+  3/6/9 columns that look like a usage-consistency metric, but the exact
+  calculation hasn't been confirmed
+- **Preferred odds range +120/+300** (Section 1) — NOT a hard filter here.
+  The EV calculation already penalizes short/juiced prices on its own
+  terms; hard-excluding a play on price alone would throw out plays the
+  PDF's own EV math would accept. Tracked as an informational reason code
+  instead (verified in `test_blueprint_qualification.py`: a -145 price
+  with real edge still reaches Tier A, just flagged).
+
+**Matchup rating — now implemented (`scripts/defense_features.py`), but
+kept informational, not a hard filter, since it's new and unvalidated.**
+The PDF names "matchup rating ≥ 1.10" without a formula. Rather than guess
+with a single blended number (e.g. raw points allowed), this was built
+from what the PDF's own data-requirements section actually asks for:
+*"Touchdowns allowed by position and play type"* and *"Red-zone touchdown
+percentage allowed."* Real, position-specific signal from real
+play-by-play:
+- RBs are rated against the opponent's trailing **rushing**-TD rate
+  allowed; WR/TE/QB against **passing**-TD rate allowed — not the same
+  number for both, since a defense can be generous against the run and
+  tough against the pass or vice versa.
+- Normalized against the **league average that same week** (not a fixed
+  historical constant), since league scoring drifts over a season. 1.00 =
+  league average; above 1.10 = notably softer than average for that
+  specific play type.
+- Same leakage-safe trailing mechanism as everything else, including
+  correctly resolving for the genuinely-future 2026 Week 1 (real prior-
+  season data trails in via the same stub-row technique used for pace/
+  implied totals elsewhere).
+- Real sample from the live pipeline: Jets show 2.66x league-average pass-
+  TD rate allowed (matches real 2025 struggles); Vikings show 0.22x (a
+  legitimately tough defense). Not fabricated numbers.
+- Validated with 13 synthetic checks (`test_defense_features.py`),
+  including an explicit leakage check (a future week's trailing rate must
+  come from real prior games, not zeroed-out future data).
+- **One real bug found and fixed while wiring this in**: calling
+  `build_matchup_ratings()` from inside `build_player_td_table()` loaded a
+  second full multi-season play-by-play DataFrame while the first was
+  still in memory — crashed the process (`Killed`, OOM). Fixed by
+  explicitly freeing the first `pbp` reference (`del pbp`) once its one
+  use was done, before the second load. Worth remembering if a similar
+  "load pbp inside a function that's called from inside another pbp-
+  loading function" pattern shows up again.
+- Surfaced in the dashboard's new **MU** column (TD Props board) and as an
+  informational reason code in `qualify()` — flags when a matchup is
+  softer/tougher than the 1.10 preferred bar without disqualifying the
+  play, since there's no backtest data yet to confirm 1.10 (or any other
+  value) is actually the right threshold for THIS metric specifically.
+
+**Real finding from running this against the actual candidate pool** — and
+a correction to an earlier wrong claim in this README: an initial read of
+this section said "126 of 132 candidates fail on snap share alone." That
+was wrong — it came from eyeballing the first-listed reason code for a
+couple of sample players (Jacobs, Tracy — both genuinely low-snap-share
+committee backs) and wrongly generalizing to the whole pool without
+actually checking the full breakdown. Corrected, verified numbers from the
+real 132-player output:
+
+| Reason code | Players affected |
+|---|---|
+| No live price (expected — no `ODDS_API_KEY` active in that run) | 132 |
+| TD projection below 30% threshold | 107 |
+| Snap share below 70% threshold | 94 |
+| No meaningful red-zone role | 40 |
+| Recent TDs outpacing opportunity (regression risk) | 18 |
+
+So the TD-projection threshold is actually the single biggest filter, not
+snap share — and **38 of 132 players do clear 70% snap share** (not 6).
+The "6" figure from the original (wrong) read was actually the count of
+players passing **every** non-market check simultaneously (snap share AND
+projection AND red-zone role AND no regression flag) — a much smaller,
+correctly-strict intersection: Saquon Barkley, Jonathan Taylor, Justin
+Jefferson, Jauan Jennings, Josh Allen, Darius Slayton. That's the screen
+working as intended (quality over quantity), not a data bug — verified by
+manually reconstructing Josh Jacobs' actual trailing snap share from his
+real per-game 2025 numbers (0.55, 0.39, 0.28, 0.63 → 0.4625), which matched
+the pipeline's output exactly.
+
+**Verified end-to-end against a real (mocked) price**: Saquon Barkley at
+-145 with real model/market numbers correctly produced Tier A (edge
+11.77%, EV 19.9%), with the price-range reason code present but non-
+disqualifying, exactly as `test_blueprint_qualification.py`'s 20 checks
+require.
+
+**Dashboard**: the TD Props board's TIER column now shows this real
+blueprint tier (hover a badge for its reason codes) instead of the old
+edge-threshold PLAY-sizing heuristic. The "QUALIFYING (A/B)" stat card
+counts players who actually clear the screen, not just anyone with
+positive edge. Verified via a real jsdom functional test — switched tabs,
+counted rendered badges, confirmed tooltip content — not just a syntax
+check.
+
 ## Architecture
 
 Static-site + scheduled-job pattern: Python scripts in `scripts/` fetch data
@@ -530,6 +657,8 @@ this is only relevant for local setup.
     python scripts/test_odds_api.py          # offline (mocked), should be 15/15
     python scripts/test_backtest.py          # offline (synthetic), should be 22/22
     python scripts/test_projector.py         # offline (synthetic), should be 8/8
+    python scripts/test_blueprint_qualification.py  # offline (synthetic), should be 24/24
+    python scripts/test_defense_features.py  # offline (synthetic), should be 13/13
     python scripts/team_features.py 2024     # builds team-week model table
     python scripts/team_td_model.py          # trains + validates Layer 2 (TD props)
     python scripts/game_features.py 2024     # builds team-game model table (Track B)

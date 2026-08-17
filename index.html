@@ -9,24 +9,25 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0A0B0F;
-    --panel:#0E1015;
-    --panel-2:#0B0D12;
-    --panel-3:#12141B;
-    --line:#1C1F28;
-    --line-2:#232733;
-    --text:#EDEFF3;
-    --text-dim:#9199AA;
-    --text-dim2:#7A8294;
-    --text-faint:#565D6D;
-    --text-faint2:#454B59;
-    --num:#C7CCD6;
-    --blue:#3E7BFA;
+    --bg:#000000;
+    --panel:#0F0F13;
+    --panel-2:#08080A;
+    --panel-3:#17171D;
+    --line:#212129;
+    --line-2:#2E2E38;
+    --text:#FFFFFF;
+    --text-dim:#A9AFC0;
+    --text-dim2:#8890A2;
+    --text-faint:#5C6275;
+    --text-faint2:#454A5C;
+    --num:#D8DBE6;
+    --blue:#4C8DFF;
     --blue-dim:#2A56B0;
-    --green:#34D399;
-    --red:#F5525F;
-    --amber:#FFB020;
-    --white-badge:#EDEFF3;
+    --green:#00FF9C;
+    --green-dim:#00B36E;
+    --red:#FF3355;
+    --amber:#FFC93C;
+    --white-badge:#FFFFFF;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;background:var(--bg);}
@@ -48,6 +49,7 @@
     width:34px;height:34px;border-radius:7px;background:var(--blue);
     display:flex;align-items:center;justify-content:center;
     font-weight:700;color:#fff;font-size:15px;letter-spacing:-.02em;
+    box-shadow:0 0 18px rgba(76,141,255,.55), 0 2px 6px rgba(0,0,0,.5);
   }
   .brand-tag{
     font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--blue);
@@ -67,7 +69,7 @@
 
   .header-spacer{flex:1;}
   .sync-pill{display:flex;align-items:center;gap:8px;padding:5px 11px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;}
-  .sync-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulseDot 1.6s infinite;}
+  .sync-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulseDot 1.6s infinite;box-shadow:0 0 8px 1px rgba(0,255,156,.8);}
   .sync-text{font-size:10.5px;color:var(--text-dim);}
   .clock{font-size:11.5px;color:var(--text-faint);min-width:150px;text-align:right;}
 
@@ -82,7 +84,7 @@
 
   .section-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 12px;flex-wrap:wrap;gap:10px;}
   .section-title{display:flex;align-items:center;gap:9px;}
-  .section-bar{width:3px;height:16px;background:var(--blue);border-radius:2px;}
+  .section-bar{width:3px;height:16px;background:var(--blue);border-radius:2px;box-shadow:0 0 8px rgba(76,141,255,.7);}
   .section-label{font-size:14px;font-weight:700;letter-spacing:.02em;}
 
   .market-tabs{display:flex;gap:2px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:2px;}
@@ -91,7 +93,7 @@
     font-size:11px;font-weight:700;letter-spacing:.03em;color:var(--text-faint);
     padding:6px 13px;border-radius:6px;transition:background .12s,color .12s;
   }
-  .market-btn.active{background:var(--blue);color:#fff;}
+  .market-btn.active{background:var(--blue);color:#fff;box-shadow:0 0 14px rgba(76,141,255,.5);}
 
   .caveat{
     background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--blue-dim);
@@ -123,18 +125,29 @@
   .cell-num{font-size:12.5px;color:var(--num);font-family:'IBM Plex Mono',monospace;}
   .cell-model{font-size:13px;font-weight:600;color:var(--text);font-family:'IBM Plex Mono',monospace;}
   .cell-edge{font-size:13px;font-weight:700;font-family:'IBM Plex Mono',monospace;}
-  .edge-pos{color:var(--green);}
-  .edge-neg{color:var(--red);}
+  .edge-pos{color:var(--green);text-shadow:0 0 12px rgba(0,255,156,.45);}
+  .edge-neg{color:var(--red);text-shadow:0 0 12px rgba(255,51,85,.4);}
   .edge-flat{color:var(--text-dim2);}
   .play-badge{
     display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:22px;padding:0 6px;
-    background:var(--white-badge);color:#0A0B0F;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;border-radius:5px;
+    background:var(--white-badge);color:#000;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;border-radius:5px;
+    box-shadow:0 0 10px rgba(255,255,255,.35);
   }
   .play-none{background:transparent;color:var(--text-faint);font-family:'IBM Plex Mono',monospace;font-size:12px;}
+
+  .qual-tier{
+    display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;
+    border-radius:6px;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;cursor:default;
+  }
+  .qual-A{background:rgba(0,255,156,.16);color:var(--green);box-shadow:0 0 10px rgba(0,255,156,.3);}
+  .qual-B{background:rgba(76,141,255,.16);color:var(--blue);}
+  .qual-C{background:rgba(255,201,60,.16);color:var(--amber);}
+  .qual-D{background:rgba(255,51,85,.14);color:var(--red);}
+  .qual-U{background:var(--panel-3);color:var(--text-faint);}
   .board-footnote{padding:10px 16px 4px;font-size:10px;color:var(--text-faint2);font-family:'IBM Plex Mono',monospace;}
 
   .grid-lines{grid-template-columns:1.5fr 90px 90px 76px 60px 52px;}
-  .grid-props{grid-template-columns:1.5fr 1fr 70px 88px 66px 52px;}
+  .grid-props{grid-template-columns:1.5fr 1fr 60px 70px 88px 66px 52px;}
 
   .pr-table{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;}
   .pr-head{display:grid;grid-template-columns:32px 1.4fr 70px 1fr 80px;padding:10px 16px;font-size:9px;letter-spacing:.09em;color:var(--text-faint);font-family:'IBM Plex Mono',monospace;border-bottom:1px solid var(--line);background:var(--panel-2);}
@@ -294,11 +307,11 @@
 
     <div class="board">
       <div class="board-head grid-props">
-        <div>PLAYER</div><div class="col-hide">MATCHUP</div><div class="col-r">MODEL</div>
-        <div class="col-r">BEST&nbsp;PRICE</div><div class="col-r">EDGE</div><div class="col-c">PLAY</div>
+        <div>PLAYER</div><div class="col-hide">MATCHUP</div><div class="col-r col-hide">MU</div><div class="col-r">MODEL</div>
+        <div class="col-r">BEST&nbsp;PRICE</div><div class="col-r">EDGE</div><div class="col-c">TIER</div>
       </div>
       <div id="props-body"></div>
-      <div class="board-footnote">Edge = model probability minus price-implied probability. PLAY is an illustrative unit size (edge-threshold heuristic, not a validated Kelly/bankroll system) — shown only when a live price exists.</div>
+      <div class="board-footnote">Edge = model probability minus price-implied probability. MU = opponent's position-specific TD-rate-allowed vs league average (real play-by-play, not points allowed) — 1.00 = league average, informational only, not yet a hard qualifier. TIER is the blueprint's own qualification screen (snap share, red-zone role, edge/EV thresholds, regression check) — hover a badge for the reason codes. "U" = unrated (no live price to evaluate edge/EV against yet).</div>
     </div>
   </div>
 
@@ -419,7 +432,7 @@
     const qualifying = games.filter(g => Math.abs(g.edges.spread_edge) >= 1.5).length;
     document.getElementById('lines-stats').innerHTML = [
       ['GAMES PRICED', games.length],
-      ['QUALIFYING EDGES', qualifying, 'color:var(--green)'],
+      ['QUALIFYING EDGES', qualifying, 'color:var(--green);text-shadow:0 0 14px rgba(0,255,156,.5)'],
       ['MARGIN MODEL MAE', '10.27', null, 'baseline 11.30'],
       ['TOTAL MODEL MAE', '9.78', null, 'market-alone 9.77'],
       ['TRAINING GAMES', linesData.model_notes.training_games.toLocaleString()],
@@ -588,7 +601,7 @@
 
     const players = propsData.players;
     const priced = players.filter(p => p.market != null);
-    const posEdge = priced.filter(p => p.market.edge > 0);
+    const qualifying = players.filter(p => p.qualification.qualifies);
     let avgEdgeTop10 = null;
     if(priced.length){
       const top10 = [...priced].sort((a,b)=>b.market.edge-a.market.edge).slice(0,10);
@@ -596,8 +609,8 @@
     }
     document.getElementById('props-stats').innerHTML = [
       ['PLAYERS PRICED', players.length],
-      ['+EDGE PLAYS', priced.length?posEdge.length:'\u2014', 'color:var(--green)'],
-      ['AVG EDGE (TOP 10)', avgEdgeTop10!=null?fmtSigned(avgEdgeTop10):'\u2014', 'color:var(--blue)'],
+      ['QUALIFYING (A/B)', qualifying.length, 'color:var(--green);text-shadow:0 0 14px rgba(0,255,156,.5)', 'blueprint screen'],
+      ['AVG EDGE (TOP 10)', avgEdgeTop10!=null?fmtSigned(avgEdgeTop10):'\u2014', 'color:var(--blue);text-shadow:0 0 14px rgba(76,141,255,.5)'],
       ['MODEL AUC', '0.70', null, 'held-out 2024'],
       ['TRAINING ROWS', propsData.model_notes.training_rows.toLocaleString()],
       ['LIVE PRICES', priced.length + ' / ' + players.length],
@@ -620,18 +633,23 @@
     function renderProps(){
       renderFilters();
       const rows = players.filter(p => posFilter==='ALL' || p.position===posFilter)
-        .sort((a,b) => (b.market?b.market.edge:-1) - (a.market?a.market.edge:-1) || b.model.anytime_td_prob - a.model.anytime_td_prob);
+        .sort((a,b) => (b.qualification.qualifies - a.qualification.qualifies) || (b.market?b.market.edge:-1) - (a.market?a.market.edge:-1) || b.model.anytime_td_prob - a.model.anytime_td_prob);
       document.getElementById('props-body').innerHTML = rows.map(p => {
         const m = p.market;
+        const q = p.qualification;
+        const tooltip = q.reason_codes.length ? q.reason_codes.join(' \\u00B7 ') : 'Clears all blueprint checks';
+        const mu = p.usage.matchup_rating;
+        const muColor = mu==null ? 'var(--text-faint)' : (mu>=1.10 ? 'var(--green)' : mu<0.90 ? 'var(--red)' : 'var(--text-dim)');
         return `<div class="board-row grid-props">
           <div class="row-inner"><span class="team-bar" style="background:${teamColor(p.team)}"></span>
             <div class="matchup-block"><div class="matchup-main">${p.player_name}</div>
             <div class="matchup-sub">${p.position} \u00B7 ${p.team}</div></div></div>
           <div class="cell-num col-hide">${p.matchup}</div>
+          <div class="cell-num col-r col-hide" style="color:${muColor}">${mu!=null?mu.toFixed(2):'\u2014'}</div>
           <div class="cell-model col-r">${fmtPct(p.model.anytime_td_prob)}</div>
           <div class="cell-num col-r">${m?fmtOdds(m.anytime_td_price):'\u2014'}</div>
           <div class="cell-edge col-r ${m?edgeClass(m.edge):'edge-flat'}">${m?fmtSigned(m.edge):'\u2014'}</div>
-          <div class="col-c">${m?playBadge(m.edge*100):'<span class="play-none">\u2014</span>'}</div>
+          <div class="col-c"><span class="qual-tier qual-${q.tier}" title="${tooltip}">${q.tier}</span></div>
         </div>`;
       }).join('');
     }

@@ -113,6 +113,87 @@ def fit_total_residual(train: pd.DataFrame):
     return model, scaler, resid_std
 
 
+# Groups FEATURE_COLS into human-readable categories for the Matchup
+# Projector's waterfall decomposition. Since the margin model is Ridge
+# (linear on standardized features), the contribution of feature i to a
+# SPECIFIC prediction is genuinely coef_i * standardized_value_i -- this is
+# not a simulation or approximation, it's the literal arithmetic the model
+# used to arrive at that number, grouped for readability.
+FEATURE_GROUPS = {
+    "Power rating": ["power_rating", "opp_power_rating"],
+    "Home field": ["is_home", "hfa_as_of_week"],
+    "Rest": ["rest_days", "opp_rest_days"],
+    "Division game": ["div_game"],
+    "Trailing scoring form": [
+        "asof_roll4_team_score", "asof_roll4_opp_score",
+        "asof_roll8_team_score", "asof_roll8_opp_score",
+    ],
+    "Weather / venue": ["is_indoor", "temp_filled", "wind_filled"],
+    "Pace": ["asof_roll4_team_plays", "asof_roll8_team_plays"],
+}
+
+
+def build_waterfall(row: pd.Series, model: Ridge, scaler: StandardScaler) -> list[dict]:
+    """
+    Real per-feature contribution breakdown for ONE game: coef_i *
+    standardized_value_i, grouped into FEATURE_GROUPS. Sum of all group
+    contributions + intercept == the model's actual prediction for this row
+    (verified in test_generate_predictions.py) -- this is an exact
+    decomposition, not an estimate.
+    """
+    x_raw = pd.DataFrame([row[FEATURE_COLS].values], columns=FEATURE_COLS).astype(float)
+    x_scaled = scaler.transform(x_raw)[0]
+    per_feature = dict(zip(FEATURE_COLS, model.coef_ * x_scaled))
+
+    out = []
+    for label, cols in FEATURE_GROUPS.items():
+        contribution = sum(per_feature[c] for c in cols)
+        out.append({"label": label, "contribution": round(float(contribution), 2)})
+    out.append({"label": "Baseline (intercept)", "contribution": round(float(model.intercept_), 2)})
+    return out
+
+
+def build_distribution(pred_margin: float, resid_std: float, bin_width: int = 3) -> list[dict]:
+    """
+    Real margin distribution: the model's assumed N(pred_margin, resid_std)
+    -- resid_std is the ACTUAL residual standard deviation from training
+    (how far off the model typically was), not a made-up spread. Returns
+    probability mass per bin (exact PDF integral, not a random sample) so
+    the frontend can render a genuine histogram instead of the reference
+    mockup's Math.random()-driven "40k drive sims" (which weren't real).
+    """
+    lo = int(np.floor((pred_margin - 4 * resid_std) / bin_width) * bin_width)
+    hi = int(np.ceil((pred_margin + 4 * resid_std) / bin_width) * bin_width)
+    bins = list(range(lo, hi, bin_width))
+    dist = []
+    for b in bins:
+        p = norm.cdf(b + bin_width, loc=pred_margin, scale=resid_std) - norm.cdf(b, loc=pred_margin, scale=resid_std)
+        dist.append({"bin_start": b, "prob": round(float(p), 5)})
+    return dist
+
+
+def build_situational_flags(row: pd.Series) -> list[str]:
+    """Short, honest situational notes derived from real feature values on
+    this specific game -- no invented narrative, just thresholds on data
+    already computed."""
+    flags = []
+    if row.get("div_game") == 1:
+        flags.append("Division game")
+    if row.get("is_indoor") == 1:
+        flags.append("Dome / indoor")
+    rest_diff = row.get("rest_days", np.nan) - row.get("opp_rest_days", np.nan)
+    if pd.notna(rest_diff) and abs(rest_diff) >= 3:
+        side = "Home" if rest_diff > 0 else "Away"
+        flags.append(f"{side} rest advantage (+{abs(rest_diff):.0f}d)")
+    wind = row.get("wind_filled", np.nan)
+    if pd.notna(wind) and wind >= 15 and row.get("is_indoor") != 1:
+        flags.append(f"High wind ({wind:.0f} mph)")
+    temp = row.get("temp_filled", np.nan)
+    if pd.notna(temp) and temp <= 32 and row.get("is_indoor") != 1:
+        flags.append(f"Cold weather ({temp:.0f}\u00b0F)")
+    return flags
+
+
 def main():
     print("Building game model table (all available seasons)...")
     full = build_game_model_table(ALL_SEASONS)
@@ -198,6 +279,13 @@ def main():
             profit = home_ml / 100 if home_ml > 0 else 100 / -home_ml
             home_ev = round(p * profit - (1 - p), 4)
 
+        proj_home_score = (row["pred_total"] + row["pred_margin"]) / 2
+        proj_away_score = (row["pred_total"] - row["pred_margin"]) / 2
+        cover_prob = (
+            1 - norm.cdf(spread_line, loc=row["pred_margin"], scale=margin_resid_std)
+            if pd.notna(spread_line) else None
+        )
+
         games.append({
             "game_id": gid,
             "season": int(s),
@@ -224,6 +312,15 @@ def main():
                 "total_edge": round(total_edge, 2) if total_edge is not None else None,
                 "moneyline_edge": round(moneyline_edge, 4) if moneyline_edge is not None else None,
                 "home_moneyline_ev": home_ev,
+            },
+            "projector": {
+                "proj_home_score": round(float(proj_home_score), 1),
+                "proj_away_score": round(float(proj_away_score), 1),
+                "cover_prob": round(float(cover_prob), 4) if cover_prob is not None else None,
+                "margin_resid_std": round(margin_resid_std, 2),
+                "distribution": build_distribution(float(row["pred_margin"]), margin_resid_std),
+                "waterfall": build_waterfall(row, margin_model, margin_scaler),
+                "situational_flags": build_situational_flags(row),
             },
         })
 

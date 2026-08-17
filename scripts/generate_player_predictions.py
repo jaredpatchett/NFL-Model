@@ -13,6 +13,15 @@ returns full names ("Saquon Barkley"). Matched via the ID crosswalk's
 normalization applied to the Odds API's player names -- NOT via player_name
 directly, which would never match.
 
+QUALIFICATION / TIER: `tier` (and the new `qualification` block) come from
+blueprint_qualification.py, which implements the eligibility screen and
+A/B/C/D framework from the user's uploaded blueprint PDF -- snap share,
+red-zone role, projection-vs-market, and recent-TD-regression checks, not
+just a probability bucket. See that module's docstring for exactly what's
+implemented vs. still needs more specification (matchup rating, HEAT
+windows). Tier "U" means unrated (no live price to evaluate edge/EV against
+-- not "D", which means it actively failed a hard filter).
+
 ROSTER FRESHNESS CAVEAT: see player_td_features.py's module docstring --
 the candidate pool is last season's active players, corrected against a
 frequently-updated ID crosswalk for offseason trades/signings, but true
@@ -38,6 +47,7 @@ from player_td_features import build_player_td_table
 from player_td_model import FEATURE_COLS, POSITIONS, MIN_GAMES_PRIOR, _prep
 from nfl_data import load_pbp, load_snaps, load_id_crosswalk, load_schedules
 from features import build_player_week_features
+from blueprint_qualification import qualify
 import odds_api
 
 ALL_SEASONS = list(range(2021, 2028))
@@ -46,10 +56,11 @@ OUT_JSON = "../data/player_td.json"
 OUT_JS = "../data/player_td.js"
 OUT_LOG = "../data/player_td_log.jsonl"
 
-# Same probability-bucket tiers used for spread/total's edge tiers, but
-# since there's no market to compare against, tiers here are MODEL
-# CONFIDENCE tiers (how likely, not how much value) -- labeled distinctly
-# in the output so nothing downstream confuses the two.
+# Fallback ONLY: used for the model.tier field when there's no live price to
+# evaluate the real blueprint tier against (see qualification.tier for the
+# actual PDF-based A/B/C/D/U tier). This bucket is model CONFIDENCE only --
+# how likely, not how much value -- kept distinct so nothing downstream
+# confuses the two.
 TIER_BOUNDS = [(0.40, "A"), (0.25, "B"), (0.15, "C"), (0.0, "D")]
 
 
@@ -176,6 +187,8 @@ def main():
                 "ev": ev,
             }
 
+        qual = qualify(r, model_prob=float(r["model_prob"]), market=market)
+
         players.append({
             "player_id": r["player_id"],
             "player_name": r["player_name"],
@@ -188,27 +201,37 @@ def main():
                 "rz_target_share": round(float(r["asof_roll4_rz_target_share"]), 3) if pd.notna(r["asof_roll4_rz_target_share"]) else None,
                 "inside5_carry_share": round(float(r["asof_roll4_inside5_carry_share"]), 3) if pd.notna(r["asof_roll4_inside5_carry_share"]) else None,
                 "xtd_per_game": round(float(r["asof_roll4_expected_tds"]), 3) if pd.notna(r["asof_roll4_expected_tds"]) else None,
+                "matchup_rating": round(float(r["matchup_rating"]), 3) if pd.notna(r["matchup_rating"]) else None,
             },
             "model": {
                 "anytime_td_prob": round(float(r["model_prob"]), 4),
-                "tier": r["tier"],
+                "tier": r["tier"],  # model-confidence-only fallback bucket, see module docstring
             },
             "market": market,  # None if no live odds or no name match found
+            "qualification": qual,  # the real blueprint-based tier -- see blueprint_qualification.py
         })
 
     matched_count = int(upcoming["live_anytime_td_price"].notna().sum()) if live_props is not None else 0
+    qualifying_count = sum(1 for p in players if p["qualification"]["qualifies"])
+    blueprint_note = (
+        f"{qualifying_count} of {len(players)} players clear the blueprint's qualification screen "
+        f"(Tier A/B). Screen implements the PDF's stated snap share/TD projection/red-zone role/"
+        f"regression checks and edge/EV tiers; matchup rating and HEAT-window thresholds are named "
+        f"in the PDF but not yet formulaically defined, so they're not enforced yet."
+    )
     if live_props is not None:
         caveat = (
             f"Live odds connected -- {matched_count} of {len(upcoming)} players matched to a real "
             f"anytime-TD price this run (unmatched players show usage/model only, either no line "
-            f"posted yet for that player or a name-matching miss). Candidate pool is last season's "
-            f"active players corrected for known offseason trades; true rookies and any very recent "
-            f"retirements the crosswalk hasn't caught are not included yet."
+            f"posted yet for that player or a name-matching miss). {blueprint_note} Candidate pool is "
+            f"last season's active players corrected for known offseason trades; true rookies and any "
+            f"very recent retirements the crosswalk hasn't caught are not included yet."
         )
     else:
         caveat = (
             "No live sportsbook odds this run (ODDS_API_KEY not set, or the API call failed -- see "
-            "logs) -- model probability and usage shares only, no price/edge/EV. Candidate pool is "
+            "logs) -- model probability and usage shares only, no price/edge/EV, so no player can "
+            "clear the qualification screen this run (all show Tier U). Candidate pool is "
             "last season's active players corrected for known offseason trades; true rookies and any "
             "very recent retirements the crosswalk hasn't caught are not included yet."
         )
@@ -237,6 +260,7 @@ def main():
     with open(OUT_LOG, "a") as f:
         for p in players:
             m = p["market"]
+            q = p["qualification"]
             f.write(json.dumps({
                 "logged_at": logged_at, "season": season, "week": week,
                 "player_id": p["player_id"], "player_name": p["player_name"],
@@ -246,6 +270,8 @@ def main():
                 "market_implied_prob": m["implied_prob"] if m else None,
                 "edge": m["edge"] if m else None,
                 "ev": m["ev"] if m else None,
+                "qualifies": q["qualifies"], "blueprint_tier": q["tier"],
+                "reason_codes": q["reason_codes"],
             }, default=odds_api.json_default) + "\n")
 
     print(f"Wrote {len(players)} players to {OUT_JSON} and {OUT_JS}")

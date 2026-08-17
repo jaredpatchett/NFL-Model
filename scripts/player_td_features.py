@@ -44,6 +44,7 @@ from nfl_data import load_pbp, load_snaps, load_id_crosswalk, load_schedules, lo
 from features import build_player_week_features
 from rolling_features import build_asof_player_features, ROLL_WINDOWS
 from team_features import _schedule_long
+from defense_features import build_matchup_ratings
 
 # Team abbreviation mapping: nfl_data_py's ID crosswalk uses a different (and
 # inconsistent -- includes legacy/relocated codes) set of team codes than
@@ -160,6 +161,10 @@ def build_player_td_table(
     weekly = _load_weekly_resilient(played_seasons)
 
     player_feat = build_player_week_features(pbp, snaps, id_crosswalk=xwalk)
+    del pbp  # large multi-season frame, not needed again -- build_matchup_ratings()
+             # loads its own pbp copy below; freeing this first avoids holding two
+             # full-size copies in memory at once (this crashed the process once
+             # already before this fix -- see README for the concrete OOM story).
 
     # ---- Candidate pool + team correction for the upcoming week's stub rows ----
     candidates = _build_candidate_pool(player_feat, upcoming_season)
@@ -211,6 +216,32 @@ def build_player_td_table(
         ["season", "week", "posteam", "opponent", "implied_team_total", "is_home"]
     ]
     asof = asof.merge(sched_ctx, on=["season", "week", "posteam"], how="left")
+
+    # ---- Opponent matchup rating: position-specific TD-rate-allowed, real
+    # from play-by-play, not a single blended points-allowed number. See
+    # defense_features.py's docstring for the full formula and reasoning.
+    # Informational only right now (surfaced in output, not yet a hard
+    # qualifier in blueprint_qualification.py) -- new and not yet validated
+    # against a real season of results.
+    matchup = build_matchup_ratings(seasons)
+    matchup_cols = matchup[[
+        "season", "week", "defteam",
+        "matchup_rating_roll4_rush", "matchup_rating_roll4_pass",
+        "asof_roll4_rush_td_rate_allowed", "asof_roll4_pass_td_rate_allowed",
+    ]].rename(columns={"defteam": "opponent"})
+    asof = asof.merge(matchup_cols, on=["season", "week", "opponent"], how="left")
+
+    # Position-appropriate single number: RB -> rush matchup, WR/TE/QB -> pass
+    # matchup (QBs mostly score via passing TDs to others, but their OWN
+    # rushing TDs use the rush rating -- approximated here with pass as the
+    # default since most QB scoring in this model's positions list is via
+    # designed/scramble runs that don't cleanly map to either category; worth
+    # revisiting once there's real data to check which fits QBs better).
+    asof["matchup_rating"] = np.where(
+        asof["position"] == "RB",
+        asof["matchup_rating_roll4_rush"],
+        asof["matchup_rating_roll4_pass"],
+    )
 
     # Skill positions only -- OL/DL/specialists essentially never score
     # offensive TDs and just add noise; a missing position is either a stale/

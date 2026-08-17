@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-14T20:14:04.411772+00:00",
+  "generated_at": "2026-08-17T16:30:01.421099+00:00",
   "season": 2026,
   "week": 1,
   "model_notes": {
@@ -102,7 +102,7 @@
         "xtd_per_game": 1.686
       },
       "model": {
-        "anytime_td_prob": 0.4982,
+        "anytime_td_prob": 0.4915,
         "tier": "A"
       },
       "market": null
@@ -222,25 +222,6 @@
       "market": null
     },
     {
-      "player_id": "00-0036973",
-      "player_name": "T.Etienne",
-      "position": "RB",
-      "team": "NO",
-      "opponent": "DET",
-      "matchup": "NO @ DET",
-      "usage": {
-        "snap_share": 0.625,
-        "rz_target_share": 0.1,
-        "inside5_carry_share": 0.2,
-        "xtd_per_game": 1.72
-      },
-      "model": {
-        "anytime_td_prob": 0.3926,
-        "tier": "B"
-      },
-      "market": null
-    },
-    {
       "player_id": "00-0036275",
       "player_name": "D.Swift",
       "position": "RB",
@@ -274,6 +255,25 @@
       },
       "model": {
         "anytime_td_prob": 0.388,
+        "tier": "B"
+      },
+      "market": null
+    },
+    {
+      "player_id": "00-0036973",
+      "player_name": "T.Etienne",
+      "position": "RB",
+      "team": "NO",
+      "opponent": "DET",
+      "matchup": "NO @ DET",
+      "usage": {
+        "snap_share": 0.625,
+        "rz_target_share": 0.1,
+        "inside5_carry_share": 0.2,
+        "xtd_per_game": 1.72
+      },
+      "model": {
+        "anytime_td_prob": 0.3862,
         "tier": "B"
       },
       "market": null
@@ -431,25 +431,6 @@
       "market": null
     },
     {
-      "player_id": "00-0037239",
-      "player_name": "C.Olave",
-      "position": "WR",
-      "team": "NO",
-      "opponent": "DET",
-      "matchup": "NO @ DET",
-      "usage": {
-        "snap_share": 0.865,
-        "rz_target_share": 0.4,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.81
-      },
-      "model": {
-        "anytime_td_prob": 0.3074,
-        "tier": "B"
-      },
-      "market": null
-    },
-    {
       "player_id": "00-0034827",
       "player_name": "D.Moore",
       "position": "WR",
@@ -464,6 +445,25 @@
       },
       "model": {
         "anytime_td_prob": 0.3073,
+        "tier": "B"
+      },
+      "market": null
+    },
+    {
+      "player_id": "00-0037239",
+      "player_name": "C.Olave",
+      "position": "WR",
+      "team": "NO",
+      "opponent": "DET",
+      "matchup": "NO @ DET",
+      "usage": {
+        "snap_share": 0.865,
+        "rz_target_share": 0.4,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.81
+      },
+      "model": {
+        "anytime_td_prob": 0.3017,
         "tier": "B"
       },
       "market": null
@@ -550,25 +550,6 @@
       "market": null
     },
     {
-      "player_id": "00-0037231",
-      "player_name": "K.Austin",
-      "position": "WR",
-      "team": "NO",
-      "opponent": "DET",
-      "matchup": "NO @ DET",
-      "usage": {
-        "snap_share": 0.755,
-        "rz_target_share": 0.1,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.48
-      },
-      "model": {
-        "anytime_td_prob": 0.2587,
-        "tier": "B"
-      },
-      "market": null
-    },
-    {
       "player_id": "00-0039919",
       "player_name": "R.Odunze",
       "position": "WR",
@@ -588,20 +569,20 @@
       "market": null
     },
     {
-      "player_id": "00-0039424",
-      "player_name": "D.Vele",
+      "player_id": "00-0037231",
+      "player_name": "K.Austin",
       "position": "WR",
       "team": "NO",
       "opponent": "DET",
       "matchup": "NO @ DET",
       "usage": {
-        "snap_share": 0.813,
+        "snap_share": 0.755,
         "rz_target_share": 0.1,
         "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.8
+        "xtd_per_game": 0.48
       },
       "model": {
-        "anytime_td_prob": 0.2544,
+        "anytime_td_prob": 0.2536,
         "tier": "B"
       },
       "market": null
@@ -641,6 +622,25 @@
       "model": {
         "anytime_td_prob": 0.2525,
         "tier": "B"
+      },
+      "market": null
+    },
+    {
+      "player_id": "00-0039424",
+      "player_name": "D.Vele",
+      "position": "WR",
+      "team": "NO",
+      "opponent": "DET",
+      "matchup": "NO @ DET",
+      "usage": {
+        "snap_share": 0.813,
+        "rz_target_share": 0.1,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.8
+      },
+      "model": {
+        "anytime_td_prob": 0.2493,
+        "tier": "C"
       },
       "market": null
     },
@@ -916,25 +916,6 @@
       "market": null
     },
     {
-      "player_id": "00-0036040",
-      "player_name": "J.Johnson",
-      "position": "TE",
-      "team": "NO",
-      "opponent": "DET",
-      "matchup": "NO @ DET",
-      "usage": {
-        "snap_share": 0.682,
-        "rz_target_share": 0.1,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.32
-      },
-      "model": {
-        "anytime_td_prob": 0.2067,
-        "tier": "C"
-      },
-      "market": null
-    },
-    {
       "player_id": "00-0039893",
       "player_name": "B.Thomas",
       "position": "WR",
@@ -949,6 +930,25 @@
       },
       "model": {
         "anytime_td_prob": 0.2056,
+        "tier": "C"
+      },
+      "market": null
+    },
+    {
+      "player_id": "00-0036040",
+      "player_name": "J.Johnson",
+      "position": "TE",
+      "team": "NO",
+      "opponent": "DET",
+      "matchup": "NO @ DET",
+      "usage": {
+        "snap_share": 0.682,
+        "rz_target_share": 0.1,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.32
+      },
+      "model": {
+        "anytime_td_prob": 0.2024,
         "tier": "C"
       },
       "market": null
@@ -1468,25 +1468,6 @@
       "market": null
     },
     {
-      "player_id": "00-0037276",
-      "player_name": "T.Chandler",
-      "position": "RB",
-      "team": "NO",
-      "opponent": "DET",
-      "matchup": "NO @ DET",
-      "usage": {
-        "snap_share": 0.195,
-        "rz_target_share": 0.1,
-        "inside5_carry_share": 0.2,
-        "xtd_per_game": 0.877
-      },
-      "model": {
-        "anytime_td_prob": 0.1513,
-        "tier": "C"
-      },
-      "market": null
-    },
-    {
       "player_id": "00-0039875",
       "player_name": "R.Davis",
       "position": "RB",
@@ -1582,6 +1563,25 @@
       "market": null
     },
     {
+      "player_id": "00-0037276",
+      "player_name": "T.Chandler",
+      "position": "RB",
+      "team": "NO",
+      "opponent": "DET",
+      "matchup": "NO @ DET",
+      "usage": {
+        "snap_share": 0.195,
+        "rz_target_share": 0.1,
+        "inside5_carry_share": 0.2,
+        "xtd_per_game": 0.877
+      },
+      "model": {
+        "anytime_td_prob": 0.1478,
+        "tier": "D"
+      },
+      "market": null
+    },
+    {
       "player_id": "00-0036988",
       "player_name": "J.Palmer",
       "position": "WR",
@@ -1620,25 +1620,6 @@
       "market": null
     },
     {
-      "player_id": "00-0039623",
-      "player_name": "M.Tipton",
-      "position": "WR",
-      "team": "NO",
-      "opponent": "DET",
-      "matchup": "NO @ DET",
-      "usage": {
-        "snap_share": 0.712,
-        "rz_target_share": 0.1,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.278
-      },
-      "model": {
-        "anytime_td_prob": 0.1433,
-        "tier": "D"
-      },
-      "market": null
-    },
-    {
       "player_id": "00-0038400",
       "player_name": "T.McKee",
       "position": "QB",
@@ -1653,6 +1634,25 @@
       },
       "model": {
         "anytime_td_prob": 0.1409,
+        "tier": "D"
+      },
+      "market": null
+    },
+    {
+      "player_id": "00-0039623",
+      "player_name": "M.Tipton",
+      "position": "WR",
+      "team": "NO",
+      "opponent": "DET",
+      "matchup": "NO @ DET",
+      "usage": {
+        "snap_share": 0.712,
+        "rz_target_share": 0.1,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.278
+      },
+      "model": {
+        "anytime_td_prob": 0.14,
         "tier": "D"
       },
       "market": null
@@ -1962,25 +1962,6 @@
       "market": null
     },
     {
-      "player_id": "00-0033357",
-      "player_name": "T.Hill",
-      "position": "TE",
-      "team": "NO",
-      "opponent": "DET",
-      "matchup": "NO @ DET",
-      "usage": {
-        "snap_share": 0.283,
-        "rz_target_share": 0.0,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.382
-      },
-      "model": {
-        "anytime_td_prob": 0.1227,
-        "tier": "D"
-      },
-      "market": null
-    },
-    {
       "player_id": "00-0035140",
       "player_name": "M.Hardman",
       "position": "WR",
@@ -1995,6 +1976,25 @@
       },
       "model": {
         "anytime_td_prob": 0.1199,
+        "tier": "D"
+      },
+      "market": null
+    },
+    {
+      "player_id": "00-0033357",
+      "player_name": "T.Hill",
+      "position": "TE",
+      "team": "NO",
+      "opponent": "DET",
+      "matchup": "NO @ DET",
+      "usage": {
+        "snap_share": 0.283,
+        "rz_target_share": 0.0,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.382
+      },
+      "model": {
+        "anytime_td_prob": 0.1198,
         "tier": "D"
       },
       "market": null
@@ -2076,25 +2076,6 @@
       "market": null
     },
     {
-      "player_id": "00-0035644",
-      "player_name": "N.Fant",
-      "position": "TE",
-      "team": "NO",
-      "opponent": "DET",
-      "matchup": "NO @ DET",
-      "usage": {
-        "snap_share": 0.32,
-        "rz_target_share": 0.1,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.43
-      },
-      "model": {
-        "anytime_td_prob": 0.1113,
-        "tier": "D"
-      },
-      "market": null
-    },
-    {
       "player_id": "00-0037086",
       "player_name": "G.Calcaterra",
       "position": "TE",
@@ -2128,6 +2109,25 @@
       },
       "model": {
         "anytime_td_prob": 0.1091,
+        "tier": "D"
+      },
+      "market": null
+    },
+    {
+      "player_id": "00-0035644",
+      "player_name": "N.Fant",
+      "position": "TE",
+      "team": "NO",
+      "opponent": "DET",
+      "matchup": "NO @ DET",
+      "usage": {
+        "snap_share": 0.32,
+        "rz_target_share": 0.1,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.43
+      },
+      "model": {
+        "anytime_td_prob": 0.1087,
         "tier": "D"
       },
       "market": null
@@ -2437,25 +2437,6 @@
       "market": null
     },
     {
-      "player_id": "00-0038647",
-      "player_name": "R.Bell",
-      "position": "WR",
-      "team": "NO",
-      "opponent": "DET",
-      "matchup": "NO @ DET",
-      "usage": {
-        "snap_share": 0.388,
-        "rz_target_share": 0.3,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.4
-      },
-      "model": {
-        "anytime_td_prob": 0.093,
-        "tier": "D"
-      },
-      "market": null
-    },
-    {
       "player_id": "00-0037093",
       "player_name": "D.Young",
       "position": "WR",
@@ -2489,6 +2470,25 @@
       },
       "model": {
         "anytime_td_prob": 0.0915,
+        "tier": "D"
+      },
+      "market": null
+    },
+    {
+      "player_id": "00-0038647",
+      "player_name": "R.Bell",
+      "position": "WR",
+      "team": "NO",
+      "opponent": "DET",
+      "matchup": "NO @ DET",
+      "usage": {
+        "snap_share": 0.388,
+        "rz_target_share": 0.3,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.4
+      },
+      "model": {
+        "anytime_td_prob": 0.0908,
         "tier": "D"
       },
       "market": null

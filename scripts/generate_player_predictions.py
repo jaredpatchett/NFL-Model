@@ -49,6 +49,7 @@ from nfl_data import load_pbp, load_snaps, load_id_crosswalk, load_schedules
 from features import build_player_week_features
 from blueprint_qualification import qualify
 import odds_api
+import manual_odds
 
 ALL_SEASONS = list(range(2021, 2028))
 
@@ -170,10 +171,32 @@ def main():
     else:
         upcoming["live_anytime_td_price"] = np.nan
 
+    # ---- Manual odds: free, hand-maintained alternative/supplement to the
+    # live API -- see manual_odds.py's docstring. Same merge_name matching
+    # as live odds, so either full names or the dashboard's abbreviated
+    # names work in the CSV. Live API price wins if both exist for a
+    # player (it's fresher); manual fills in anyone the API missed, or
+    # everyone if no ODDS_API_KEY is set at all.
+    manual = manual_odds.load_manual_odds()
+    if manual is not None:
+        print(f"\nLoaded {len(manual)} manual odds entries from data/manual_odds.csv.")
+        manual = manual.rename(columns={"player_name_norm": "merge_name"})
+        upcoming = upcoming.merge(manual, on="merge_name", how="left")
+    else:
+        upcoming["manual_price"] = np.nan
+
+    upcoming["final_price"] = upcoming["live_anytime_td_price"].where(
+        upcoming["live_anytime_td_price"].notna(), upcoming["manual_price"]
+    )
+    upcoming["price_source"] = np.where(
+        upcoming["live_anytime_td_price"].notna(), "live_api",
+        np.where(upcoming["manual_price"].notna(), "manual", None),
+    )
+
     # ---- Build output ----
     players = []
     for _, r in upcoming.sort_values("model_prob", ascending=False).iterrows():
-        price = r.get("live_anytime_td_price")
+        price = r.get("final_price")
         market = None
         if pd.notna(price):
             implied = odds_api.american_to_implied_prob(price)
@@ -185,6 +208,7 @@ def main():
                 "implied_prob": round(implied, 4),
                 "edge": round(p - implied, 4),
                 "ev": ev,
+                "source": r["price_source"],  # "live_api" or "manual"
             }
 
         qual = qualify(r, model_prob=float(r["model_prob"]), market=market)
@@ -211,29 +235,40 @@ def main():
             "qualification": qual,  # the real blueprint-based tier -- see blueprint_qualification.py
         })
 
-    matched_count = int(upcoming["live_anytime_td_price"].notna().sum()) if live_props is not None else 0
+    live_matched = int((upcoming["price_source"] == "live_api").sum())
+    manual_matched = int((upcoming["price_source"] == "manual").sum())
+    total_priced = live_matched + manual_matched
     qualifying_count = sum(1 for p in players if p["qualification"]["qualifies"])
     blueprint_note = (
         f"{qualifying_count} of {len(players)} players clear the blueprint's qualification screen "
         f"(Tier A/B). Screen implements the PDF's stated snap share/TD projection/red-zone role/"
-        f"regression checks and edge/EV tiers; matchup rating and HEAT-window thresholds are named "
-        f"in the PDF but not yet formulaically defined, so they're not enforced yet."
+        f"regression checks and edge/EV tiers; matchup rating is implemented but informational only "
+        f"(see README); HEAT-window thresholds are named in the PDF but not formulaically defined, "
+        f"so not enforced."
     )
-    if live_props is not None:
+    if total_priced > 0:
+        source_bits = []
+        if live_matched:
+            source_bits.append(f"{live_matched} from live API")
+        if manual_matched:
+            source_bits.append(f"{manual_matched} from data/manual_odds.csv (hand-maintained -- "
+                                f"keep it updated with current lines before a run, it doesn't refresh itself)")
         caveat = (
-            f"Live odds connected -- {matched_count} of {len(upcoming)} players matched to a real "
-            f"anytime-TD price this run (unmatched players show usage/model only, either no line "
-            f"posted yet for that player or a name-matching miss). {blueprint_note} Candidate pool is "
+            f"{total_priced} of {len(upcoming)} players matched to a real anytime-TD price this run "
+            f"({', '.join(source_bits)}; unmatched players show usage/model only, either no line "
+            f"posted for that player or a name-matching miss). {blueprint_note} Candidate pool is "
             f"last season's active players corrected for known offseason trades; true rookies and any "
             f"very recent retirements the crosswalk hasn't caught are not included yet."
         )
     else:
         caveat = (
-            "No live sportsbook odds this run (ODDS_API_KEY not set, or the API call failed -- see "
-            "logs) -- model probability and usage shares only, no price/edge/EV, so no player can "
-            "clear the qualification screen this run (all show Tier U). Candidate pool is "
-            "last season's active players corrected for known offseason trades; true rookies and any "
-            "very recent retirements the crosswalk hasn't caught are not included yet."
+            "No sportsbook odds this run -- ODDS_API_KEY not set and data/manual_odds.csv is either "
+            "missing or empty. Model probability and usage shares only, no price/edge/EV, so no "
+            "player can clear the qualification screen this run (all show Tier U). Add prices to "
+            "data/manual_odds.csv (player_name,price -- see manual_odds.py) or set ODDS_API_KEY to "
+            "get real edges. Candidate pool is last season's active players corrected for known "
+            "offseason trades; true rookies and any very recent retirements the crosswalk hasn't "
+            "caught are not included yet."
         )
 
     output = {
@@ -266,7 +301,8 @@ def main():
                 "player_id": p["player_id"], "player_name": p["player_name"],
                 "position": p["position"], "team": p["team"], "opponent": p["opponent"],
                 "anytime_td_prob": p["model"]["anytime_td_prob"], "tier": p["model"]["tier"],
-                "live_anytime_td_price": m["anytime_td_price"] if m else None,
+                "anytime_td_price": m["anytime_td_price"] if m else None,
+                "price_source": m["source"] if m else None,
                 "market_implied_prob": m["implied_prob"] if m else None,
                 "edge": m["edge"] if m else None,
                 "ev": m["ev"] if m else None,

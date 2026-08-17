@@ -112,11 +112,11 @@ def test_track_a_hit_rate_and_roi():
     """
     df = pd.DataFrame([
         {"player_id": "p1", "anytime_td_prob": 0.6, "scored_td": 1,
-         "live_anytime_td_price": -150, "edge": 0.05},
+         "anytime_td_price": -150, "edge": 0.05},
         {"player_id": "p2", "anytime_td_prob": 0.3, "scored_td": 0,
-         "live_anytime_td_price": 120, "edge": -0.02},
+         "anytime_td_price": 120, "edge": -0.02},
         {"player_id": "p3", "anytime_td_prob": 0.4, "scored_td": 1,
-         "live_anytime_td_price": None, "edge": None},
+         "anytime_td_price": None, "edge": None},
     ])
     out = evaluate_track_a(df)
     checks = []

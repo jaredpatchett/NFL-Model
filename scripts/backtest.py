@@ -191,12 +191,12 @@ def evaluate_track_a(bets_with_results: pd.DataFrame) -> dict:
         out["log_loss"] = float(log_loss(df["scored_td"], df["anytime_td_prob"]))
         out["brier"] = float(brier_score_loss(df["scored_td"], df["anytime_td_prob"]))
 
-    priced = df.dropna(subset=["live_anytime_td_price"])
+    priced = df.dropna(subset=["anytime_td_price"])
     if len(priced):
         priced = priced.copy()
         priced["bet_won"] = priced["scored_td"] == 1
         profits = np.where(
-            priced["bet_won"], priced["live_anytime_td_price"].apply(profit_per_unit), -1.0
+            priced["bet_won"], priced["anytime_td_price"].apply(profit_per_unit), -1.0
         )
         out["n_priced_bets"] = len(priced)
         out["roi_all_pct"] = round(100 * float(np.mean(profits)), 2)
@@ -205,7 +205,7 @@ def evaluate_track_a(bets_with_results: pd.DataFrame) -> dict:
         if len(positive_edge):
             pe_profits = np.where(
                 positive_edge["scored_td"] == 1,
-                positive_edge["live_anytime_td_price"].apply(profit_per_unit), -1.0,
+                positive_edge["anytime_td_price"].apply(profit_per_unit), -1.0,
             )
             out["n_positive_edge_bets"] = len(positive_edge)
             out["roi_positive_edge_pct"] = round(100 * float(np.mean(pe_profits)), 2)

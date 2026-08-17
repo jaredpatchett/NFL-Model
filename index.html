@@ -150,6 +150,59 @@
 
   footer{max-width:1320px;margin:0 auto;padding:0 22px 40px;color:var(--text-faint);font-size:11px;font-family:'IBM Plex Mono',monospace;line-height:1.6;}
 
+  /* ---- Matchup Projector modal ---- */
+  .board-row.clickable{cursor:pointer;}
+  .modal-backdrop{
+    display:none;position:fixed;inset:0;background:rgba(4,5,8,.72);
+    z-index:50;align-items:flex-start;justify-content:center;overflow-y:auto;padding:40px 16px;
+  }
+  .modal-backdrop.open{display:flex;}
+  .modal-panel{
+    background:var(--panel);border:1px solid var(--line-2);border-radius:14px;
+    max-width:720px;width:100%;padding:26px;position:relative;
+  }
+  .modal-close{
+    position:absolute;top:16px;right:16px;background:var(--panel-3);border:1px solid var(--line);
+    color:var(--text-dim);width:28px;height:28px;border-radius:7px;cursor:pointer;font-size:16px;line-height:1;
+  }
+  .modal-close:hover{color:var(--text);}
+
+  .proj-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--line);}
+  .proj-team{text-align:center;flex:1;}
+  .proj-team-bar{display:block;width:36px;height:4px;border-radius:2px;margin:0 auto 8px;}
+  .proj-team-name{font-size:15px;font-weight:700;letter-spacing:.02em;}
+  .proj-score{font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:700;margin-top:4px;}
+  .proj-meta{text-align:center;flex:0 0 auto;padding:0 10px;}
+  .proj-matchup-title{font-size:11px;color:var(--text-faint);font-family:'IBM Plex Mono',monospace;}
+  .proj-at{font-size:20px;color:var(--text-faint);margin:2px 0;}
+
+  .proj-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px;}
+  .proj-stat{background:var(--panel-3);border:1px solid var(--line-2);border-radius:10px;padding:11px 14px;}
+  .proj-stat-label{font-size:8.5px;letter-spacing:.1em;color:var(--text-faint);margin-bottom:5px;font-family:'IBM Plex Mono',monospace;}
+  .proj-stat-value{font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:700;}
+  .proj-stat-sub{font-size:10px;color:var(--text-faint2);font-family:'IBM Plex Mono',monospace;margin-top:2px;}
+
+  .proj-section{margin-bottom:22px;}
+  .proj-section-title{font-size:10px;letter-spacing:.1em;color:var(--text-faint);margin-bottom:10px;font-family:'IBM Plex Mono',monospace;}
+
+  .proj-hist{display:flex;align-items:flex-end;gap:2px;height:90px;background:var(--panel-3);border-radius:8px;padding:10px 8px 0;}
+  .proj-hist-bar{flex:1;border-radius:2px 2px 0 0;background:var(--line-2);min-height:2px;position:relative;}
+  .proj-hist-bar.cover{background:var(--green);}
+  .proj-hist-note{font-size:10px;color:var(--text-faint2);font-family:'IBM Plex Mono',monospace;margin-top:8px;}
+
+  .proj-wf-row{display:grid;grid-template-columns:150px 1fr 56px;align-items:center;gap:10px;padding:5px 0;font-size:11.5px;}
+  .proj-wf-label{color:var(--text-dim);}
+  .proj-wf-track{position:relative;height:14px;background:var(--panel-3);border-radius:3px;}
+  .proj-wf-center{position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--line-2);}
+  .proj-wf-bar{position:absolute;top:1px;bottom:1px;border-radius:3px;}
+  .proj-wf-value{text-align:right;font-family:'IBM Plex Mono',monospace;font-weight:600;}
+
+  .proj-flags{display:flex;gap:7px;flex-wrap:wrap;}
+  .proj-flag{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:var(--text-dim);
+    background:var(--panel-3);border:1px solid var(--line-2);border-radius:6px;padding:5px 10px;
+  }
+
   @media (max-width:860px){
     .stat-strip{grid-template-columns:repeat(3,1fr);}
     .grid-lines{grid-template-columns:1.3fr 76px 76px 52px;}
@@ -157,6 +210,7 @@
     .col-hide{display:none;}
     .pr-head,.pr-row{grid-template-columns:28px 1.3fr 60px 70px;}
     .pr-bar-col{display:none;}
+    .proj-wf-row{grid-template-columns:110px 1fr 48px;font-size:10.5px;}
   }
 </style>
 </head>
@@ -249,6 +303,58 @@
   </div>
 
 </main>
+
+<div class="modal-backdrop" id="projector-modal">
+  <div class="modal-panel">
+    <button class="modal-close" id="modal-close">&times;</button>
+    <div class="proj-header">
+      <div class="proj-team">
+        <span class="proj-team-bar" id="proj-away-bar"></span>
+        <div class="proj-team-name" id="proj-away-name">—</div>
+        <div class="proj-score" id="proj-away-score">—</div>
+      </div>
+      <div class="proj-meta">
+        <div class="proj-matchup-title" id="proj-matchup-sub">—</div>
+        <div class="proj-at">@</div>
+      </div>
+      <div class="proj-team">
+        <span class="proj-team-bar" id="proj-home-bar"></span>
+        <div class="proj-team-name" id="proj-home-name">—</div>
+        <div class="proj-score" id="proj-home-score">—</div>
+      </div>
+    </div>
+
+    <div class="proj-stats-row">
+      <div class="proj-stat">
+        <div class="proj-stat-label">WIN PROB (HOME)</div>
+        <div class="proj-stat-value" id="proj-winprob">—</div>
+      </div>
+      <div class="proj-stat">
+        <div class="proj-stat-label">MODEL LINE / TOTAL</div>
+        <div class="proj-stat-value" id="proj-line-total">—</div>
+        <div class="proj-stat-sub" id="proj-market-line-total">—</div>
+      </div>
+      <div class="proj-stat">
+        <div class="proj-stat-label">FAIR MONEYLINE</div>
+        <div class="proj-stat-value" id="proj-fair-ml">—</div>
+        <div class="proj-stat-sub" id="proj-market-ml">—</div>
+      </div>
+    </div>
+
+    <div class="proj-section">
+      <div class="proj-section-title">MARGIN DISTRIBUTION — MODEL'S N(&mu;, &sigma;) FROM TRAINING RESIDUALS</div>
+      <div class="proj-hist" id="proj-hist"></div>
+      <div class="proj-hist-note" id="proj-hist-note">—</div>
+    </div>
+
+    <div class="proj-section">
+      <div class="proj-section-title">LINE DECOMPOSITION — EXACT PER-FEATURE CONTRIBUTION TO MODEL MARGIN</div>
+      <div id="proj-waterfall"></div>
+    </div>
+
+    <div class="proj-flags" id="proj-flags"></div>
+  </div>
+</div>
 
 <footer>
   PitchEdge NFL Model — Track B (spread/total/moneyline) and Track A (anytime TD) are independently trained and validated; power ratings are opponent-adjusted (SRS-style), solved week-by-week from games strictly before the current one.
@@ -345,7 +451,7 @@
         const sorted = [...games].sort((a,b)=>Math.abs(b.edges.spread_edge)-Math.abs(a.edges.spread_edge));
         body.innerHTML = sorted.map(g => {
           const e = g.edges.spread_edge;
-          return `<div class="board-row grid-lines">
+          return `<div class="board-row grid-lines clickable" data-game-id="${g.game_id}">
             <div class="row-inner"><span class="team-bar" style="background:${teamColor(g.home_team)}"></span>
               <div class="matchup-block"><div class="matchup-main">${g.away_team} @ ${g.home_team}</div>
               <div class="matchup-sub">${g.market_source==='live'?'LIVE':'SCHED'}</div></div></div>
@@ -363,7 +469,7 @@
         const sorted = [...games].sort((a,b)=>Math.abs(b.edges.total_edge)-Math.abs(a.edges.total_edge));
         body.innerHTML = sorted.map(g => {
           const e = g.edges.total_edge;
-          return `<div class="board-row grid-lines">
+          return `<div class="board-row grid-lines clickable" data-game-id="${g.game_id}">
             <div class="row-inner"><span class="team-bar" style="background:${teamColor(g.home_team)}"></span>
               <div class="matchup-block"><div class="matchup-main">${g.away_team} @ ${g.home_team}</div>
               <div class="matchup-sub">O/U</div></div></div>
@@ -381,7 +487,7 @@
         const sorted = [...games].sort((a,b)=>(b.edges.home_moneyline_ev||-1)-(a.edges.home_moneyline_ev||-1));
         body.innerHTML = sorted.map(g => {
           const ev = g.edges.home_moneyline_ev;
-          return `<div class="board-row grid-lines">
+          return `<div class="board-row grid-lines clickable" data-game-id="${g.game_id}">
             <div class="row-inner"><span class="team-bar" style="background:${teamColor(g.home_team)}"></span>
               <div class="matchup-block"><div class="matchup-main">${g.away_team} @ ${g.home_team}</div>
               <div class="matchup-sub">ML (home)</div></div></div>
@@ -396,6 +502,67 @@
       }
     }
     renderLines();
+
+    // ---- Matchup Projector modal ----
+    const gamesById = Object.fromEntries(games.map(g => [g.game_id, g]));
+    const modal = document.getElementById('projector-modal');
+
+    document.getElementById('lines-body').addEventListener('click', (e) => {
+      const row = e.target.closest('.board-row[data-game-id]');
+      if(!row) return;
+      openProjector(gamesById[row.dataset.gameId]);
+    });
+    document.getElementById('modal-close').addEventListener('click', () => modal.classList.remove('open'));
+    modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.remove('open'); });
+    document.addEventListener('keydown', (e) => { if(e.key === 'Escape') modal.classList.remove('open'); });
+
+    function openProjector(g){
+      const p = g.projector;
+      document.getElementById('proj-away-name').textContent = g.away_team;
+      document.getElementById('proj-home-name').textContent = g.home_team;
+      document.getElementById('proj-away-bar').style.background = teamColor(g.away_team);
+      document.getElementById('proj-home-bar').style.background = teamColor(g.home_team);
+      document.getElementById('proj-away-score').textContent = p.proj_away_score.toFixed(1);
+      document.getElementById('proj-home-score').textContent = p.proj_home_score.toFixed(1);
+      document.getElementById('proj-matchup-sub').textContent = `WEEK ${g.week} \u00B7 ${g.season}`;
+      document.getElementById('proj-winprob').textContent = (g.model.home_win_prob*100).toFixed(1) + '%';
+      document.getElementById('proj-line-total').textContent = `${fmtSign1(g.model.pred_home_margin)} / ${g.model.pred_total.toFixed(1)}`;
+      document.getElementById('proj-market-line-total').textContent = `market ${fmtSign1(g.market.spread_line)} / ${g.market.total_line!=null?g.market.total_line.toFixed(1):'\u2014'}`;
+      document.getElementById('proj-fair-ml').textContent = fmtOdds(g.model.home_fair_moneyline);
+      document.getElementById('proj-market-ml').textContent = `posted ${fmtOdds(g.market.home_moneyline)}`;
+
+      // Histogram: real probability mass per bin, shaded where home covers the market spread.
+      const dist = p.distribution;
+      const maxProb = Math.max(...dist.map(b => b.prob));
+      document.getElementById('proj-hist').innerHTML = dist.map(b => {
+        const h = Math.max(2, (b.prob / maxProb) * 100);
+        const covers = g.market.spread_line != null && b.bin_start >= g.market.spread_line;
+        return `<div class="proj-hist-bar ${covers?'cover':''}" style="height:${h}%" title="${b.bin_start} to ${b.bin_start+3}: ${(b.prob*100).toFixed(1)}%"></div>`;
+      }).join('');
+      document.getElementById('proj-hist-note').textContent = p.cover_prob != null
+        ? `Shaded (margin \u2265 ${fmtSign1(g.market.spread_line)}): ${(p.cover_prob*100).toFixed(1)}% of the model's assumed distribution \u2014 \u03C3=${p.margin_resid_std} pts from training residuals`
+        : `\u03C3=${p.margin_resid_std} pts from training residuals`;
+
+      // Waterfall: real coef_i * standardized_value_i per feature group, exact.
+      const maxAbsContrib = Math.max(1, ...p.waterfall.map(w => Math.abs(w.contribution)));
+      document.getElementById('proj-waterfall').innerHTML = p.waterfall.map(w => {
+        const pct = Math.abs(w.contribution) / maxAbsContrib * 48;
+        const pos = w.contribution >= 0;
+        const color = pos ? 'var(--green)' : 'var(--red)';
+        const side = pos ? `left:50%;width:${pct}%` : `right:50%;width:${pct}%`;
+        return `<div class="proj-wf-row">
+          <div class="proj-wf-label">${w.label}</div>
+          <div class="proj-wf-track"><div class="proj-wf-center"></div><div class="proj-wf-bar" style="${side};background:${color}"></div></div>
+          <div class="proj-wf-value" style="color:${color}">${fmtSign1(w.contribution)}</div>
+        </div>`;
+      }).join('');
+
+      document.getElementById('proj-flags').innerHTML = p.situational_flags.length
+        ? p.situational_flags.map(f => `<span class="proj-flag">${f}</span>`).join('')
+        : `<span class="proj-flag" style="color:var(--text-faint2)">No notable situational factors</span>`;
+
+      modal.classList.add('open');
+    }
 
     const pr = linesData.power_ratings || [];
     const maxAbs = Math.max(1, ...pr.map(r => Math.abs(r.net_rating)));

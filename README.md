@@ -444,6 +444,55 @@ the moment real results start flowing in. Not wired into the automated
 cron — run manually (`python scripts/backtest.py`) whenever you want a
 fresh report; it doesn't generate new predictions, only evaluates old ones.
 
+## Matchup Projector (new this session)
+
+Click any game row on the Lines board to open a per-game deep dive —
+matching the reference design's "Matchup Projector" but built entirely
+from real, exact numbers rather than the reference's simulated ones.
+
+- **Score projection**: `(pred_total + pred_margin) / 2` and
+  `(pred_total - pred_margin) / 2` — algebraically consistent with the two
+  numbers the model actually outputs, not a separately-modeled score.
+- **Margin distribution histogram**: the model's own assumed
+  N(pred_margin, margin_resid_std) — `margin_resid_std` is the REAL
+  residual standard deviation from training (how far off the model
+  typically was), not an invented spread. Bars are exact PDF-integral
+  probability mass per bin, not a random sample — reproducible, not noisy.
+  Shaded bars show the probability the home side covers the market
+  spread under this distribution. The reference mockup's equivalent
+  ("40k drive sims") was driven by `Math.random()` — fabricated for the
+  demo. This one isn't.
+- **Line decomposition (waterfall)**: since the margin model is Ridge
+  (linear on standardized features), the contribution of each feature to
+  a SPECIFIC game's prediction is genuinely `coef_i * standardized_value_i`
+  — not an approximation or SHAP-style estimate, the literal arithmetic
+  the model used. Grouped into 7 readable categories (`FEATURE_GROUPS` in
+  `generate_predictions.py`): Power rating, Home field, Rest, Division
+  game, Trailing scoring form, Weather/venue, Pace. Verified in
+  `test_projector.py` that the sum of all group contributions plus the
+  intercept exactly equals the model's actual prediction for that row —
+  not just close, exact.
+- **Situational flags**: short, honest notes derived from real thresholds
+  on the row's own data (division game, dome/indoor, rest advantage ≥3
+  days, wind ≥15mph, cold ≤32°F) — no invented narrative.
+
+**Backend addition**: `generate_predictions.py` now exports a `projector`
+object per game in `data/nfl_lines.json` (proj_home_score, proj_away_score,
+cover_prob, distribution, waterfall, situational_flags). `test_projector.py`
+covers all three new helper functions (`build_waterfall`,
+`build_distribution`, `build_situational_flags`) against synthetic
+fixtures with hand-computable expected results (8/8 passing) — including a
+fitted-Ridge-model test that confirms the waterfall's exactness property
+directly, not just its shape.
+
+**Verified functionally, not just by syntax check**: rendered the actual
+dashboard in a real DOM (jsdom) and simulated a genuine click event on a
+game row — confirmed the modal opens, populates with correct real data
+(team names, win probability, 7 waterfall categories + intercept, 36
+histogram bins, correct situational flags for a real dome team), and the
+close button works. Not just "the JS parses," an actual interaction was
+exercised end-to-end.
+
 ## Architecture
 
 Static-site + scheduled-job pattern: Python scripts in `scripts/` fetch data
@@ -480,6 +529,7 @@ this is only relevant for local setup.
     python scripts/test_power_ratings.py     # offline, should be 5/5
     python scripts/test_odds_api.py          # offline (mocked), should be 15/15
     python scripts/test_backtest.py          # offline (synthetic), should be 22/22
+    python scripts/test_projector.py         # offline (synthetic), should be 8/8
     python scripts/team_features.py 2024     # builds team-week model table
     python scripts/team_td_model.py          # trains + validates Layer 2 (TD props)
     python scripts/game_features.py 2024     # builds team-game model table (Track B)

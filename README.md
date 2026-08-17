@@ -405,6 +405,57 @@ config needed. Trigger the workflow manually once and check the Action log
 for `[odds api] ... credits remaining` lines to confirm it's actually
 pulling live data rather than silently falling back.
 
+## Manual odds (new this session)
+
+Track A now supports hand-typed prices via `data/manual_odds.csv` — a
+free, no-API-key alternative to The Odds API (or a supplement to it: live
+API price wins if both exist for a player, manual fills in anyone the API
+missed).
+
+**Format**, edited directly on GitHub like every other file in this
+project:
+
+```
+player_name,price
+Saquon Barkley,-145
+J.Taylor,180
+```
+
+Names can be full ("Saquon Barkley") or the dashboard's abbreviated form
+("J.Taylor") — matched via the same `normalize_name()` + `merge_name`
+mechanism the live API already uses, so either works. Price is American
+odds; a bare `180` and `+180` both parse the same.
+
+**This produces genuinely real edge/EV/tier**, computed by the exact same
+math as live-API odds, and gets logged to `player_td_log.jsonl` the same
+way — usable for the real backtest later, not a throwaway. Verified
+end-to-end: Barkley at a manually-entered -145 correctly produced edge
++11.77%, EV +19.9%, Tier A — identical to the earlier live-API mocked test
+that used the same price.
+
+**Staleness caveat, stated plainly**: unlike the live API, this file does
+NOT refresh itself — it only has whatever was last typed into it. If lines
+move and the file isn't updated, the model will happily compute edge
+against a stale price. The dashboard's manual-odds rows get a small ✎
+indicator (hover for a reminder) so it's visually obvious which prices are
+hand-maintained versus live.
+
+**One real schema fix made while wiring this in**: the persistent log's
+price field was renamed from `live_anytime_td_price` to `anytime_td_price`
+(now generic across both sources) plus a new `price_source` field. Made
+this a clean break rather than supporting both names, specifically because
+no real games have completed yet — the log's accumulated entries so far
+are all still "upcoming week" snapshots with zero real backtest value, so
+this was the cheapest possible moment to do it. `backtest.py` and
+`test_backtest.py` updated to match. If this is read after real games have
+been logged under the OLD field name, that's a genuine migration to handle
+carefully, not a search-and-replace.
+
+Validated with 16 synthetic checks (`test_manual_odds.py`): both name
+formats, price parsing with/without a `+` sign, malformed rows dropped
+without crashing the whole file, duplicate names (last one wins — the most
+recently edited), and a missing or wrong-column file handled gracefully.
+
 ## Backtest (new this session)
 
 `scripts/backtest.py` joins the persistent prediction logs
@@ -659,6 +710,7 @@ this is only relevant for local setup.
     python scripts/test_projector.py         # offline (synthetic), should be 8/8
     python scripts/test_blueprint_qualification.py  # offline (synthetic), should be 24/24
     python scripts/test_defense_features.py  # offline (synthetic), should be 13/13
+    python scripts/test_manual_odds.py       # offline (synthetic), should be 16/16
     python scripts/team_features.py 2024     # builds team-week model table
     python scripts/team_td_model.py          # trains + validates Layer 2 (TD props)
     python scripts/game_features.py 2024     # builds team-game model table (Track B)

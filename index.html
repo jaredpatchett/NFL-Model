@@ -647,7 +647,7 @@
           <div class="cell-num col-hide">${p.matchup}</div>
           <div class="cell-num col-r col-hide" style="color:${muColor}">${mu!=null?mu.toFixed(2):'\u2014'}</div>
           <div class="cell-model col-r">${fmtPct(p.model.anytime_td_prob)}</div>
-          <div class="cell-num col-r">${m?fmtOdds(m.anytime_td_price):'\u2014'}</div>
+          <div class="cell-num col-r">${m?fmtOdds(m.anytime_td_price):'\u2014'}${m&&m.source==='manual'?'<span style="color:var(--amber);font-size:9px;margin-left:3px" title="Manually entered odds -- see data/manual_odds.csv">\u270E</span>':''}</div>
           <div class="cell-edge col-r ${m?edgeClass(m.edge):'edge-flat'}">${m?fmtSigned(m.edge):'\u2014'}</div>
           <div class="col-c"><span class="qual-tier qual-${q.tier}" title="${tooltip}">${q.tier}</span></div>
         </div>`;

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-17T21:36:01.614753+00:00",
+  "generated_at": "2026-08-18T13:34:58.046542+00:00",
   "season": 2026,
   "week": 1,
   "model_notes": {
@@ -59,10 +59,10 @@
         "tier": "A"
       },
       "market": {
-        "anytime_td_price": 240,
-        "implied_prob": 0.2941,
-        "edge": 0.2478,
-        "ev": 0.8425,
+        "anytime_td_price": 225,
+        "implied_prob": 0.3077,
+        "edge": 0.2342,
+        "ev": 0.7612,
         "source": "live_api"
       },
       "qualification": {
@@ -721,10 +721,10 @@
         "tier": "B"
       },
       "market": {
-        "anytime_td_price": 290,
-        "implied_prob": 0.2564,
-        "edge": 0.0442,
-        "ev": 0.1723,
+        "anytime_td_price": 285,
+        "implied_prob": 0.2597,
+        "edge": 0.0409,
+        "ev": 0.1573,
         "source": "live_api"
       },
       "qualification": {
@@ -1655,10 +1655,10 @@
         "tier": "C"
       },
       "market": {
-        "anytime_td_price": 360,
-        "implied_prob": 0.2174,
-        "edge": -0.0249,
-        "ev": -0.1146,
+        "anytime_td_price": 340,
+        "implied_prob": 0.2273,
+        "edge": -0.0348,
+        "ev": -0.1531,
         "source": "live_api"
       },
       "qualification": {

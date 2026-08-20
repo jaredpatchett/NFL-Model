@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-19T13:35:47.086746+00:00",
+  "generated_at": "2026-08-20T13:37:48.218423+00:00",
   "season": 2026,
   "week": 1,
   "model_notes": {
@@ -27,7 +27,7 @@
         "spread_price": 100,
         "total_line": 44.5,
         "home_moneyline": -190,
-        "away_moneyline": 175,
+        "away_moneyline": 170,
         "home_implied_prob": 0.6552
       },
       "edges": {
@@ -241,15 +241,15 @@
         "spread_line": 3.5,
         "spread_price": null,
         "total_line": 48.5,
-        "home_moneyline": -192.0,
-        "away_moneyline": 160.0,
-        "home_implied_prob": 0.6575
+        "home_moneyline": -198.0,
+        "away_moneyline": 164.0,
+        "home_implied_prob": 0.6644
       },
       "edges": {
         "spread_edge": 2.71,
         "total_edge": 0.9,
-        "moneyline_edge": 0.0239,
-        "home_moneyline_ev": 0.0364
+        "moneyline_edge": 0.017,
+        "home_moneyline_ev": 0.0257
       },
       "projector": {
         "proj_home_score": 27.8,
@@ -1747,7 +1747,7 @@
       "market_source": "live",
       "model": {
         "pred_home_margin": 2.67,
-        "pred_total": 41.85,
+        "pred_total": 42.85,
         "home_win_prob": 0.5804,
         "home_fair_moneyline": -138.3
       },
@@ -1761,13 +1761,13 @@
       },
       "edges": {
         "spread_edge": 5.67,
-        "total_edge": -0.65,
+        "total_edge": 0.35,
         "moneyline_edge": -0.035,
         "home_moneyline_ev": -0.0568
       },
       "projector": {
-        "proj_home_score": 22.3,
-        "proj_away_score": 19.6,
+        "proj_home_score": 22.8,
+        "proj_away_score": 20.1,
         "cover_prob": 0.6668,
         "margin_resid_std": 13.16,
         "distribution": [
@@ -3054,15 +3054,15 @@
         "spread_line": 2.5,
         "spread_price": 105,
         "total_line": 48.5,
-        "home_moneyline": 140,
+        "home_moneyline": 138,
         "away_moneyline": -145,
-        "home_implied_prob": 0.4167
+        "home_implied_prob": 0.4202
       },
       "edges": {
         "spread_edge": 0.56,
         "total_edge": 0.37,
-        "moneyline_edge": 0.1752,
-        "home_moneyline_ev": 0.4204
+        "moneyline_edge": 0.1717,
+        "home_moneyline_ev": 0.4086
       },
       "projector": {
         "proj_home_score": 26.0,

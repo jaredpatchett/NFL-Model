@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-20T13:38:05.419460+00:00",
+  "generated_at": "2026-08-21T13:37:08.777008+00:00",
   "season": 2026,
   "week": 1,
   "model_notes": {
@@ -59,10 +59,10 @@
         "tier": "A"
       },
       "market": {
-        "anytime_td_price": 210,
-        "implied_prob": 0.3226,
-        "edge": 0.2193,
-        "ev": 0.6799,
+        "anytime_td_price": 215,
+        "implied_prob": 0.3175,
+        "edge": 0.2244,
+        "ev": 0.707,
         "source": "live_api"
       },
       "qualification": {
@@ -721,10 +721,10 @@
         "tier": "B"
       },
       "market": {
-        "anytime_td_price": 260,
-        "implied_prob": 0.2778,
-        "edge": 0.0228,
-        "ev": 0.0821,
+        "anytime_td_price": 270,
+        "implied_prob": 0.2703,
+        "edge": 0.0303,
+        "ev": 0.1122,
         "source": "live_api"
       },
       "qualification": {
@@ -817,6 +817,36 @@
         "tier": "D",
         "reason_codes": [
           "TD projection below 30% threshold",
+          "No live price -- edge/EV not evaluated"
+        ]
+      }
+    },
+    {
+      "player_id": "00-0030279",
+      "player_name": "K.Allen",
+      "position": "WR",
+      "team": "IND",
+      "opponent": "BAL",
+      "matchup": "IND vs BAL",
+      "usage": {
+        "snap_share": 0.545,
+        "rz_target_share": 0.143,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.82,
+        "matchup_rating": 0.561
+      },
+      "model": {
+        "anytime_td_prob": 0.2602,
+        "tier": "B"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "Matchup rating 0.56 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
         ]
       }
@@ -1022,6 +1052,37 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "Matchup rating 0.56 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ]
+      }
+    },
+    {
+      "player_id": "00-0031610",
+      "player_name": "D.Waller",
+      "position": "TE",
+      "team": "CAR",
+      "opponent": "CHI",
+      "matchup": "CAR vs CHI",
+      "usage": {
+        "snap_share": 0.445,
+        "rz_target_share": 0.143,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.737,
+        "matchup_rating": 1.089
+      },
+      "model": {
+        "anytime_td_prob": 0.2343,
+        "tier": "C"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "Recent TDs outpacing opportunity (regression risk)",
+          "Matchup rating 1.09 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
         ]
       }
@@ -1328,37 +1389,6 @@
       }
     },
     {
-      "player_id": "00-0031610",
-      "player_name": "D.Waller",
-      "position": "TE",
-      "team": "MIA",
-      "opponent": "LV",
-      "matchup": "MIA @ LV",
-      "usage": {
-        "snap_share": 0.445,
-        "rz_target_share": 0.125,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.737,
-        "matchup_rating": 0.749
-      },
-      "model": {
-        "anytime_td_prob": 0.215,
-        "tier": "C"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Snap share below 70% threshold",
-          "TD projection below 30% threshold",
-          "Recent TDs outpacing opportunity (regression risk)",
-          "Matchup rating 0.75 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ]
-      }
-    },
-    {
       "player_id": "00-0035689",
       "player_name": "D.Knox",
       "position": "TE",
@@ -1586,10 +1616,10 @@
         "tier": "C"
       },
       "market": {
-        "anytime_td_price": 650,
-        "implied_prob": 0.1333,
-        "edge": 0.0624,
-        "ev": 0.4682,
+        "anytime_td_price": 700,
+        "implied_prob": 0.125,
+        "edge": 0.0708,
+        "ev": 0.5661,
         "source": "live_api"
       },
       "qualification": {
@@ -1655,10 +1685,10 @@
         "tier": "C"
       },
       "market": {
-        "anytime_td_price": 550,
-        "implied_prob": 0.1538,
-        "edge": 0.0386,
-        "ev": 0.2511,
+        "anytime_td_price": 500,
+        "implied_prob": 0.1667,
+        "edge": 0.0258,
+        "ev": 0.1548,
         "source": "live_api"
       },
       "qualification": {
@@ -1854,34 +1884,6 @@
           "No meaningful red-zone role",
           "Recent TDs outpacing opportunity (regression risk)",
           "Matchup rating 1.09 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ]
-      }
-    },
-    {
-      "player_id": "00-0033857",
-      "player_name": "J.Smith-Schuster",
-      "position": "WR",
-      "team": "NYG",
-      "opponent": "DAL",
-      "matchup": "NYG vs DAL",
-      "usage": {
-        "snap_share": 0.755,
-        "rz_target_share": 0.091,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.2,
-        "matchup_rating": 1.222
-      },
-      "model": {
-        "anytime_td_prob": 0.1729,
-        "tier": "C"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "TD projection below 30% threshold",
           "No live price -- edge/EV not evaluated"
         ]
       }
@@ -2410,6 +2412,35 @@
         "inside5_carry_share": 0.2,
         "xtd_per_game": 0.877,
         "matchup_rating": 2.154
+      },
+      "model": {
+        "anytime_td_prob": 0.1478,
+        "tier": "D"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "No live price -- edge/EV not evaluated"
+        ]
+      }
+    },
+    {
+      "player_id": "00-0033591",
+      "player_name": "N.Brown",
+      "position": "WR",
+      "team": "LV",
+      "opponent": "MIA",
+      "matchup": "LV vs MIA",
+      "usage": {
+        "snap_share": 0.41,
+        "rz_target_share": 0.5,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.3,
+        "matchup_rating": 1.572
       },
       "model": {
         "anytime_td_prob": 0.1478,
@@ -3595,36 +3626,6 @@
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
           "Matchup rating 1.09 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ]
-      }
-    },
-    {
-      "player_id": "00-0035602",
-      "player_name": "A.Bachman",
-      "position": "WR",
-      "team": "LV",
-      "opponent": "MIA",
-      "matchup": "LV vs MIA",
-      "usage": {
-        "snap_share": 0.188,
-        "rz_target_share": 0.0,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.34,
-        "matchup_rating": 1.572
-      },
-      "model": {
-        "anytime_td_prob": 0.0993,
-        "tier": "D"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Snap share below 70% threshold",
-          "TD projection below 30% threshold",
-          "No meaningful red-zone role",
           "No live price -- edge/EV not evaluated"
         ]
       }

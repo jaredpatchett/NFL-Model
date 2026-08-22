@@ -460,11 +460,12 @@ function renderGrid(){
       const n=r*T+(r%2===0?team-1:T-team);
       const k=state.picks.find(x=>x.n===n);
       const p=k?byId[k.id]:null;
-      const bg=team===state.mySlot?'#111A16':(n===pickN?'#17171D':'#0F0F13');
-      const nameColor=p?(team===state.mySlot?'#00FF9C':'#D8DBE6'):(n===pickN?'#4C8DFF':'#2E2E38');
-      cells+=`<div style="background:${bg};padding:6px;min-height:34px">
-        <div class="mono" style="font-size:9px;color:${n===pickN?'#4C8DFF':'#454A5C'}">${pickLabelFor(n)}${p?' · '+p.pos:''}</div>
-        <div style="font-size:11px;font-weight:600;color:${nameColor};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p?esc(p.name):(n===pickN?'ON THE CLOCK':'—')}</div>
+      const bg=p?`${POS_COLOR[p.pos]}2E`:(team===state.mySlot?'#111A16':(n===pickN?'#17171D':'#0F0F13'));
+      const posC=p?(POS_COLOR[p.pos]||'#D8DBE6'):null;
+      const border=p?`border:1px solid ${posC}80;`:'';
+      cells+=`<div style="background:${bg};${border}padding:6px;min-height:34px">
+        <div class="mono" style="font-size:9px;font-weight:${p?800:400};color:${p?posC:(n===pickN?'#4C8DFF':'#454A5C')}">${pickLabelFor(n)}${p?' · '+p.pos:''}</div>
+        <div style="font-size:11px;font-weight:700;color:${p?'#FFFFFF':(n===pickN?'#4C8DFF':'#2E2E38')};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:${p?'0 1px 2px rgba(0,0,0,.6)':'none'}">${p?esc(p.name):(n===pickN?'ON THE CLOCK':'—')}</div>
       </div>`;
     }
   }
@@ -476,7 +477,10 @@ function renderGrid(){
     <div class="card" style="overflow:auto">
       <div style="display:grid;grid-template-columns:44px repeat(${T},minmax(96px,1fr));gap:1px;background:#212129;min-width:${44+T*96}px">${header}${cells}</div>
     </div>
-    <div class="mono" style="font-size:10px;color:#454A5C;margin-top:10px">Snake order, odd rounds left to right. Your column is highlighted. Every pick made on the board lands here.</div>
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:10px">
+      <span class="mono" style="font-size:10px;color:#454A5C">Snake order, odd rounds left to right. Your column is highlighted.</span>
+      ${['QB','RB','WR','TE','K','DST'].map(pos=>`<span style="display:flex;align-items:center;gap:5px"><span style="width:8px;height:8px;border-radius:2px;background:${POS_COLOR[pos]}"></span><span class="mono" style="font-size:10px;color:#8890A2">${pos}</span></span>`).join('')}
+    </div>
   </div>`;
 }
 

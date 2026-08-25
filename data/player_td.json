@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-08-22T17:01:28.167539+00:00",
+  "generated_at": "2026-08-25T13:40:08.146078+00:00",
   "season": 2026,
   "week": 1,
   "model_notes": {
     "training_rows": 18424,
-    "caveat": "8 of 131 players matched to a real anytime-TD price this run (7 from live API, 1 from data/manual_odds.csv (hand-maintained -- keep it updated with current lines before a run, it doesn't refresh itself); unmatched players show usage/model only, either no line posted for that player or a name-matching miss). 1 of 131 players clear the blueprint's qualification screen (Tier A/B). Screen implements the PDF's stated snap share/TD projection/red-zone role/regression checks and edge/EV tiers; matchup rating is implemented but informational only (see README); HEAT-window thresholds are named in the PDF but not formulaically defined, so not enforced. Candidate pool is last season's active players corrected for known offseason trades; true rookies and any very recent retirements the crosswalk hasn't caught are not included yet."
+    "caveat": "63 of 131 players matched to a real anytime-TD price this run (63 from live API; unmatched players show usage/model only, either no line posted for that player or a name-matching miss). 3 of 131 players clear the blueprint's qualification screen (Tier A/B). Screen implements the PDF's stated snap share/TD projection/red-zone role/regression checks and edge/EV tiers; matchup rating is implemented but informational only (see README); HEAT-window thresholds are named in the PDF but not formulaically defined, so not enforced. Candidate pool is last season's active players corrected for known offseason trades; true rookies and any very recent retirements the crosswalk hasn't caught are not included yet."
   },
   "players": [
     {
@@ -26,11 +26,11 @@
         "tier": "A"
       },
       "market": {
-        "anytime_td_price": -145,
-        "implied_prob": 0.5918,
-        "edge": 0.1177,
-        "ev": 0.199,
-        "source": "manual"
+        "anytime_td_price": -135,
+        "implied_prob": 0.5745,
+        "edge": 0.1351,
+        "ev": 0.2352,
+        "source": "live_api"
       },
       "qualification": {
         "qualifies": true,
@@ -91,12 +91,19 @@
         "anytime_td_prob": 0.5188,
         "tier": "A"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": -180,
+        "implied_prob": 0.6429,
+        "edge": -0.124,
+        "ev": -0.1929,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
-        "tier": "U",
+        "tier": "D",
         "reason_codes": [
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability",
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -118,14 +125,21 @@
         "anytime_td_prob": 0.5162,
         "tier": "A"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": -120,
+        "implied_prob": 0.5455,
+        "edge": -0.0293,
+        "ev": -0.0537,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "Snap share below 70% threshold",
           "Matchup rating 0.52 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability",
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -175,13 +189,18 @@
         "anytime_td_prob": 0.4806,
         "tier": "A"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 205,
+        "implied_prob": 0.3279,
+        "edge": 0.1527,
+        "ev": 0.4657,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
-          "Snap share below 70% threshold",
-          "No live price -- edge/EV not evaluated"
+          "Snap share below 70% threshold"
         ]
       }
     },
@@ -203,13 +222,18 @@
         "anytime_td_prob": 0.4729,
         "tier": "A"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 160,
+        "implied_prob": 0.3846,
+        "edge": 0.0882,
+        "ev": 0.2294,
+        "source": "live_api"
+      },
       "qualification": {
-        "qualifies": false,
-        "tier": "U",
+        "qualifies": true,
+        "tier": "A",
         "reason_codes": [
-          "Matchup rating 0.85 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Matchup rating 0.85 below 1.10 preferred (informational only, not yet a disqualifier)"
         ]
       }
     },
@@ -231,13 +255,18 @@
         "anytime_td_prob": 0.4568,
         "tier": "A"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 185,
+        "implied_prob": 0.3509,
+        "edge": 0.1059,
+        "ev": 0.3018,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
-          "Recent TDs outpacing opportunity (regression risk)",
-          "No live price -- edge/EV not evaluated"
+          "Recent TDs outpacing opportunity (regression risk)"
         ]
       }
     },
@@ -259,14 +288,21 @@
         "anytime_td_prob": 0.4329,
         "tier": "A"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 110,
+        "implied_prob": 0.4762,
+        "edge": -0.0433,
+        "ev": -0.0909,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "Snap share below 70% threshold",
           "Matchup rating 0.65 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability",
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -288,14 +324,19 @@
         "anytime_td_prob": 0.412,
         "tier": "A"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 200,
+        "implied_prob": 0.3333,
+        "edge": 0.0787,
+        "ev": 0.2361,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "Recent TDs outpacing opportunity (regression risk)",
-          "Matchup rating 0.88 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Matchup rating 0.88 below 1.10 preferred (informational only, not yet a disqualifier)"
         ]
       }
     },
@@ -317,14 +358,19 @@
         "anytime_td_prob": 0.4046,
         "tier": "A"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 270,
+        "implied_prob": 0.2703,
+        "edge": 0.1343,
+        "ev": 0.4969,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "Recent TDs outpacing opportunity (regression risk)",
-          "Matchup rating 1.09 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Matchup rating 1.09 below 1.10 preferred (informational only, not yet a disqualifier)"
         ]
       }
     },
@@ -346,14 +392,21 @@
         "anytime_td_prob": 0.3964,
         "tier": "B"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": -125,
+        "implied_prob": 0.5556,
+        "edge": -0.1592,
+        "ev": -0.2866,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "Snap share below 70% threshold",
           "Matchup rating 0.93 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability",
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -375,13 +428,19 @@
         "anytime_td_prob": 0.3944,
         "tier": "B"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 125,
+        "implied_prob": 0.4444,
+        "edge": -0.05,
+        "ev": -0.1126,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "Snap share below 70% threshold",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability"
         ]
       }
     },
@@ -403,13 +462,19 @@
         "anytime_td_prob": 0.3862,
         "tier": "B"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 120,
+        "implied_prob": 0.4545,
+        "edge": -0.0683,
+        "ev": -0.1504,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "Snap share below 70% threshold",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability"
         ]
       }
     },
@@ -460,7 +525,13 @@
         "anytime_td_prob": 0.3758,
         "tier": "B"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 105,
+        "implied_prob": 0.4878,
+        "edge": -0.112,
+        "ev": -0.2295,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
@@ -468,7 +539,8 @@
           "Snap share below 70% threshold",
           "Recent TDs outpacing opportunity (regression risk)",
           "Matchup rating 1.04 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability",
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -490,13 +562,18 @@
         "anytime_td_prob": 0.3683,
         "tier": "B"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 295,
+        "implied_prob": 0.2532,
+        "edge": 0.1151,
+        "ev": 0.4548,
+        "source": "live_api"
+      },
       "qualification": {
-        "qualifies": false,
-        "tier": "U",
+        "qualifies": true,
+        "tier": "A",
         "reason_codes": [
-          "Matchup rating 0.85 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Matchup rating 0.85 below 1.10 preferred (informational only, not yet a disqualifier)"
         ]
       }
     },
@@ -518,14 +595,19 @@
         "anytime_td_prob": 0.335,
         "tier": "B"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 245,
+        "implied_prob": 0.2899,
+        "edge": 0.0452,
+        "ev": 0.1559,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "Recent TDs outpacing opportunity (regression risk)",
-          "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)"
         ]
       }
     },
@@ -547,14 +629,19 @@
         "anytime_td_prob": 0.3314,
         "tier": "B"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 275,
+        "implied_prob": 0.2667,
+        "edge": 0.0648,
+        "ev": 0.2429,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "Recent TDs outpacing opportunity (regression risk)",
-          "Matchup rating 0.88 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Matchup rating 0.88 below 1.10 preferred (informational only, not yet a disqualifier)"
         ]
       }
     },
@@ -576,13 +663,19 @@
         "anytime_td_prob": 0.328,
         "tier": "B"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 195,
+        "implied_prob": 0.339,
+        "edge": -0.011,
+        "ev": -0.0323,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "Snap share below 70% threshold",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability"
         ]
       }
     },
@@ -604,7 +697,13 @@
         "anytime_td_prob": 0.3249,
         "tier": "B"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 200,
+        "implied_prob": 0.3333,
+        "edge": -0.0084,
+        "ev": -0.0252,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
@@ -612,7 +711,7 @@
           "Snap share below 70% threshold",
           "Recent TDs outpacing opportunity (regression risk)",
           "Matchup rating 0.22 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability"
         ]
       }
     },
@@ -634,13 +733,20 @@
         "anytime_td_prob": 0.3227,
         "tier": "B"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 110,
+        "implied_prob": 0.4762,
+        "edge": -0.1535,
+        "ev": -0.3223,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
-        "tier": "U",
+        "tier": "D",
         "reason_codes": [
           "Matchup rating 0.98 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability",
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -662,14 +768,19 @@
         "anytime_td_prob": 0.3073,
         "tier": "B"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 255,
+        "implied_prob": 0.2817,
+        "edge": 0.0256,
+        "ev": 0.0908,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "Recent TDs outpacing opportunity (regression risk)",
-          "Matchup rating 0.98 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Matchup rating 0.98 below 1.10 preferred (informational only, not yet a disqualifier)"
         ]
       }
     },
@@ -691,14 +802,20 @@
         "anytime_td_prob": 0.3017,
         "tier": "B"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 165,
+        "implied_prob": 0.3774,
+        "edge": -0.0756,
+        "ev": -0.2005,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "Recent TDs outpacing opportunity (regression risk)",
           "Matchup rating 0.83 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability"
         ]
       }
     },
@@ -721,10 +838,10 @@
         "tier": "B"
       },
       "market": {
-        "anytime_td_price": 270,
-        "implied_prob": 0.2703,
-        "edge": 0.0303,
-        "ev": 0.1122,
+        "anytime_td_price": 265,
+        "implied_prob": 0.274,
+        "edge": 0.0266,
+        "ev": 0.0972,
         "source": "live_api"
       },
       "qualification": {
@@ -751,7 +868,13 @@
         "anytime_td_prob": 0.2687,
         "tier": "B"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 175,
+        "implied_prob": 0.3636,
+        "edge": -0.0949,
+        "ev": -0.261,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
@@ -759,7 +882,7 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability"
         ]
       }
     },
@@ -781,7 +904,13 @@
         "anytime_td_prob": 0.2632,
         "tier": "B"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 370,
+        "implied_prob": 0.2128,
+        "edge": 0.0504,
+        "ev": 0.2369,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
@@ -789,7 +918,7 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "Matchup rating 0.98 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -811,13 +940,19 @@
         "anytime_td_prob": 0.262,
         "tier": "B"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 190,
+        "implied_prob": 0.3448,
+        "edge": -0.0829,
+        "ev": -0.2403,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "TD projection below 30% threshold",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability"
         ]
       }
     },
@@ -839,7 +974,13 @@
         "anytime_td_prob": 0.2602,
         "tier": "B"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 330,
+        "implied_prob": 0.2326,
+        "edge": 0.0276,
+        "ev": 0.1189,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
@@ -847,7 +988,7 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "Matchup rating 0.56 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -869,7 +1010,13 @@
         "anytime_td_prob": 0.2591,
         "tier": "B"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 600,
+        "implied_prob": 0.1429,
+        "edge": 0.1162,
+        "ev": 0.8136,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
@@ -877,7 +1024,7 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "Matchup rating 0.65 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -928,14 +1075,20 @@
         "anytime_td_prob": 0.2532,
         "tier": "B"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 330,
+        "implied_prob": 0.2326,
+        "edge": 0.0206,
+        "ev": 0.0888,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "TD projection below 30% threshold",
           "Matchup rating 0.88 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -957,14 +1110,20 @@
         "anytime_td_prob": 0.2525,
         "tier": "B"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 230,
+        "implied_prob": 0.303,
+        "edge": -0.0505,
+        "ev": -0.1668,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "TD projection below 30% threshold",
           "Matchup rating 0.88 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability"
         ]
       }
     },
@@ -986,14 +1145,20 @@
         "anytime_td_prob": 0.2493,
         "tier": "C"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 360,
+        "implied_prob": 0.2174,
+        "edge": 0.032,
+        "ev": 0.147,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "TD projection below 30% threshold",
           "Matchup rating 0.83 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -1015,14 +1180,20 @@
         "anytime_td_prob": 0.2476,
         "tier": "C"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 185,
+        "implied_prob": 0.3509,
+        "edge": -0.1033,
+        "ev": -0.2944,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability"
         ]
       }
     },
@@ -1044,7 +1215,13 @@
         "anytime_td_prob": 0.2441,
         "tier": "C"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 265,
+        "implied_prob": 0.274,
+        "edge": -0.0299,
+        "ev": -0.109,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
@@ -1052,7 +1229,7 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "Matchup rating 0.56 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability"
         ]
       }
     },
@@ -1135,13 +1312,19 @@
         "anytime_td_prob": 0.23,
         "tier": "C"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 270,
+        "implied_prob": 0.2703,
+        "edge": -0.0402,
+        "ev": -0.1488,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "TD projection below 30% threshold",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability"
         ]
       }
     },
@@ -1164,10 +1347,10 @@
         "tier": "C"
       },
       "market": {
-        "anytime_td_price": 550,
-        "implied_prob": 0.1538,
-        "edge": 0.0741,
-        "ev": 0.4816,
+        "anytime_td_price": 600,
+        "implied_prob": 0.1429,
+        "edge": 0.0851,
+        "ev": 0.5955,
         "source": "live_api"
       },
       "qualification": {
@@ -1287,14 +1470,21 @@
         "anytime_td_prob": 0.218,
         "tier": "C"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 320,
+        "implied_prob": 0.2381,
+        "edge": -0.0201,
+        "ev": -0.0844,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "TD projection below 30% threshold",
           "Matchup rating 0.85 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability",
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -1316,7 +1506,13 @@
         "anytime_td_prob": 0.2166,
         "tier": "C"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 650,
+        "implied_prob": 0.1333,
+        "edge": 0.0832,
+        "ev": 0.6242,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
@@ -1325,7 +1521,7 @@
           "TD projection below 30% threshold",
           "Recent TDs outpacing opportunity (regression risk)",
           "Matchup rating 0.75 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -1347,14 +1543,21 @@
         "anytime_td_prob": 0.2166,
         "tier": "C"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 115,
+        "implied_prob": 0.4651,
+        "edge": -0.2486,
+        "ev": -0.5344,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "TD projection below 30% threshold",
           "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability",
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -1376,7 +1579,13 @@
         "anytime_td_prob": 0.2163,
         "tier": "C"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 255,
+        "implied_prob": 0.2817,
+        "edge": -0.0654,
+        "ev": -0.2323,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
@@ -1384,7 +1593,7 @@
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
           "Matchup rating 0.85 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability"
         ]
       }
     },
@@ -1406,7 +1615,13 @@
         "anytime_td_prob": 0.2134,
         "tier": "C"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 550,
+        "implied_prob": 0.1538,
+        "edge": 0.0595,
+        "ev": 0.387,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
@@ -1414,7 +1629,7 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "Matchup rating 0.98 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -1436,7 +1651,13 @@
         "anytime_td_prob": 0.2056,
         "tier": "C"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 235,
+        "implied_prob": 0.2985,
+        "edge": -0.0929,
+        "ev": -0.3114,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
@@ -1444,7 +1665,7 @@
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
           "Matchup rating 0.88 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability"
         ]
       }
     },
@@ -1466,7 +1687,13 @@
         "anytime_td_prob": 0.2024,
         "tier": "C"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 330,
+        "implied_prob": 0.2326,
+        "edge": -0.0302,
+        "ev": -0.1299,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
@@ -1474,7 +1701,8 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "Matchup rating 0.83 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability",
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -1526,14 +1754,20 @@
         "anytime_td_prob": 0.1993,
         "tier": "C"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 425,
+        "implied_prob": 0.1905,
+        "edge": 0.0088,
+        "ev": 0.0462,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
-          "No live price -- edge/EV not evaluated"
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -1555,7 +1789,13 @@
         "anytime_td_prob": 0.1984,
         "tier": "C"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 475,
+        "implied_prob": 0.1739,
+        "edge": 0.0245,
+        "ev": 0.1407,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
@@ -1563,7 +1803,7 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "Recent TDs outpacing opportunity (regression risk)",
-          "No live price -- edge/EV not evaluated"
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -1585,7 +1825,13 @@
         "anytime_td_prob": 0.1959,
         "tier": "C"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 500,
+        "implied_prob": 0.1667,
+        "edge": 0.0293,
+        "ev": 0.1757,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
@@ -1593,7 +1839,7 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "Matchup rating 0.75 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -1616,10 +1862,10 @@
         "tier": "C"
       },
       "market": {
-        "anytime_td_price": 700,
-        "implied_prob": 0.125,
-        "edge": 0.0708,
-        "ev": 0.5661,
+        "anytime_td_price": 650,
+        "implied_prob": 0.1333,
+        "edge": 0.0624,
+        "ev": 0.4682,
         "source": "live_api"
       },
       "qualification": {
@@ -1650,10 +1896,10 @@
         "tier": "C"
       },
       "market": {
-        "anytime_td_price": 170,
-        "implied_prob": 0.3704,
-        "edge": -0.175,
-        "ev": -0.4725,
+        "anytime_td_price": 165,
+        "implied_prob": 0.3774,
+        "edge": -0.182,
+        "ev": -0.4823,
         "source": "live_api"
       },
       "qualification": {
@@ -1685,10 +1931,10 @@
         "tier": "C"
       },
       "market": {
-        "anytime_td_price": 500,
-        "implied_prob": 0.1667,
-        "edge": 0.0258,
-        "ev": 0.1548,
+        "anytime_td_price": 550,
+        "implied_prob": 0.1538,
+        "edge": 0.0386,
+        "ev": 0.2511,
         "source": "live_api"
       },
       "qualification": {
@@ -1718,7 +1964,13 @@
         "anytime_td_prob": 0.1871,
         "tier": "C"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 280,
+        "implied_prob": 0.2632,
+        "edge": -0.076,
+        "ev": -0.2889,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
@@ -1727,7 +1979,7 @@
           "TD projection below 30% threshold",
           "Recent TDs outpacing opportunity (regression risk)",
           "Matchup rating 0.98 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability"
         ]
       }
     },
@@ -1750,10 +2002,10 @@
         "tier": "C"
       },
       "market": {
-        "anytime_td_price": 600,
-        "implied_prob": 0.1429,
-        "edge": 0.0432,
-        "ev": 0.3027,
+        "anytime_td_price": 650,
+        "implied_prob": 0.1333,
+        "edge": 0.0528,
+        "ev": 0.3958,
         "source": "live_api"
       },
       "qualification": {
@@ -1875,7 +2127,13 @@
         "anytime_td_prob": 0.1776,
         "tier": "C"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 500,
+        "implied_prob": 0.1667,
+        "edge": 0.0109,
+        "ev": 0.0653,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
@@ -1884,7 +2142,7 @@
           "No meaningful red-zone role",
           "Recent TDs outpacing opportunity (regression risk)",
           "Matchup rating 1.09 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -1906,14 +2164,21 @@
         "anytime_td_prob": 0.1711,
         "tier": "C"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 400,
+        "implied_prob": 0.2,
+        "edge": -0.0289,
+        "ev": -0.1444,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability",
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -1966,13 +2231,19 @@
         "anytime_td_prob": 0.1688,
         "tier": "C"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 500,
+        "implied_prob": 0.1667,
+        "edge": 0.0021,
+        "ev": 0.0128,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "TD projection below 30% threshold",
-          "No live price -- edge/EV not evaluated"
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -1994,14 +2265,21 @@
         "anytime_td_prob": 0.1678,
         "tier": "C"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 475,
+        "implied_prob": 0.1739,
+        "edge": -0.0061,
+        "ev": -0.0351,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability",
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -2084,7 +2362,13 @@
         "anytime_td_prob": 0.1661,
         "tier": "C"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 310,
+        "implied_prob": 0.2439,
+        "edge": -0.0778,
+        "ev": -0.3189,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
@@ -2094,7 +2378,8 @@
           "No meaningful red-zone role",
           "Recent TDs outpacing opportunity (regression risk)",
           "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability",
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -2144,7 +2429,13 @@
         "anytime_td_prob": 0.1639,
         "tier": "C"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 600,
+        "implied_prob": 0.1429,
+        "edge": 0.021,
+        "ev": 0.1473,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
@@ -2152,7 +2443,7 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "Matchup rating 0.98 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -2266,7 +2557,13 @@
         "anytime_td_prob": 0.1508,
         "tier": "C"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 700,
+        "implied_prob": 0.125,
+        "edge": 0.0258,
+        "ev": 0.2064,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
@@ -2275,7 +2572,7 @@
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
           "Matchup rating 0.65 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -2297,7 +2594,13 @@
         "anytime_td_prob": 0.1493,
         "tier": "D"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 230,
+        "implied_prob": 0.303,
+        "edge": -0.1537,
+        "ev": -0.5073,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
@@ -2306,7 +2609,7 @@
           "TD projection below 30% threshold",
           "Recent TDs outpacing opportunity (regression risk)",
           "Matchup rating 0.75 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability"
         ]
       }
     },
@@ -2389,13 +2692,19 @@
         "anytime_td_prob": 0.1479,
         "tier": "D"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 1300,
+        "implied_prob": 0.0714,
+        "edge": 0.0765,
+        "ev": 1.071,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "TD projection below 30% threshold",
-          "No live price -- edge/EV not evaluated"
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -2834,7 +3143,13 @@
         "anytime_td_prob": 0.1285,
         "tier": "D"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 255,
+        "implied_prob": 0.2817,
+        "edge": -0.1532,
+        "ev": -0.5437,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
@@ -2842,7 +3157,7 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "Matchup rating 0.22 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability"
         ]
       }
     },
@@ -3044,14 +3359,20 @@
         "anytime_td_prob": 0.1244,
         "tier": "D"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 750,
+        "implied_prob": 0.1176,
+        "edge": 0.0067,
+        "ev": 0.0572,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "TD projection below 30% threshold",
           "Matchup rating 0.22 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -3286,7 +3607,13 @@
         "anytime_td_prob": 0.1105,
         "tier": "D"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 500,
+        "implied_prob": 0.1667,
+        "edge": -0.0562,
+        "ev": -0.3372,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
@@ -3294,7 +3621,8 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "Matchup rating 1.09 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability",
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -3526,7 +3854,13 @@
         "anytime_td_prob": 0.1018,
         "tier": "D"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 1000,
+        "implied_prob": 0.0909,
+        "edge": 0.0109,
+        "ev": 0.1194,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
@@ -3535,7 +3869,7 @@
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
           "Matchup rating 0.22 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },

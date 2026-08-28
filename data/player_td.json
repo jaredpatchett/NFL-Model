@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-08-27T22:41:15.089569+00:00",
+  "generated_at": "2026-08-28T16:37:05.191086+00:00",
   "season": 2026,
   "week": 1,
   "model_notes": {
     "training_rows": 18424,
-    "caveat": "54 of 131 players matched to a real anytime-TD price this run (54 from live API; unmatched players show usage/model only, either no line posted for that player or a name-matching miss). 4 of 131 players clear the blueprint's qualification screen (Tier A/B). Screen implements the PDF's stated snap share/TD projection/red-zone role/regression checks and edge/EV tiers; matchup rating is implemented but informational only (see README); HEAT-window thresholds are named in the PDF but not formulaically defined, so not enforced. Candidate pool is last season's active players corrected for known offseason trades; true rookies and any very recent retirements the crosswalk hasn't caught are not included yet."
+    "caveat": "63 of 133 players matched to a real anytime-TD price this run (63 from live API; unmatched players show usage/model only, either no line posted for that player or a name-matching miss). 4 of 133 players clear the blueprint's qualification screen (Tier A/B). Screen implements the PDF's stated snap share/TD projection/red-zone role/regression checks and edge/EV tiers; matchup rating is implemented but informational only (see README); HEAT-window thresholds are named in the PDF but not formulaically defined, so not enforced. Candidate pool is last season's active players corrected for known offseason trades; true rookies and any very recent retirements the crosswalk hasn't caught are not included yet."
   },
   "players": [
     {
@@ -92,10 +92,10 @@
         "tier": "A"
       },
       "market": {
-        "anytime_td_price": -175,
-        "implied_prob": 0.6364,
-        "edge": -0.1175,
-        "ev": -0.1847,
+        "anytime_td_price": -165,
+        "implied_prob": 0.6226,
+        "edge": -0.1038,
+        "ev": -0.1667,
         "source": "live_api"
       },
       "qualification": {
@@ -248,13 +248,18 @@
         "anytime_td_prob": 0.4568,
         "tier": "A"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 185,
+        "implied_prob": 0.3509,
+        "edge": 0.1059,
+        "ev": 0.3018,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
-          "Recent TDs outpacing opportunity (regression risk)",
-          "No live price -- edge/EV not evaluated"
+          "Recent TDs outpacing opportunity (regression risk)"
         ]
       }
     },
@@ -513,7 +518,13 @@
         "anytime_td_prob": 0.3758,
         "tier": "B"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 105,
+        "implied_prob": 0.4878,
+        "edge": -0.112,
+        "ev": -0.2295,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
@@ -521,7 +532,8 @@
           "Snap share below 70% threshold",
           "Recent TDs outpacing opportunity (regression risk)",
           "Matchup rating 1.04 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability",
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -1191,10 +1203,10 @@
         "tier": "C"
       },
       "market": {
-        "anytime_td_price": 270,
-        "implied_prob": 0.2703,
-        "edge": -0.0262,
-        "ev": -0.0968,
+        "anytime_td_price": 280,
+        "implied_prob": 0.2632,
+        "edge": -0.019,
+        "ev": -0.0724,
         "source": "live_api"
       },
       "qualification": {
@@ -1287,13 +1299,19 @@
         "anytime_td_prob": 0.23,
         "tier": "C"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 285,
+        "implied_prob": 0.2597,
+        "edge": -0.0297,
+        "ev": -0.1143,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "TD projection below 30% threshold",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability"
         ]
       }
     },
@@ -1475,7 +1493,13 @@
         "anytime_td_prob": 0.2166,
         "tier": "C"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 475,
+        "implied_prob": 0.1739,
+        "edge": 0.0426,
+        "ev": 0.2452,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
@@ -1484,7 +1508,7 @@
           "TD projection below 30% threshold",
           "Recent TDs outpacing opportunity (regression risk)",
           "Matchup rating 0.75 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -1716,7 +1740,13 @@
         "anytime_td_prob": 0.1984,
         "tier": "C"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 450,
+        "implied_prob": 0.1818,
+        "edge": 0.0166,
+        "ev": 0.0911,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
@@ -1724,7 +1754,7 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "Recent TDs outpacing opportunity (regression risk)",
-          "No live price -- edge/EV not evaluated"
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -1746,7 +1776,13 @@
         "anytime_td_prob": 0.1959,
         "tier": "C"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 450,
+        "implied_prob": 0.1818,
+        "edge": 0.0141,
+        "ev": 0.0777,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
@@ -1754,7 +1790,7 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "Matchup rating 0.75 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -2209,14 +2245,21 @@
         "anytime_td_prob": 0.1678,
         "tier": "C"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 450,
+        "implied_prob": 0.1818,
+        "edge": -0.014,
+        "ev": -0.077,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability",
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -2520,6 +2563,37 @@
       }
     },
     {
+      "player_id": "00-0033858",
+      "player_name": "J.Smith",
+      "position": "TE",
+      "team": "GB",
+      "opponent": "MIN",
+      "matchup": "GB @ MIN",
+      "usage": {
+        "snap_share": 0.44,
+        "rz_target_share": 0.0,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.415,
+        "matchup_rating": 0.219
+      },
+      "model": {
+        "anytime_td_prob": 0.1499,
+        "tier": "D"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "No meaningful red-zone role",
+          "Matchup rating 0.22 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ]
+      }
+    },
+    {
       "player_id": "00-0038128",
       "player_name": "M.Willis",
       "position": "QB",
@@ -2537,7 +2611,13 @@
         "anytime_td_prob": 0.1493,
         "tier": "D"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 225,
+        "implied_prob": 0.3077,
+        "edge": -0.1584,
+        "ev": -0.5147,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
@@ -2546,7 +2626,7 @@
           "TD projection below 30% threshold",
           "Recent TDs outpacing opportunity (regression risk)",
           "Matchup rating 0.75 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
+          "Model projection does not exceed market implied probability"
         ]
       }
     },
@@ -2598,13 +2678,19 @@
         "anytime_td_prob": 0.1479,
         "tier": "D"
       },
-      "market": null,
+      "market": {
+        "anytime_td_price": 1400,
+        "implied_prob": 0.0667,
+        "edge": 0.0813,
+        "ev": 1.2189,
+        "source": "live_api"
+      },
       "qualification": {
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
           "TD projection below 30% threshold",
-          "No live price -- edge/EV not evaluated"
+          "Outside preferred price range (+120/+300)"
         ]
       }
     },
@@ -2621,35 +2707,6 @@
         "inside5_carry_share": 0.2,
         "xtd_per_game": 0.877,
         "matchup_rating": 2.154
-      },
-      "model": {
-        "anytime_td_prob": 0.1478,
-        "tier": "D"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Snap share below 70% threshold",
-          "TD projection below 30% threshold",
-          "No live price -- edge/EV not evaluated"
-        ]
-      }
-    },
-    {
-      "player_id": "00-0033591",
-      "player_name": "N.Brown",
-      "position": "WR",
-      "team": "LV",
-      "opponent": "MIA",
-      "matchup": "LV vs MIA",
-      "usage": {
-        "snap_share": 0.41,
-        "rz_target_share": 0.5,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.3,
-        "matchup_rating": 1.572
       },
       "model": {
         "anytime_td_prob": 0.1478,
@@ -3401,21 +3458,21 @@
       }
     },
     {
-      "player_id": "00-0036849",
-      "player_name": "T.Atwell",
+      "player_id": "00-0034418",
+      "player_name": "C.Wilson",
       "position": "WR",
       "team": "MIA",
       "opponent": "LV",
       "matchup": "MIA @ LV",
       "usage": {
-        "snap_share": 0.262,
-        "rz_target_share": 0.125,
+        "snap_share": 0.507,
+        "rz_target_share": 0.0,
         "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.2,
+        "xtd_per_game": 0.39,
         "matchup_rating": 0.749
       },
       "model": {
-        "anytime_td_prob": 0.1155,
+        "anytime_td_prob": 0.1175,
         "tier": "D"
       },
       "market": null,
@@ -3425,7 +3482,38 @@
         "reason_codes": [
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
+          "No meaningful red-zone role",
           "Matchup rating 0.75 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ]
+      }
+    },
+    {
+      "player_id": "00-0036332",
+      "player_name": "J.Deguara",
+      "position": "TE",
+      "team": "NYG",
+      "opponent": "DAL",
+      "matchup": "NYG vs DAL",
+      "usage": {
+        "snap_share": 0.133,
+        "rz_target_share": 0.0,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.21,
+        "matchup_rating": 1.222
+      },
+      "model": {
+        "anytime_td_prob": 0.1165,
+        "tier": "D"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "No meaningful red-zone role",
           "No live price -- edge/EV not evaluated"
         ]
       }
@@ -3705,6 +3793,36 @@
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
           "Matchup rating 1.09 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ]
+      }
+    },
+    {
+      "player_id": "00-0038040",
+      "player_name": "Z.White",
+      "position": "RB",
+      "team": "NO",
+      "opponent": "DET",
+      "matchup": "NO @ DET",
+      "usage": {
+        "snap_share": 0.203,
+        "rz_target_share": 0.0,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.123,
+        "matchup_rating": 2.154
+      },
+      "model": {
+        "anytime_td_prob": 0.1062,
+        "tier": "D"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "No meaningful red-zone role",
           "No live price -- edge/EV not evaluated"
         ]
       }

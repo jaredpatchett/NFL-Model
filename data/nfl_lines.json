@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-27T22:40:57.937475+00:00",
+  "generated_at": "2026-08-28T16:36:43.951317+00:00",
   "season": 2026,
   "week": 1,
   "model_notes": {
@@ -26,15 +26,15 @@
         "spread_line": -3.5,
         "spread_price": -105,
         "total_line": 44.5,
-        "home_moneyline": -180,
+        "home_moneyline": -175,
         "away_moneyline": 165,
-        "home_implied_prob": 0.6429
+        "home_implied_prob": 0.6364
       },
       "edges": {
         "spread_edge": 9.44,
         "total_edge": 0.67,
-        "moneyline_edge": 0.0315,
-        "home_moneyline_ev": 0.0489
+        "moneyline_edge": 0.038,
+        "home_moneyline_ev": 0.0596
       },
       "projector": {
         "proj_home_score": 25.6,
@@ -673,14 +673,14 @@
       "market": {
         "spread_line": -4.0,
         "spread_price": -105,
-        "total_line": 51.5,
+        "total_line": 51.0,
         "home_moneyline": -198,
         "away_moneyline": 180,
         "home_implied_prob": 0.6644
       },
       "edges": {
         "spread_edge": 6.52,
-        "total_edge": -0.58,
+        "total_edge": -0.08,
         "moneyline_edge": -0.0884,
         "home_moneyline_ev": -0.133
       },

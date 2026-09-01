@@ -219,6 +219,7 @@ function renderHeader(){
       <button class="tabbtn ${state.view==='queue'?'active':''}" onclick="state.view='queue';save()">Queue (${state.queue.length})</button>
       <button class="tabbtn ${state.view==='grid'?'active':''}" onclick="state.view='grid';save()">Draft Grid</button>
       <button class="tabbtn ${state.view==='inj'?'active':''}" onclick="state.view='inj';save()">Injury Watch</button>
+      <button class="tabbtn ${state.view==='strategy'?'active':''}" onclick="state.view='strategy';save()">Strategy</button>
     </div>
     <div style="flex:1"></div>
     <div style="display:flex;align-items:center;gap:8px;padding:5px 11px;background:#08080A;border:1px solid #212129;border-radius:8px">
@@ -524,6 +525,102 @@ function renderGrid(){
   </div>`;
 }
 
+function renderStrategy(){
+  const taken=new Set(state.picks.map(p=>p.id));
+  const available=orderedPlayers().filter(p=>!taken.has(p.id));
+  const T=teams(), R=rounds();
+
+  // my pick schedule
+  const myPicks=[];
+  for(let n=0;n<T*R;n++){ if(teamForPick(n)===state.mySlot) myPicks.push(n); }
+  const nextFew = myPicks.filter(n=>n>=state.picks.length).slice(0,8);
+
+  const schedRows = myPicks.slice(0,10).map(n=>{
+    const rd=Math.floor(n/T)+1;
+    const done = n < state.picks.length;
+    return `<div style="display:flex;align-items:center;gap:10px;padding:6px 12px;border-bottom:1px solid #212129">
+      <span class="mono" style="font-size:10px;color:#5C6275;width:50px">RD ${rd}</span>
+      <span class="mono" style="font-size:13px;font-weight:700;color:${done?'#454A5C':'#4C8DFF'}">Pick ${n+1}</span>
+      ${done?'<span class="mono" style="font-size:9.5px;color:#00FF9C;margin-left:auto">DONE</span>':''}
+    </div>`;
+  }).join('');
+
+  // target windows for upcoming picks
+  const windowCards = nextFew.map((n,i)=>{
+    const cur=n+1;
+    const window = available.filter(p=>p[rankKey()]!=null && p[rankKey()]>=Math.max(1,cur-4) && p[rankKey()]<=cur+7).slice(0,6);
+    const rd=Math.floor(n/T)+1;
+    return `<div class="card" style="margin-bottom:12px">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 14px;border-bottom:1px solid #212129;background:#08080A">
+        <span style="font-size:13px;font-weight:700">Pick ${cur} <span class="mono" style="font-size:10px;color:#5C6275;font-weight:400">· Round ${rd}</span></span>
+        <span class="mono" style="font-size:9.5px;color:#5C6275">LIKELY WINDOW</span>
+      </div>
+      <div style="padding:8px 14px">
+        ${window.length ? window.map(p=>`<div style="display:flex;align-items:center;gap:8px;padding:4px 0">
+          <span class="mono" style="font-size:10px;color:#5C6275;width:26px">${p[rankKey()]}</span>
+          <span style="width:3px;height:16px;border-radius:2px;background:${TEAM_COLOR[p.team]||'#4C8DFF'}"></span>
+          <span style="font-size:12.5px;font-weight:600">${esc(p.name)}</span>
+          <span class="mono" style="font-size:10px;font-weight:700;color:${POS_COLOR[p.pos]||'#A9AFC0'}">${esc(p[posRankKey()]||p.pos)}</span>
+        </div>`).join('') : '<div class="mono" style="font-size:11px;color:#454A5C">No ranked players in this window right now.</div>'}
+      </div>
+    </div>`;
+  }).join('');
+
+  // data-driven callouts
+  const top60 = available.filter(p=>p[rankKey()]!=null && p[rankKey()]<=60);
+  const byeCounts={};
+  top60.forEach(p=>{ if(p.bye) byeCounts[p.bye]=(byeCounts[p.bye]||0)+1; });
+  const worstByes = Object.entries(byeCounts).filter(([w,c])=>c>=4).sort((a,b)=>b[1]-a[1]).slice(0,3);
+  const byeNote = worstByes.length
+    ? worstByes.map(([w,c])=>{
+        const names = top60.filter(p=>String(p.bye)===w).sort((a,b)=>a[rankKey()]-b[rankKey()]).slice(0,4).map(p=>p.name);
+        return `<b style="color:#FF7B4C">Week ${w}</b> has ${c} top-60 players (${esc(names.join(', '))}) — avoid overloading this bye if you can.`;
+      }).join('<br>')
+    : 'No heavy bye-week clusters detected in the current top 60.';
+
+  const tesByRank = available.filter(p=>p.pos==='TE' && p[rankKey()]!=null).sort((a,b)=>a[rankKey()]-b[rankKey()]);
+  const teCliff = tesByRank.length>=5 ? (tesByRank[4][rankKey()]-tesByRank[2][rankKey()]) : null;
+  const teNote = tesByRank.length>=5
+    ? `Top 3 TEs: ${esc(tesByRank.slice(0,3).map(p=>p.name).join(', '))} (rank ${tesByRank[0][rankKey()]}-${tesByRank[2][rankKey()]}). Then a ${teCliff}-spot gap to TE4-5 (${esc(tesByRank.slice(3,5).map(p=>p.name).join(', '))}) — grab one early or plan to wait it out entirely.`
+    : 'Not enough TE data loaded to assess the position.';
+
+  const qbsByRank = available.filter(p=>p.pos==='QB' && p[rankKey()]!=null).sort((a,b)=>a[rankKey()]-b[rankKey()]);
+  const qbNote = qbsByRank.length>=10
+    ? `QB1 is currently ${esc(qbsByRank[0].name)} at rank ${qbsByRank[0][rankKey()]}, but a startable arm (${esc(qbsByRank[9].name)}) is still on the board past rank ${qbsByRank[9][rankKey()]} — this position can comfortably wait.`
+    : 'Not enough QB data loaded to assess the position.';
+
+  return `<div class="content" style="max-width:1200px">
+    <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px">
+      <span style="width:3px;height:16px;background:#4C8DFF;border-radius:2px"></span>
+      <span style="font-size:14px;font-weight:700">DRAFT STRATEGY — SLOT #${state.mySlot} · ${T}-TEAM · ${state.fmt==='ppr'?'FULL PPR':state.fmt==='family'?'FAMILY 364':'HALF PPR'}</span>
+    </div>
+    <div class="sidewrap" style="grid-template-columns:340px 1fr;padding:0;max-width:none">
+      <div>
+        <div class="card" style="margin-bottom:14px">
+          <div style="padding:9px 14px;border-bottom:1px solid #212129;background:#08080A">
+            <span class="mono" style="font-size:9px;letter-spacing:.1em;color:#5C6275">YOUR PICK SCHEDULE</span>
+          </div>
+          ${schedRows}
+        </div>
+        <div class="card">
+          <div style="padding:9px 14px;border-bottom:1px solid #212129;background:#08080A">
+            <span class="mono" style="font-size:9px;letter-spacing:.1em;color:#5C6275">THINGS TO WATCH</span>
+          </div>
+          <div style="padding:12px 14px;font-size:11.5px;line-height:1.6;color:#A9AFC0">
+            <div style="margin-bottom:12px">${byeNote}</div>
+            <div style="margin-bottom:12px">${teNote}</div>
+            <div style="margin-bottom:12px">${qbNote}</div>
+            <div>Kickers and defenses last — no exceptions.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="mono" style="font-size:10px;color:#5C6275;margin-bottom:10px">For each of your next picks, here's who's likely to still be on the board based on current ranks — updates live as players get drafted.</div>
+        ${windowCards}
+      </div>
+    </div>
+  </div>`;
+}
 function renderInjury(){
   const withInj = PLAYERS.filter(p=>p.injStatus);
   const rows = withInj.map(p=>{
@@ -563,6 +660,7 @@ function render(){
     v==='board' ? renderBoard() :
     v==='queue' ? renderQueue() :
     v==='grid' ? renderGrid() :
+    v==='strategy' ? renderStrategy() :
     renderInjury()
   );
   if(wasSearchFocused){

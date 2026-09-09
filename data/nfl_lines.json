@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-09T16:16:49.510602+00:00",
+  "generated_at": "2026-09-09T16:58:14.145956+00:00",
   "season": 2026,
   "week": 1,
   "model_notes": {
@@ -18,7 +18,7 @@
       "market_source": "live",
       "model": {
         "pred_home_margin": 5.96,
-        "pred_total": 45.2,
+        "pred_total": 45.21,
         "home_win_prob": 0.6748,
         "home_fair_moneyline": -207.5
       },
@@ -32,7 +32,7 @@
       },
       "edges": {
         "spread_edge": 9.46,
-        "total_edge": 0.7,
+        "total_edge": 0.71,
         "moneyline_edge": 0.0507,
         "home_moneyline_ev": 0.0813
       },
@@ -2402,15 +2402,15 @@
         "spread_line": -3.5,
         "spread_price": -101,
         "total_line": 41.0,
-        "home_moneyline": -178,
+        "home_moneyline": -180,
         "away_moneyline": 160,
-        "home_implied_prob": 0.6403
+        "home_implied_prob": 0.6429
       },
       "edges": {
         "spread_edge": 2.53,
         "total_edge": -0.01,
-        "moneyline_edge": -0.1697,
-        "home_moneyline_ev": -0.265
+        "moneyline_edge": -0.1722,
+        "home_moneyline_ev": -0.2679
       },
       "projector": {
         "proj_home_score": 20.0,

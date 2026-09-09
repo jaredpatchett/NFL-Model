@@ -420,7 +420,18 @@
     document.getElementById('generated-at').textContent = generatedAt.toLocaleString('en-US', {dateStyle:'medium', timeStyle:'short'});
   }
 
-  const linesData = window.NFL_LINES_DATA;
+  // FIX: data/nfl_lines.js declares its data with `const NFL_LINES_DATA = {...}`
+  // at the top level of a classic (non-module) script. Top-level `const`/`let`
+  // create a script-scoped global binding, NOT a property of `window` -- only
+  // `var` does that. So `window.NFL_LINES_DATA` was always undefined even
+  // though the data loaded correctly, silently taking the "no data" branch
+  // below every time with no error thrown (reading an undefined property
+  // isn't an error, it just evaluates to undefined). `typeof NFL_LINES_DATA
+  // !== 'undefined'` checks the actual script-scoped binding instead, which
+  // *is* visible here since both scripts share one top-level lexical scope --
+  // and stays safe (no ReferenceError) if the data file is ever genuinely
+  // missing, preserving the original graceful fallback message.
+  const linesData = (typeof NFL_LINES_DATA !== 'undefined') ? NFL_LINES_DATA : null;
   let currentMarket = 'spread';
 
   if(linesData){
@@ -594,7 +605,9 @@
     document.getElementById('lines-caveat').textContent = 'No data found -- run scripts/generate_predictions.py to produce data/nfl_lines.js.';
   }
 
-  const propsData = window.PLAYER_TD_DATA;
+  // Same fix as linesData above -- data/player_td.js also declares
+  // `const PLAYER_TD_DATA = {...}`, which never attaches to `window`.
+  const propsData = (typeof PLAYER_TD_DATA !== 'undefined') ? PLAYER_TD_DATA : null;
   if(propsData){
     setGeneratedAt(propsData.generated_at);
     document.getElementById('props-caveat').textContent = propsData.model_notes.caveat;

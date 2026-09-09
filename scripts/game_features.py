@@ -24,6 +24,7 @@ from nfl_data import load_schedules
 from power_ratings import build_power_ratings
 from rolling_features import _asof_trailing
 from team_features import build_team_week_model_table
+from weather_forecast import get_game_weather
 
 ROLL_WINDOWS = (4, 8)
 
@@ -36,7 +37,7 @@ def _team_game_long(sched: pd.DataFrame) -> pd.DataFrame:
         "season", "week", "game_id", "home_team", "away_team",
         "home_score", "away_score", "home_rest", "away_rest", "div_game",
         "home_moneyline", "away_moneyline", "spread_line", "total_line",
-        "roof", "surface", "temp", "wind",
+        "roof", "surface", "temp", "wind", "gameday",
     ]
     s = sched[[c for c in keep if c in sched.columns]].copy()
 
@@ -62,9 +63,93 @@ def _team_game_long(sched: pd.DataFrame) -> pd.DataFrame:
         "season", "week", "game_id", "team", "opponent", "is_home",
         "team_score", "opp_score", "rest_days", "opp_rest_days", "div_game",
         "team_moneyline", "opp_moneyline", "team_spread_line", "total_line",
-        "roof", "surface", "temp", "wind",
+        "roof", "surface", "temp", "wind", "gameday",
     ]
     return pd.concat([home[cols], away[cols]], ignore_index=True)
+
+
+def _apply_weather(long: pd.DataFrame) -> pd.DataFrame:
+    """
+    Fills temp/wind for future outdoor games with real weather (live
+    forecast or historical seasonal average -- see weather_forecast.py),
+    then applies a narrow last-resort global fallback only for the rare
+    case both of those fail. Separated from build_game_model_table so it
+    can be unit-tested directly against a synthetic `long`-shaped frame
+    without needing the full power_ratings/team_features dependency chain.
+
+    Mutates and returns `long`. Expects columns: is_home, roof, temp, wind,
+    gameday, team, game_id.
+    """
+    # Indoors (dome/closed roof), weather doesn't affect play -- impute a
+    # neutral value rather than the outdoor average, and flag it explicitly
+    # so the model can learn "indoors" as its own signal rather than being
+    # fed a fake temp/wind reading.
+    long["is_indoor"] = long["roof"].isin(["dome", "closed"]).astype(float)
+
+    # PLAYED outdoor games already have real recorded temp/wind from the
+    # schedule data -- never touched below, only FUTURE outdoor games (temp
+    # is null because the game hasn't happened yet) get filled.
+    #
+    # Previous approach here filled every future game with a single global
+    # median blended across all seasons/weeks/locations -- a November game
+    # in Buffalo and a November game in Miami got the identical number,
+    # with no location or season awareness at all. Replaced with
+    # weather_forecast.py's two-tier real approach: a live forecast for
+    # games within its ~15-day horizon, and a real historical seasonal
+    # average (that team's own actual outdoor home-game temp/wind in the
+    # same calendar month) for anything farther out or if the live call
+    # fails. See that module's docstring for the full reasoning and the
+    # honest caveat on how it's been verified (mocked tests against Open-
+    # Meteo's documented contract -- the live network call itself hasn't
+    # been exercised from this sandbox, since api.open-meteo.com isn't on
+    # its network allowlist; worth an explicit check on the first real run).
+    long["game_month"] = pd.to_datetime(long["gameday"], errors="coerce").dt.month
+    needs_weather = (
+        (long["is_indoor"] == 0) & (long["is_home"] == 1) & long["temp"].isna()
+        & long["gameday"].notna()
+    )
+    weather_source = pd.Series("real_recorded", index=long.index, dtype=object)
+    weather_source[long["is_indoor"] == 1] = "indoor_neutral"
+
+    if needs_weather.any():
+        for idx in long.index[needs_weather]:
+            team = long.at[idx, "team"]
+            game_date = long.at[idx, "gameday"]
+            result = get_game_weather(team, game_date, long)
+            long.at[idx, "temp"] = result["temp"]
+            long.at[idx, "wind"] = result["wind"]
+            weather_source[idx] = result["source"]
+        n_live = (weather_source == "live_forecast").sum()
+        n_seasonal = (weather_source == "seasonal_history").sum()
+        n_global = (weather_source == "global_fallback").sum()
+        print(f"[weather] {needs_weather.sum()} future outdoor home games needed weather: "
+              f"{n_live} live forecast, {n_seasonal} seasonal history, {n_global} global fallback.")
+
+    # Away-perspective rows for the same game_id don't independently look up
+    # weather (it's the same venue/date as the home row) -- copy the home
+    # row's resolved temp/wind across by game_id.
+    home_weather = long.loc[long["is_home"] == 1, ["game_id", "temp", "wind"]].set_index("game_id")
+    away_mask = (long["is_home"] == 0) & long["temp"].isna()
+    for idx in long.index[away_mask]:
+        gid = long.at[idx, "game_id"]
+        if gid in home_weather.index:
+            long.at[idx, "temp"] = home_weather.at[gid, "temp"]
+            long.at[idx, "wind"] = home_weather.at[gid, "wind"]
+
+    # Absolute last-resort fallback (a team with zero outdoor home-game
+    # history in that month AND a failed live call, for a genuinely new
+    # team/situation) -- the old global-median behavior, now only reached
+    # in this narrow edge case rather than as the default for every future
+    # game.
+    outdoor_temp_median = long.loc[long["is_indoor"] == 0, "temp"].median()
+    outdoor_wind_median = long.loc[long["is_indoor"] == 0, "wind"].median()
+    long["temp_filled"] = long["temp"]
+    long.loc[long["is_indoor"] == 1, "temp_filled"] = 70.0  # neutral indoor temp
+    long["temp_filled"] = long["temp_filled"].fillna(outdoor_temp_median)
+    long["wind_filled"] = long["wind"]
+    long.loc[long["is_indoor"] == 1, "wind_filled"] = 0.0  # no wind indoors
+    long["wind_filled"] = long["wind_filled"].fillna(outdoor_wind_median)
+    return long
 
 
 def build_game_model_table(seasons: list[int]) -> pd.DataFrame:
@@ -103,20 +188,7 @@ def build_game_model_table(seasons: list[int]) -> pd.DataFrame:
     trailing = _asof_trailing(long, "team", ["team_score", "opp_score", "game_total"], ROLL_WINDOWS)
     long = long.merge(trailing, on=["team", "season", "week"], how="left")
 
-    # ---- Weather / venue features ----
-    # Indoors (dome/closed roof), weather doesn't affect play -- impute a
-    # neutral value rather than the outdoor average, and flag it explicitly
-    # so the model can learn "indoors" as its own signal rather than being
-    # fed a fake temp/wind reading.
-    long["is_indoor"] = long["roof"].isin(["dome", "closed"]).astype(float)
-    outdoor_temp_median = long.loc[long["is_indoor"] == 0, "temp"].median()
-    outdoor_wind_median = long.loc[long["is_indoor"] == 0, "wind"].median()
-    long["temp_filled"] = long["temp"]
-    long.loc[long["is_indoor"] == 1, "temp_filled"] = 70.0  # neutral indoor temp
-    long["temp_filled"] = long["temp_filled"].fillna(outdoor_temp_median)
-    long["wind_filled"] = long["wind"]
-    long.loc[long["is_indoor"] == 1, "wind_filled"] = 0.0  # no wind indoors
-    long["wind_filled"] = long["wind_filled"].fillna(outdoor_wind_median)
+    long = _apply_weather(long)
 
     # ---- Trailing pace (plays run) -- reuses the play-count data pulled for
     # the Layer 2 TD model (team_features.py's pbp-based pipeline). Total

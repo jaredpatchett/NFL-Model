@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-10T17:11:36.741894+00:00",
+  "generated_at": "2026-09-10T17:35:03.860682+00:00",
   "season": 2026,
   "week": 1,
   "model_notes": {
@@ -1178,10 +1178,10 @@
         "tier": "B"
       },
       "market": {
-        "anytime_td_price": 250,
-        "implied_prob": 0.2857,
-        "edge": -0.0332,
-        "ev": -0.1163,
+        "anytime_td_price": 270,
+        "implied_prob": 0.2703,
+        "edge": -0.0178,
+        "ev": -0.0658,
         "source": "live_api"
       },
       "qualification": {

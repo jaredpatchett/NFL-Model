@@ -252,7 +252,22 @@ def main():
         # Prefer live odds when available; fall back to the schedule-riding
         # lines (still real market data, just not necessarily current/best-price).
         if live is not None and pd.notna(live["live_home_spread_point"]):
-            spread_line = float(live["live_home_spread_point"])
+            # SIGN FIX: The Odds API returns spreads in the standard
+            # sportsbook convention (favorite is NEGATIVE) -- but every
+            # other consumer of `spread_line` in this pipeline (the
+            # schedule-riding fallback below, team_features.py's documented
+            # convention, spread_edge, cover_prob, the dashboard's
+            # histogram shading) expects the OPPOSITE: positive means the
+            # HOME team is favored by that many points. Without this
+            # negation, a live-sourced favorite's spread got double-counted
+            # instead of compared against the model -- e.g. a home team
+            # favored by 7 with a model margin of +5.4 produced a
+            # nonsensical "+12.4 edge, PLAY home" instead of the correct
+            # small lean toward the underdog. Confirmed against real
+            # production output before this fix (spread_edge exactly
+            # equaled pred_margin + the raw API number, not a real
+            # model-vs-market difference) -- see test_spread_sign_fix.py.
+            spread_line = -float(live["live_home_spread_point"])
             spread_price = live["live_home_spread_price"]
             total_line = float(live["live_total_point"])
             home_ml = live["live_home_moneyline"]

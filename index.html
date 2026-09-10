@@ -161,6 +161,51 @@
   .pr-bar{height:100%;border-radius:3px;}
   .pr-pace{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-dim2);text-align:right;}
 
+  /* ---- Bet Tracker ---- */
+  .tracker-form{
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;
+    display:grid;grid-template-columns:1.3fr 1fr 1.2fr 90px 90px auto;gap:10px;margin-bottom:20px;align-items:end;
+  }
+  .tracker-field{display:flex;flex-direction:column;gap:4px;}
+  .tracker-field label{font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.08em;color:var(--text-faint);}
+  .tracker-field input,.tracker-field select{
+    background:var(--panel-3);border:1px solid var(--line-2);border-radius:6px;color:var(--text);
+    padding:8px 10px;font-family:'Space Grotesk',sans-serif;font-size:12.5px;
+  }
+  .tracker-field input:focus,.tracker-field select:focus{outline:none;border-color:var(--blue);}
+  .tracker-add-btn{
+    background:var(--blue);color:#fff;border:none;border-radius:6px;padding:9px 16px;
+    font-family:'Space Grotesk',sans-serif;font-size:12.5px;font-weight:700;cursor:pointer;
+    box-shadow:0 0 14px rgba(76,141,255,.4);white-space:nowrap;
+  }
+  .tracker-add-btn:hover{background:#3d7ae0;}
+
+  .tracker-toolbar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+  .tracker-tool-btn{
+    border:1px solid var(--line);cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;
+    padding:6px 13px;border-radius:7px;background:var(--panel);color:var(--text-dim);
+  }
+  .tracker-tool-btn:hover{border-color:var(--line-2);color:var(--text);}
+  .tracker-tool-btn.danger:hover{border-color:var(--red);color:var(--red);}
+  .tracker-file-input{display:none;}
+
+  .grid-tracker{grid-template-columns:1.3fr 1fr 1.1fr 70px 90px 90px 90px 40px;}
+  .result-pill{
+    display:inline-flex;align-items:center;justify-content:center;padding:3px 9px;border-radius:5px;
+    font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;cursor:pointer;border:none;
+  }
+  .result-pending{background:var(--panel-3);color:var(--text-faint);}
+  .result-win{background:rgba(0,255,156,.16);color:var(--green);}
+  .result-loss{background:rgba(255,51,85,.14);color:var(--red);}
+  .result-push{background:rgba(255,201,60,.16);color:var(--amber);}
+  .tracker-row-delete{background:none;border:none;color:var(--text-faint2);cursor:pointer;font-size:15px;line-height:1;}
+  .tracker-row-delete:hover{color:var(--red);}
+  .tracker-empty{padding:30px 16px;text-align:center;color:var(--text-faint);font-size:12px;font-family:'IBM Plex Mono',monospace;}
+  .tracker-storage-note{
+    font-size:10.5px;color:var(--text-faint2);font-family:'IBM Plex Mono',monospace;
+    margin-top:10px;line-height:1.6;
+  }
+
   footer{max-width:1320px;margin:0 auto;padding:0 22px 40px;color:var(--text-faint);font-size:11px;font-family:'IBM Plex Mono',monospace;line-height:1.6;}
 
   /* ---- Matchup Projector modal ---- */
@@ -273,6 +318,7 @@
   <div class="tabs">
     <button class="tab-btn active" data-view="lines">Lines</button>
     <button class="tab-btn" data-view="props">TD Props</button>
+    <button class="tab-btn" data-view="tracker">Tracker</button>
   </div>
 
   <div class="header-spacer"></div>
@@ -342,6 +388,52 @@
       <div id="props-body"></div>
       <div class="board-footnote">Edge = model probability minus price-implied probability. MU = opponent's position-specific TD-rate-allowed vs league average (real play-by-play, not points allowed) — 1.00 = league average, informational only, not yet a hard qualifier. TIER is the blueprint's own qualification screen (snap share, red-zone role, edge/EV thresholds, regression check) — hover a badge for the reason codes. "U" = unrated (no live price to evaluate edge/EV against yet).</div>
     </div>
+  </div>
+
+  <div class="view" id="view-tracker">
+    <div class="stat-strip" id="tracker-stats"></div>
+
+    <div class="section-head">
+      <div class="section-title">
+        <span class="section-bar"></span>
+        <span class="section-label">MY BETS</span>
+      </div>
+    </div>
+
+    <div class="caveat">
+      This is YOUR personal log, separate from the model's own record. Stored only in this browser
+      (localStorage) — it will not appear on another device or browser unless you export and re-import
+      the CSV. Nothing here is sent anywhere; it never leaves your machine.
+    </div>
+
+    <div class="tracker-form">
+      <div class="tracker-field"><label>GAME</label><input type="text" id="tf-game" placeholder="NO @ DET"></div>
+      <div class="tracker-field"><label>MARKET</label>
+        <select id="tf-market">
+          <option>Spread</option><option>Total</option><option>Moneyline</option><option>TD Prop</option>
+        </select>
+      </div>
+      <div class="tracker-field"><label>SIDE</label><input type="text" id="tf-side" placeholder="DET -5.5"></div>
+      <div class="tracker-field"><label>ODDS</label><input type="text" id="tf-odds" placeholder="-110"></div>
+      <div class="tracker-field"><label>STAKE&nbsp;($)</label><input type="text" id="tf-stake" placeholder="50"></div>
+      <button class="tracker-add-btn" id="tf-add">+ Add Bet</button>
+    </div>
+
+    <div class="tracker-toolbar">
+      <button class="tracker-tool-btn" id="tt-export">Export CSV</button>
+      <button class="tracker-tool-btn" id="tt-import">Import CSV</button>
+      <input type="file" id="tt-import-file" class="tracker-file-input" accept=".csv">
+      <button class="tracker-tool-btn danger" id="tt-clear">Clear All</button>
+    </div>
+
+    <div class="board">
+      <div class="board-head grid-tracker">
+        <div>GAME</div><div>MARKET</div><div>SIDE</div><div class="col-r">ODDS</div>
+        <div class="col-r">STAKE</div><div class="col-r">P/L</div><div class="col-c">RESULT</div><div></div>
+      </div>
+      <div id="tracker-body"></div>
+    </div>
+    <div class="tracker-storage-note">Click a RESULT pill to cycle Pending → Win → Loss → Push. P/L is computed from stake + American odds at the moment you mark a result; pending bets show P/L as —.</div>
   </div>
 
 </main>
@@ -762,6 +854,263 @@
   } else {
     document.getElementById('props-caveat').textContent = 'No data found -- run scripts/generate_player_predictions.py to produce data/player_td.js.';
   }
+
+  // ============================================================
+  // BET TRACKER -- personal log, entirely separate from linesData/
+  // propsData above. Stored in localStorage only: this dashboard is a
+  // static GitHub Pages site with no backend, so there's nowhere else to
+  // put it. That means it's scoped to THIS browser/device -- CSV export/
+  // import is the way to move it or back it up, not a sync mechanism.
+  // ============================================================
+  (function(){
+    const TRACKER_KEY = 'pitchedge_bet_tracker_v1';
+    const RESULT_CYCLE = ['pending', 'win', 'loss', 'push'];
+    const RESULT_LABEL = {pending:'PENDING', win:'WIN', loss:'LOSS', push:'PUSH'};
+
+    function loadBets(){
+      try {
+        const raw = localStorage.getItem(TRACKER_KEY);
+        const parsed = raw ? JSON.parse(raw) : [];
+        return Array.isArray(parsed) ? parsed : [];
+      } catch(e) {
+        console.warn('Bet tracker: could not read localStorage, starting empty.', e);
+        return [];
+      }
+    }
+    function saveBets(bets){
+      try {
+        localStorage.setItem(TRACKER_KEY, JSON.stringify(bets));
+      } catch(e) {
+        alert(`Could not save to this browser's storage (it may be full or disabled). Your last change was not saved.`);
+      }
+    }
+
+    let bets = loadBets();
+
+    // Real American-odds profit math -- same formula as home_moneyline_ev
+    // elsewhere in this codebase, per $1 staked, scaled to the real stake.
+    function computeProfit(odds, stake, result){
+      if(result === 'pending') return null;
+      if(result === 'push') return 0;
+      const o = Number(odds), s = Number(stake);
+      if(!isFinite(o) || !isFinite(s)) return null;
+      const winProfit = o > 0 ? s * (o / 100) : s * (100 / Math.abs(o));
+      return result === 'win' ? winProfit : -s;
+    }
+
+    function fmtMoney(n){
+      if(n == null) return '\u2014';
+      const sign = n > 0 ? '+' : n < 0 ? '\u2212' : '';
+      return `${sign}$${Math.abs(n).toFixed(2)}`;
+    }
+
+    function renderTrackerStats(){
+      const settled = bets.filter(b => b.result !== 'pending');
+      const wins = settled.filter(b => b.result === 'win').length;
+      const losses = settled.filter(b => b.result === 'loss').length;
+      const pushes = settled.filter(b => b.result === 'push').length;
+      const totalStaked = settled.reduce((sum, b) => sum + (Number(b.stake) || 0), 0);
+      const totalProfit = settled.reduce((sum, b) => sum + (computeProfit(b.odds, b.stake, b.result) || 0), 0);
+      const roi = totalStaked > 0 ? (totalProfit / totalStaked) * 100 : null;
+      const pending = bets.filter(b => b.result === 'pending').length;
+
+      document.getElementById('tracker-stats').innerHTML = [
+        ['RECORD', `${wins}-${losses}${pushes ? '-' + pushes : ''}`],
+        ['PENDING', pending],
+        ['TOTAL STAKED', `$${totalStaked.toFixed(2)}`],
+        ['PROFIT / LOSS', fmtMoney(totalProfit), totalProfit > 0 ? 'color:var(--green);text-shadow:0 0 14px rgba(0,255,156,.5)' : totalProfit < 0 ? 'color:var(--red)' : ''],
+        ['ROI', roi != null ? `${roi >= 0 ? '+' : ''}${roi.toFixed(1)}%` : '\u2014', roi > 0 ? 'color:var(--green)' : roi < 0 ? 'color:var(--red)' : ''],
+        ['TOTAL BETS', bets.length],
+      ].map(([label, val, style]) => `
+        <div class="stat-box">
+          <div class="stat-label mono">${label}</div>
+          <div class="stat-value" style="${style||''}">${val}</div>
+        </div>`).join('');
+    }
+
+    function renderTrackerTable(){
+      const body = document.getElementById('tracker-body');
+      if(bets.length === 0){
+        body.innerHTML = '<div class="tracker-empty">No bets logged yet -- add one above.</div>';
+        return;
+      }
+      const sorted = [...bets].sort((a, b) => (b.dateAdded||0) - (a.dateAdded||0));
+      body.innerHTML = sorted.map(b => {
+        const profit = computeProfit(b.odds, b.stake, b.result);
+        const profitClass = profit == null ? 'edge-flat' : profit > 0 ? 'edge-pos' : profit < 0 ? 'edge-neg' : 'edge-flat';
+        return `<div class="board-row grid-tracker" data-bet-id="${b.id}">
+          <div class="row-inner"><div class="matchup-block"><div class="matchup-main">${b.game || '\u2014'}</div></div></div>
+          <div class="cell-num">${b.market}</div>
+          <div class="cell-num">${b.side || '\u2014'}</div>
+          <div class="cell-num col-r">${fmtOdds(Number(b.odds))}</div>
+          <div class="cell-num col-r">$${Number(b.stake).toFixed(2)}</div>
+          <div class="cell-edge col-r ${profitClass}">${fmtMoney(profit)}</div>
+          <div class="col-c"><button class="result-pill result-${b.result}" data-action="cycle-result" data-bet-id="${b.id}">${RESULT_LABEL[b.result]}</button></div>
+          <div class="col-c"><button class="tracker-row-delete" data-action="delete" data-bet-id="${b.id}" title="Delete this bet">&times;</button></div>
+        </div>`;
+      }).join('');
+    }
+
+    function renderTracker(){
+      renderTrackerStats();
+      renderTrackerTable();
+    }
+
+    document.getElementById('tf-add').addEventListener('click', () => {
+      const game = document.getElementById('tf-game').value.trim();
+      const market = document.getElementById('tf-market').value;
+      const side = document.getElementById('tf-side').value.trim();
+      const odds = document.getElementById('tf-odds').value.trim();
+      const stake = document.getElementById('tf-stake').value.trim();
+
+      if(!game || !side || odds === '' || stake === ''){
+        alert('Fill in game, side, odds, and stake before adding a bet.');
+        return;
+      }
+      if(!isFinite(Number(odds)) || !isFinite(Number(stake)) || Number(stake) <= 0){
+        alert('Odds and stake need to be plain numbers (e.g. odds: -110 or 150, stake: 50).');
+        return;
+      }
+
+      bets.push({
+        id: 'bet_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8),
+        dateAdded: Date.now(),
+        game, market, side,
+        odds: Number(odds), stake: Number(stake),
+        result: 'pending',
+      });
+      saveBets(bets);
+      renderTracker();
+
+      document.getElementById('tf-game').value = '';
+      document.getElementById('tf-side').value = '';
+      document.getElementById('tf-odds').value = '';
+      document.getElementById('tf-stake').value = '';
+      document.getElementById('tf-game').focus();
+    });
+
+    document.getElementById('tracker-body').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-action]');
+      if(!btn) return;
+      const id = btn.dataset.betId;
+      const bet = bets.find(b => b.id === id);
+      if(!bet) return;
+
+      if(btn.dataset.action === 'cycle-result'){
+        const idx = RESULT_CYCLE.indexOf(bet.result);
+        bet.result = RESULT_CYCLE[(idx + 1) % RESULT_CYCLE.length];
+        saveBets(bets);
+        renderTracker();
+      } else if(btn.dataset.action === 'delete'){
+        if(confirm(`Delete this bet? (${bet.game} \u2014 ${bet.side})`)){
+          bets = bets.filter(b => b.id !== id);
+          saveBets(bets);
+          renderTracker();
+        }
+      }
+    });
+
+    document.getElementById('tt-clear').addEventListener('click', () => {
+      if(bets.length === 0) return;
+      if(confirm(`Delete all ${bets.length} logged bet(s)? This cannot be undone -- export a CSV first if you want a backup.`)){
+        bets = [];
+        saveBets(bets);
+        renderTracker();
+      }
+    });
+
+    // ---- CSV export/import: the only portability mechanism, since this
+    // is browser-local storage with no server behind it. ----
+    const CSV_COLS = ['id', 'dateAdded', 'game', 'market', 'side', 'odds', 'stake', 'result'];
+
+    function toCSV(rows){
+      const esc = v => `"${String(v == null ? '' : v).replace(/"/g, '""')}"`;
+      const lines = [CSV_COLS.join(',')];
+      for(const r of rows) lines.push(CSV_COLS.map(c => esc(r[c])).join(','));
+      return lines.join('\n');
+    }
+    function parseCSV(text){
+      const lines = text.split(/\r?\n/).filter(l => l.trim() !== '');
+      if(lines.length < 2) return [];
+      // Simple quoted-CSV line parser -- sufficient for our own export
+      // format (fields we control), not a general-purpose CSV parser.
+      function parseLine(line){
+        const out = []; let cur = ''; let inQ = false;
+        for(let i = 0; i < line.length; i++){
+          const c = line[i];
+          if(inQ){
+            if(c === '"' && line[i+1] === '"'){ cur += '"'; i++; }
+            else if(c === '"'){ inQ = false; }
+            else cur += c;
+          } else {
+            if(c === '"') inQ = true;
+            else if(c === ','){ out.push(cur); cur = ''; }
+            else cur += c;
+          }
+        }
+        out.push(cur);
+        return out;
+      }
+      const header = parseLine(lines[0]);
+      return lines.slice(1).map(line => {
+        const vals = parseLine(line);
+        const row = {};
+        header.forEach((h, i) => { row[h] = vals[i]; });
+        return row;
+      });
+    }
+
+    document.getElementById('tt-export').addEventListener('click', () => {
+      if(bets.length === 0){ alert('No bets to export yet.'); return; }
+      const csv = toCSV(bets);
+      const blob = new Blob([csv], {type: 'text/csv'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `pitchedge_bet_tracker_${new Date().toISOString().slice(0,10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById('tt-import').addEventListener('click', () => {
+      document.getElementById('tt-import-file').click();
+    });
+    document.getElementById('tt-import-file').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        let rows;
+        try {
+          rows = parseCSV(String(reader.result));
+        } catch(err){
+          alert('Could not read that file as a bet-tracker CSV.');
+          return;
+        }
+        const existingIds = new Set(bets.map(b => b.id));
+        let added = 0, skipped = 0;
+        for(const r of rows){
+          if(!r.id || existingIds.has(r.id)){ skipped++; continue; } // dedupe re-imports
+          bets.push({
+            id: r.id, dateAdded: Number(r.dateAdded) || Date.now(),
+            game: r.game || '', market: r.market || 'Spread', side: r.side || '',
+            odds: Number(r.odds) || 0, stake: Number(r.stake) || 0,
+            result: RESULT_CYCLE.includes(r.result) ? r.result : 'pending',
+          });
+          added++;
+        }
+        saveBets(bets);
+        renderTracker();
+        alert(`Imported ${added} bet(s)${skipped ? ` (${skipped} already present, skipped)` : ''}.`);
+        e.target.value = '';
+      };
+      reader.readAsText(file);
+    });
+
+    renderTracker();
+  })();
 })();
 </script>
 

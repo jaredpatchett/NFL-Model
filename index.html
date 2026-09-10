@@ -180,20 +180,49 @@
   }
   .modal-close:hover{color:var(--text);}
 
-  .proj-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--line);}
-  .proj-team{text-align:center;flex:1;}
+  .proj-header{display:flex;align-items:center;justify-content:center;gap:22px;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--line);}
+  .proj-team{text-align:center;flex:0 0 auto;min-width:120px;}
   .proj-team-bar{display:block;width:36px;height:4px;border-radius:2px;margin:0 auto 8px;}
-  .proj-team-name{font-size:15px;font-weight:700;letter-spacing:.02em;}
-  .proj-score{font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:700;margin-top:4px;}
-  .proj-meta{text-align:center;flex:0 0 auto;padding:0 10px;}
-  .proj-matchup-title{font-size:11px;color:var(--text-faint);font-family:'IBM Plex Mono',monospace;}
-  .proj-at{font-size:20px;color:var(--text-faint);margin:2px 0;}
+  .proj-team-name{font-size:14px;font-weight:700;letter-spacing:.02em;}
+  .proj-score-box{
+    text-align:center;flex:0 0 auto;background:var(--panel-3);border:1px solid var(--line-2);
+    border-radius:10px;padding:12px 26px;
+  }
+  .proj-score-pair{font-family:'IBM Plex Mono',monospace;font-size:34px;font-weight:700;letter-spacing:-.01em;}
+  .proj-score-away{color:var(--text-dim);}
+  .proj-score-dash{color:var(--text-faint);margin:0 8px;}
+  .proj-score-home{color:var(--blue);text-shadow:0 0 16px rgba(76,141,255,.4);}
+  .proj-matchup-title{font-size:10px;color:var(--text-faint);font-family:'IBM Plex Mono',monospace;letter-spacing:.08em;margin-top:5px;}
 
   .proj-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px;}
   .proj-stat{background:var(--panel-3);border:1px solid var(--line-2);border-radius:10px;padding:11px 14px;}
   .proj-stat-label{font-size:8.5px;letter-spacing:.1em;color:var(--text-faint);margin-bottom:5px;font-family:'IBM Plex Mono',monospace;}
   .proj-stat-value{font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:700;}
   .proj-stat-sub{font-size:10px;color:var(--text-faint2);font-family:'IBM Plex Mono',monospace;margin-top:2px;}
+
+  /* ---- Edge comparison rows: MARKET vs OURS vs EDGE, with a plain-language verdict ---- */
+  .edge-compare{background:var(--panel-3);border:1px solid var(--line-2);border-radius:10px;margin-bottom:22px;overflow:hidden;}
+  .edge-row{
+    display:grid;grid-template-columns:70px 1fr 1fr 90px;align-items:center;gap:14px;
+    padding:13px 14px;border-bottom:1px solid var(--line);
+  }
+  .edge-row:last-child{border-bottom:none;}
+  .edge-row-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;color:var(--text-faint);}
+  .edge-row-field{display:flex;flex-direction:column;gap:2px;}
+  .edge-row-field-label{font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.08em;color:var(--text-faint2);}
+  .edge-row-field-value{font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:700;}
+  .edge-row-edge{text-align:right;}
+  .edge-row-edge-value{font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:700;}
+  .edge-verdict{
+    grid-column:1 / -1;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--text-faint);
+    padding-top:8px;display:flex;align-items:center;gap:8px;
+  }
+  .verdict-tag{
+    font-size:9px;font-weight:700;letter-spacing:.06em;padding:2px 7px;border-radius:4px;flex:0 0 auto;
+  }
+  .verdict-play{background:rgba(0,255,156,.16);color:var(--green);}
+  .verdict-lean{background:rgba(255,201,60,.16);color:var(--amber);}
+  .verdict-none{background:var(--panel-3);color:var(--text-faint);}
 
   .proj-section{margin-bottom:22px;}
   .proj-section-title{font-size:10px;letter-spacing:.1em;color:var(--text-faint);margin-bottom:10px;font-family:'IBM Plex Mono',monospace;}
@@ -324,18 +353,20 @@
       <div class="proj-team">
         <span class="proj-team-bar" id="proj-away-bar"></span>
         <div class="proj-team-name" id="proj-away-name">—</div>
-        <div class="proj-score" id="proj-away-score">—</div>
       </div>
-      <div class="proj-meta">
+      <div class="proj-score-box">
+        <div class="proj-score-pair">
+          <span class="proj-score-away" id="proj-away-score">—</span><span class="proj-score-dash">–</span><span class="proj-score-home" id="proj-home-score">—</span>
+        </div>
         <div class="proj-matchup-title" id="proj-matchup-sub">—</div>
-        <div class="proj-at">@</div>
       </div>
       <div class="proj-team">
         <span class="proj-team-bar" id="proj-home-bar"></span>
         <div class="proj-team-name" id="proj-home-name">—</div>
-        <div class="proj-score" id="proj-home-score">—</div>
       </div>
     </div>
+
+    <div class="edge-compare" id="proj-edge-compare"></div>
 
     <div class="proj-stats-row">
       <div class="proj-stat">
@@ -548,12 +579,65 @@
       document.getElementById('proj-home-bar').style.background = teamColor(g.home_team);
       document.getElementById('proj-away-score').textContent = p.proj_away_score.toFixed(1);
       document.getElementById('proj-home-score').textContent = p.proj_home_score.toFixed(1);
-      document.getElementById('proj-matchup-sub').textContent = `WEEK ${g.week} \u00B7 ${g.season}`;
+      document.getElementById('proj-matchup-sub').textContent = `WEEK ${g.week} \u00B7 ${g.season} \u00B7 PROJECTED`;
       document.getElementById('proj-winprob').textContent = (g.model.home_win_prob*100).toFixed(1) + '%';
       document.getElementById('proj-line-total').textContent = `${fmtSign1(g.model.pred_home_margin)} / ${g.model.pred_total.toFixed(1)}`;
       document.getElementById('proj-market-line-total').textContent = `market ${fmtSign1(g.market.spread_line)} / ${g.market.total_line!=null?g.market.total_line.toFixed(1):'\u2014'}`;
       document.getElementById('proj-fair-ml').textContent = fmtOdds(g.model.home_fair_moneyline);
       document.getElementById('proj-market-ml').textContent = `posted ${fmtOdds(g.market.home_moneyline)}`;
+
+      // "TEAM -X.X" style formatting for a spread number, from a home-margin
+      // value (positive = home favored by that much). Used for both the
+      // market line and the model's own implied spread so they read the
+      // same way side by side.
+      function spreadAsTeam(homeMarginValue){
+        if(homeMarginValue == null) return '\u2014';
+        return homeMarginValue >= 0
+          ? `${g.home_team} \u2212${homeMarginValue.toFixed(1)}`
+          : `${g.away_team} \u2212${Math.abs(homeMarginValue).toFixed(1)}`;
+      }
+
+      // Verdict thresholds are the SAME real thresholds already used
+      // elsewhere on this dashboard (see playBadge()) -- 1.5 / 3.0 points
+      // for spread -- not new/invented numbers for this view.
+      function spreadVerdict(){
+        const e = g.edges.spread_edge;
+        if(e == null) return {tier:'none', text:'No live market price for this game yet.'};
+        const side = e >= 0 ? g.home_team : g.away_team;
+        const abs = Math.abs(e);
+        if(abs >= 3) return {tier:'play', tag:'PLAY', text:`${side} to cover \u2014 edge of ${fmtSign1(e)} pts clears our 3-point threshold.`};
+        if(abs >= 1.5) return {tier:'lean', tag:'LEAN', text:`${side} to cover \u2014 edge of ${fmtSign1(e)} pts clears our 1.5-point floor.`};
+        return {tier:'none', tag:'NO PLAY', text:`Edge of ${fmtSign1(e)} pts is under our 1.5-point floor.`};
+      }
+
+      // Total is explicitly market-anchored and low-confidence (see the
+      // caveat banner) -- this never shows PLAY, only a soft directional
+      // lean, and says so plainly rather than implying confidence we
+      // haven't shown we have.
+      function totalVerdict(){
+        const e = g.edges.total_edge;
+        if(e == null) return {tier:'none', text:'No live market total for this game yet.'};
+        const dir = e >= 0 ? 'OVER' : 'UNDER';
+        const abs = Math.abs(e);
+        if(abs >= 1.5) return {tier:'lean', tag:`LEAN ${dir}`, text:`Total model is market-anchored and low-confidence \u2014 treat this as a soft lean, not a play.`};
+        return {tier:'none', tag:'NO LEAN', text:`Edge of ${fmtSign1(e)} pts is negligible, and the total model is low-confidence regardless.`};
+      }
+
+      function edgeRow(label, marketField, oursField, edgeVal, verdict){
+        const tagClass = verdict.tier === 'play' ? 'verdict-play' : verdict.tier === 'lean' ? 'verdict-lean' : 'verdict-none';
+        const tagText = verdict.tag || (verdict.tier === 'none' ? 'NO PLAY' : '');
+        return `<div class="edge-row">
+          <div class="edge-row-label">${label}</div>
+          <div class="edge-row-field"><span class="edge-row-field-label">MARKET</span><span class="edge-row-field-value">${marketField}</span></div>
+          <div class="edge-row-field"><span class="edge-row-field-label">OURS</span><span class="edge-row-field-value">${oursField}</span></div>
+          <div class="edge-row-field edge-row-edge"><span class="edge-row-field-label">EDGE</span><span class="edge-row-edge-value ${edgeClass(edgeVal)}">${edgeVal!=null?fmtSign1(edgeVal):'\u2014'}</span></div>
+          <div class="edge-verdict">${tagText?`<span class="verdict-tag ${tagClass}">${tagText}</span>`:''}<span>${verdict.text}</span></div>
+        </div>`;
+      }
+
+      document.getElementById('proj-edge-compare').innerHTML =
+        edgeRow('SPREAD', spreadAsTeam(-g.market.spread_line), spreadAsTeam(g.model.pred_home_margin), g.edges.spread_edge, spreadVerdict()) +
+        edgeRow('TOTAL', g.market.total_line!=null?g.market.total_line.toFixed(1):'\u2014', g.model.pred_total.toFixed(1), g.edges.total_edge, totalVerdict());
 
       // Histogram: real probability mass per bin, shaded where home covers the market spread.
       const dist = p.distribution;

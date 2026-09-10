@@ -635,8 +635,16 @@
         </div>`;
       }
 
+      // NOTE: as of the backend sign fix (generate_predictions.py), both
+      // g.market.spread_line and g.model.pred_home_margin already use the
+      // SAME convention (positive = home favored by that many points) --
+      // so both sides get passed to spreadAsTeam() directly, no negation.
+      // This used to negate the market side to compensate for a live-odds
+      // sign bug upstream; that bug is fixed at the source now, so a
+      // negation here would silently reintroduce the same wrong-side
+      // display it was papering over.
       document.getElementById('proj-edge-compare').innerHTML =
-        edgeRow('SPREAD', spreadAsTeam(-g.market.spread_line), spreadAsTeam(g.model.pred_home_margin), g.edges.spread_edge, spreadVerdict()) +
+        edgeRow('SPREAD', spreadAsTeam(g.market.spread_line), spreadAsTeam(g.model.pred_home_margin), g.edges.spread_edge, spreadVerdict()) +
         edgeRow('TOTAL', g.market.total_line!=null?g.market.total_line.toFixed(1):'\u2014', g.model.pred_total.toFixed(1), g.edges.total_edge, totalVerdict());
 
       // Histogram: real probability mass per bin, shaded where home covers the market spread.

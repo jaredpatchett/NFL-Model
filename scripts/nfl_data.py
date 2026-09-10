@@ -80,8 +80,37 @@ def load_weekly(seasons: list[int]) -> pd.DataFrame:
 
 
 def load_snaps(seasons: list[int]) -> pd.DataFrame:
-    """Snap counts by player-game. Gives us snap share."""
-    return _load_cached("snaps", seasons, lambda s: nfl.import_snap_counts(s))
+    """
+    Snap counts by player-game. Gives us snap share.
+
+    Fetched ONE SEASON AT A TIME and caches per-season, unlike the other
+    loaders here. Reason: nflverse publishes schedule/play-by-play for the
+    current in-progress season almost immediately after each game, but
+    snap-count aggregation lags behind by days -- requesting the full
+    season list in one call (as this used to do) means a single
+    not-yet-published season 404s and crashes the ENTIRE pipeline, even
+    though every other feature source for that week is already available.
+    A season that fails here is skipped with a clear warning, not silently
+    dropped -- the rest of the pipeline still runs; that one season's games
+    just don't contribute a snap-share signal until nflverse publishes it.
+
+    CACHING NOTE: this moves from one bulk cache file (e.g.
+    snaps_2021_2026.parquet) to one file per season (snaps_2021_2021.parquet,
+    snaps_2022_2022.parquet, ...). More reusable going forward (adding a new
+    season no longer invalidates everything already cached), but the first
+    run after this change re-fetches every season once, since the old bulk
+    cache file's name won't match any of the new per-season paths.
+    """
+    frames = []
+    for s in seasons:
+        try:
+            frames.append(_load_cached("snaps", [s], lambda ss: nfl.import_snap_counts(ss)))
+        except Exception as e:
+            print(f"WARNING: [snaps] season {s} not available yet ({e}) -- "
+                  f"skipping it for snap-share features; the rest of the run continues.")
+    if not frames:
+        return pd.DataFrame()
+    return pd.concat(frames, ignore_index=True)
 
 
 GAMES_CSV_URL = "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv"

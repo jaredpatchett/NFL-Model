@@ -62,7 +62,20 @@ EDGE_TIER_A = 0.06
 EDGE_TIER_B = 0.04
 EV_TIER_A = 0.12
 EV_TIER_B = 0.07
-REGRESSION_RATIO = 1.5
+REGRESSION_RATIO = 2.0  # was 1.5 through Week 1 2026 -- loosened after reviewing
+                         # real Week 1 output: at 1.5x, 6 players with otherwise
+                         # clean profiles (70%+ snap share, real positive edge,
+                         # a real red-zone role) were excluded by this ONE check
+                         # alone. This ratio was never sourced from the blueprint
+                         # PDF (it names the "chasing recent TDs" concept but
+                         # gives no number -- see module docstring), so it's
+                         # ours to revisit, unlike the snap-share/TD-projection
+                         # thresholds which ARE direct from the document. Not a
+                         # final answer -- see regression_ratio in the returned
+                         # dict, now logged for every candidate regardless of
+                         # outcome, specifically so this exact value can be
+                         # checked against real results after real games are
+                         # played, instead of staying a guess indefinitely.
 REGRESSION_MIN_ACTUAL = 2.0
 PREFERRED_ODDS_LOW = 120
 PREFERRED_ODDS_HIGH = 300
@@ -98,13 +111,22 @@ def qualify(row, model_prob: float, market: dict | None) -> dict:
         reason_codes.append("No meaningful red-zone role")
 
     # ---- Regression check: recent TDs outpacing opportunity ----
+    # regression_ratio is computed for EVERY candidate that has both real
+    # values available, regardless of whether it trips REGRESSION_RATIO
+    # below -- this is what makes the threshold itself re-testable later:
+    # once real outcomes are logged against a whole month of real ratios,
+    # a different cutoff can be checked against the SAME real data, rather
+    # than only ever knowing what happened under whichever number was live
+    # at prediction time.
     actual_tds = row.get("asof_roll4_actual_tds")
     expected_tds = row.get("asof_roll4_expected_tds")
-    if not _is_missing(actual_tds) and not _is_missing(expected_tds):
-        if (actual_tds >= REGRESSION_MIN_ACTUAL and expected_tds > 0
-                and actual_tds > expected_tds * REGRESSION_RATIO):
+    regression_ratio = None
+    if not _is_missing(actual_tds) and not _is_missing(expected_tds) and expected_tds > 0:
+        regression_ratio = actual_tds / expected_tds
+        if actual_tds >= REGRESSION_MIN_ACTUAL and regression_ratio > REGRESSION_RATIO:
             hard_fail = True
             reason_codes.append("Recent TDs outpacing opportunity (regression risk)")
+    regression_ratio_out = round(regression_ratio, 3) if regression_ratio is not None else None
 
     # ---- Matchup rating: INFORMATIONAL ONLY, not a hard filter yet. ----
     # New this session (defense_features.py) -- a real, position-specific
@@ -124,7 +146,8 @@ def qualify(row, model_prob: float, market: dict | None) -> dict:
     # ---- Market-dependent checks: edge, EV, price range, tier ----
     if market is None:
         reason_codes.append("No live price -- edge/EV not evaluated")
-        return {"qualifies": False, "tier": "D" if hard_fail else "U", "reason_codes": reason_codes}
+        return {"qualifies": False, "tier": "D" if hard_fail else "U", "reason_codes": reason_codes,
+                "regression_ratio": regression_ratio_out}
 
     edge = market["edge"]
     ev = market["ev"]
@@ -138,7 +161,8 @@ def qualify(row, model_prob: float, market: dict | None) -> dict:
         reason_codes.append(f"Outside preferred price range (+{PREFERRED_ODDS_LOW}/+{PREFERRED_ODDS_HIGH})")
 
     if hard_fail:
-        return {"qualifies": False, "tier": "D", "reason_codes": reason_codes}
+        return {"qualifies": False, "tier": "D", "reason_codes": reason_codes,
+                "regression_ratio": regression_ratio_out}
 
     if edge >= EDGE_TIER_A and ev >= EV_TIER_A:
         tier = "A"
@@ -147,4 +171,9 @@ def qualify(row, model_prob: float, market: dict | None) -> dict:
     else:
         tier = "C"
 
-    return {"qualifies": tier in ("A", "B"), "tier": tier, "reason_codes": reason_codes}
+    return {"qualifies": tier in ("A", "B"), "tier": tier, "reason_codes": reason_codes,
+            "regression_ratio": regression_ratio_out}
+
+
+if __name__ == "__main__":
+    print("Run test_blueprint_qualification.py to validate this module.")

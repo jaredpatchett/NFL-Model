@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-11T16:28:57.753907+00:00",
+  "generated_at": "2026-09-11T16:50:19.029908+00:00",
   "season": 2026,
   "week": 1,
   "model_notes": {
@@ -1756,7 +1756,7 @@
         "spread_price": -105,
         "total_line": 41.5,
         "home_moneyline": -225,
-        "away_moneyline": 203,
+        "away_moneyline": 205,
         "home_implied_prob": 0.6923
       },
       "edges": {
@@ -2617,7 +2617,7 @@
       },
       "market": {
         "spread_line": 1.5,
-        "spread_price": -108,
+        "spread_price": -109,
         "total_line": 46.5,
         "home_moneyline": -122,
         "away_moneyline": 110,

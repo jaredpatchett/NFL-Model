@@ -1,5 +1,3 @@
-name: Update NFL Predictions
-
 # Runs on a schedule during the season, plus lets you trigger it manually.
 # Generates BOTH tracks in one run: spread/total/moneyline (Track B) and
 # anytime-TD player probabilities (Track A). Mirrors the wc-7-dashboard cron
@@ -54,15 +52,30 @@ jobs:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: python generate_player_predictions.py
 
+      - name: Backtest against real completed games
+        working-directory: scripts
+        # Runs after both prediction steps so this run's fresh entries are
+        # already in the logs -- though the backtest itself only ever grades
+        # against ALREADY-LOGGED pre-game snapshots from past runs, never
+        # something generated in this same run, so ordering here doesn't
+        # affect correctness either way, just keeps the pipeline reading
+        # top-to-bottom in a sensible order. Writes data/backtest_results.json
+        # + .js (same overwritten-snapshot pattern as the other two data
+        # files) -- expect ~0 results for a while; that's correct, not
+        # broken, until real games start finishing (see backtest.py's
+        # module docstring).
+        run: python backtest.py
+
       - name: Commit and push if data changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/nfl_lines.json data/nfl_lines.js data/predictions_log.jsonl
           git add data/player_td.json data/player_td.js data/player_td_log.jsonl
+          git add data/backtest_results.json data/backtest_results.js
           if git diff --cached --quiet; then
             echo "No changes to predictions -- nothing to commit."
           else
-            git commit -m "Auto-update NFL predictions (lines + TD props) [skip ci]"
+            git commit -m "Auto-update NFL predictions (lines + TD props + backtest) [skip ci]"
             git push
           fi

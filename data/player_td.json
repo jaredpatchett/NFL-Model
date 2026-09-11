@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-09-11T20:37:13.997423+00:00",
+  "generated_at": "2026-09-11T21:09:43.644054+00:00",
   "season": 2026,
   "week": 1,
   "model_notes": {
     "training_rows": 18424,
-    "caveat": "86 of 132 players matched to a real anytime-TD price this run (86 from live API; unmatched players show usage/model only, either no line posted for that player or a name-matching miss). 3 of 132 players clear the blueprint's qualification screen (Tier A/B). Screen implements the PDF's stated snap share/TD projection/red-zone role/regression checks and edge/EV tiers; matchup rating is implemented but informational only (see README); HEAT-window thresholds are named in the PDF but not formulaically defined, so not enforced. Candidate pool is last season's active players corrected for known offseason trades; true rookies and any very recent retirements the crosswalk hasn't caught are not included yet."
+    "caveat": "86 of 132 players matched to a real anytime-TD price this run (86 from live API; unmatched players show usage/model only, either no line posted for that player or a name-matching miss). 4 of 132 players clear the blueprint's qualification screen (Tier A/B). Screen implements the PDF's stated snap share/TD projection/red-zone role/regression checks and edge/EV tiers; matchup rating is implemented but informational only (see README); HEAT-window thresholds are named in the PDF but not formulaically defined, so not enforced. Candidate pool is last season's active players corrected for known offseason trades; true rookies and any very recent retirements the crosswalk hasn't caught are not included yet."
   },
   "players": [
     {
@@ -39,7 +39,8 @@
         "tier": "A",
         "reason_codes": [
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.392
       }
     },
     {
@@ -75,7 +76,8 @@
         "reason_codes": [
           "Snap share below 70% threshold",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 1.278
       }
     },
     {
@@ -106,7 +108,8 @@
           "Snap share below 70% threshold",
           "Matchup rating 0.52 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.644
       }
     },
     {
@@ -130,10 +133,10 @@
         "tier": "A"
       },
       "market": {
-        "anytime_td_price": -175,
-        "implied_prob": 0.6364,
-        "edge": -0.1243,
-        "ev": -0.1953,
+        "anytime_td_price": -185,
+        "implied_prob": 0.6491,
+        "edge": -0.137,
+        "ev": -0.2111,
         "source": "live_api"
       },
       "qualification": {
@@ -142,7 +145,8 @@
         "reason_codes": [
           "Model projection does not exceed market implied probability",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.611
       }
     },
     {
@@ -178,7 +182,8 @@
         "reason_codes": [
           "Snap share below 70% threshold",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.593
       }
     },
     {
@@ -213,7 +218,8 @@
         "tier": "D",
         "reason_codes": [
           "Snap share below 70% threshold"
-        ]
+        ],
+        "regression_ratio": 0.423
       }
     },
     {
@@ -248,7 +254,8 @@
         "tier": "A",
         "reason_codes": [
           "Matchup rating 0.85 below 1.10 preferred (informational only, not yet a disqualifier)"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -278,7 +285,8 @@
         "reason_codes": [
           "Recent TDs outpacing opportunity (regression risk)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 3.252
       }
     },
     {
@@ -316,7 +324,8 @@
           "Matchup rating 0.65 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Model projection does not exceed market implied probability",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -352,7 +361,8 @@
         "reason_codes": [
           "Recent TDs outpacing opportunity (regression risk)",
           "Matchup rating 0.88 below 1.10 preferred (informational only, not yet a disqualifier)"
-        ]
+        ],
+        "regression_ratio": 2.398
       }
     },
     {
@@ -388,7 +398,8 @@
         "reason_codes": [
           "Recent TDs outpacing opportunity (regression risk)",
           "Matchup rating 1.09 below 1.10 preferred (informational only, not yet a disqualifier)"
-        ]
+        ],
+        "regression_ratio": 2.381
       }
     },
     {
@@ -426,7 +437,8 @@
           "Matchup rating 0.93 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Model projection does not exceed market implied probability",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 1.152
       }
     },
     {
@@ -463,7 +475,8 @@
           "Snap share below 70% threshold",
           "Model projection does not exceed market implied probability",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 1.163
       }
     },
     {
@@ -499,7 +512,8 @@
         "reason_codes": [
           "Snap share below 70% threshold",
           "Model projection does not exceed market implied probability"
-        ]
+        ],
+        "regression_ratio": 1.161
       }
     },
     {
@@ -538,7 +552,8 @@
           "Matchup rating 1.04 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Model projection does not exceed market implied probability",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 2.632
       }
     },
     {
@@ -574,7 +589,8 @@
         "reason_codes": [
           "Matchup rating 0.85 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 1.818
       }
     },
     {
@@ -610,7 +626,8 @@
         "reason_codes": [
           "Recent TDs outpacing opportunity (regression risk)",
           "Matchup rating 0.56 below 1.10 preferred (informational only, not yet a disqualifier)"
-        ]
+        ],
+        "regression_ratio": 5.797
       }
     },
     {
@@ -641,12 +658,12 @@
         "source": "live_api"
       },
       "qualification": {
-        "qualifies": false,
-        "tier": "D",
+        "qualifies": true,
+        "tier": "B",
         "reason_codes": [
-          "Recent TDs outpacing opportunity (regression risk)",
           "Matchup rating 0.88 below 1.10 preferred (informational only, not yet a disqualifier)"
-        ]
+        ],
+        "regression_ratio": 1.626
       }
     },
     {
@@ -681,9 +698,9 @@
         "tier": "D",
         "reason_codes": [
           "Snap share below 70% threshold",
-          "Recent TDs outpacing opportunity (regression risk)",
           "Matchup rating 0.22 below 1.10 preferred (informational only, not yet a disqualifier)"
-        ]
+        ],
+        "regression_ratio": 1.835
       }
     },
     {
@@ -719,7 +736,8 @@
         "reason_codes": [
           "Snap share below 70% threshold",
           "Model projection does not exceed market implied probability"
-        ]
+        ],
+        "regression_ratio": 0.706
       }
     },
     {
@@ -755,7 +773,8 @@
         "reason_codes": [
           "Recent TDs outpacing opportunity (regression risk)",
           "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)"
-        ]
+        ],
+        "regression_ratio": 2.715
       }
     },
     {
@@ -791,7 +810,8 @@
         "reason_codes": [
           "Matchup rating 0.98 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Model projection does not exceed market implied probability"
-        ]
+        ],
+        "regression_ratio": 1.379
       }
     },
     {
@@ -828,7 +848,8 @@
           "Recent TDs outpacing opportunity (regression risk)",
           "Matchup rating 0.83 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Model projection does not exceed market implied probability"
-        ]
+        ],
+        "regression_ratio": 4.938
       }
     },
     {
@@ -852,10 +873,10 @@
         "tier": "B"
       },
       "market": {
-        "anytime_td_price": 275,
-        "implied_prob": 0.2667,
-        "edge": 0.0406,
-        "ev": 0.1522,
+        "anytime_td_price": 270,
+        "implied_prob": 0.2703,
+        "edge": 0.037,
+        "ev": 0.1369,
         "source": "live_api"
       },
       "qualification": {
@@ -864,7 +885,8 @@
         "reason_codes": [
           "Recent TDs outpacing opportunity (regression risk)",
           "Matchup rating 0.98 below 1.10 preferred (informational only, not yet a disqualifier)"
-        ]
+        ],
+        "regression_ratio": 2.09
       }
     },
     {
@@ -894,7 +916,8 @@
         "reason_codes": [
           "TD projection below 30% threshold",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -930,7 +953,8 @@
         "reason_codes": [
           "TD projection below 30% threshold",
           "Model projection does not exceed market implied probability"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -968,7 +992,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.98 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -1006,7 +1031,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Model projection does not exceed market implied probability"
-        ]
+        ],
+        "regression_ratio": 1.333
       }
     },
     {
@@ -1030,10 +1056,10 @@
         "tier": "B"
       },
       "market": {
-        "anytime_td_price": 800,
-        "implied_prob": 0.1111,
-        "edge": 0.148,
-        "ev": 1.3317,
+        "anytime_td_price": 675,
+        "implied_prob": 0.129,
+        "edge": 0.13,
+        "ev": 1.0079,
         "source": "live_api"
       },
       "qualification": {
@@ -1044,7 +1070,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.65 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.938
       }
     },
     {
@@ -1075,7 +1102,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.83 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 2.083
       }
     },
     {
@@ -1099,10 +1127,10 @@
         "tier": "B"
       },
       "market": {
-        "anytime_td_price": 350,
-        "implied_prob": 0.2222,
-        "edge": 0.0328,
-        "ev": 0.1477,
+        "anytime_td_price": 375,
+        "implied_prob": 0.2105,
+        "edge": 0.0445,
+        "ev": 0.2114,
         "source": "live_api"
       },
       "qualification": {
@@ -1113,7 +1141,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.56 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -1150,7 +1179,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.83 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 1.25
       }
     },
     {
@@ -1186,7 +1216,8 @@
         "reason_codes": [
           "TD projection below 30% threshold",
           "Matchup rating 0.88 below 1.10 preferred (informational only, not yet a disqualifier)"
-        ]
+        ],
+        "regression_ratio": 1.437
       }
     },
     {
@@ -1223,7 +1254,8 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "Model projection does not exceed market implied probability"
-        ]
+        ],
+        "regression_ratio": 0.786
       }
     },
     {
@@ -1260,7 +1292,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.88 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Model projection does not exceed market implied probability"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -1298,7 +1331,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.56 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Model projection does not exceed market implied probability"
-        ]
+        ],
+        "regression_ratio": 1.984
       }
     },
     {
@@ -1336,7 +1370,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 1.04 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.571
       }
     },
     {
@@ -1375,7 +1410,8 @@
           "Recent TDs outpacing opportunity (regression risk)",
           "Matchup rating 1.09 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 2.714
       }
     },
     {
@@ -1411,7 +1447,8 @@
         "reason_codes": [
           "TD projection below 30% threshold",
           "Model projection does not exceed market implied probability"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -1448,7 +1485,8 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 1.057
       }
     },
     {
@@ -1485,7 +1523,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 1.09 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -1516,7 +1555,8 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 3.03
       }
     },
     {
@@ -1553,7 +1593,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.85 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 1.613
       }
     },
     {
@@ -1591,7 +1632,8 @@
           "No meaningful red-zone role",
           "Matchup rating 0.85 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Model projection does not exceed market implied probability"
-        ]
+        ],
+        "regression_ratio": 3.891
       }
     },
     {
@@ -1630,7 +1672,8 @@
           "Recent TDs outpacing opportunity (regression risk)",
           "Matchup rating 0.75 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 2.688
       }
     },
     {
@@ -1663,7 +1706,8 @@
           "No meaningful red-zone role",
           "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -1687,10 +1731,10 @@
         "tier": "C"
       },
       "market": {
-        "anytime_td_price": 700,
-        "implied_prob": 0.125,
-        "edge": 0.0884,
-        "ev": 0.707,
+        "anytime_td_price": 650,
+        "implied_prob": 0.1333,
+        "edge": 0.08,
+        "ev": 0.6004,
         "source": "live_api"
       },
       "qualification": {
@@ -1701,7 +1745,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.98 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 1.613
       }
     },
     {
@@ -1738,7 +1783,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Model projection does not exceed market implied probability"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -1776,7 +1822,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.83 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Model projection does not exceed market implied probability"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -1814,7 +1861,8 @@
           "No meaningful red-zone role",
           "Matchup rating 0.88 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Model projection does not exceed market implied probability"
-        ]
+        ],
+        "regression_ratio": 2.273
       }
     },
     {
@@ -1846,7 +1894,8 @@
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 2.439
       }
     },
     {
@@ -1884,7 +1933,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.75 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.935
       }
     },
     {
@@ -1923,7 +1973,8 @@
           "Recent TDs outpacing opportunity (regression risk)",
           "Model projection does not exceed market implied probability",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 4.107
       }
     },
     {
@@ -1959,7 +2010,8 @@
         "reason_codes": [
           "TD projection below 30% threshold",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -1997,7 +2049,8 @@
           "TD projection below 30% threshold",
           "Model projection does not exceed market implied probability",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 1.562
       }
     },
     {
@@ -2034,7 +2087,8 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 1.285
       }
     },
     {
@@ -2070,7 +2124,8 @@
         "reason_codes": [
           "TD projection below 30% threshold",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -2094,10 +2149,10 @@
         "tier": "C"
       },
       "market": {
-        "anytime_td_price": 310,
-        "implied_prob": 0.2439,
-        "edge": -0.0568,
-        "ev": -0.2328,
+        "anytime_td_price": 300,
+        "implied_prob": 0.25,
+        "edge": -0.0629,
+        "ev": -0.2515,
         "source": "live_api"
       },
       "qualification": {
@@ -2108,9 +2163,9 @@
           "TD projection below 30% threshold",
           "Recent TDs outpacing opportunity (regression risk)",
           "Matchup rating 0.98 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "Model projection does not exceed market implied probability",
-          "Outside preferred price range (+120/+300)"
-        ]
+          "Model projection does not exceed market implied probability"
+        ],
+        "regression_ratio": 5.714
       }
     },
     {
@@ -2149,7 +2204,8 @@
           "No meaningful red-zone role",
           "Matchup rating 0.85 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -2181,7 +2237,8 @@
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 3.226
       }
     },
     {
@@ -2212,7 +2269,8 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.574
       }
     },
     {
@@ -2250,7 +2308,8 @@
           "No meaningful red-zone role",
           "Matchup rating 1.09 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 4.0
       }
     },
     {
@@ -2274,10 +2333,10 @@
         "tier": "C"
       },
       "market": {
-        "anytime_td_price": 460,
-        "implied_prob": 0.1786,
-        "edge": -0.003,
-        "ev": -0.0167,
+        "anytime_td_price": 475,
+        "implied_prob": 0.1739,
+        "edge": 0.0017,
+        "ev": 0.0096,
         "source": "live_api"
       },
       "qualification": {
@@ -2288,9 +2347,9 @@
           "No meaningful red-zone role",
           "Recent TDs outpacing opportunity (regression risk)",
           "Matchup rating 1.09 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "Model projection does not exceed market implied probability",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 5.882
       }
     },
     {
@@ -2327,7 +2386,8 @@
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -2363,7 +2423,8 @@
         "reason_codes": [
           "TD projection below 30% threshold",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 1.522
       }
     },
     {
@@ -2396,7 +2457,8 @@
           "No meaningful red-zone role",
           "Matchup rating 0.98 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 1.136
       }
     },
     {
@@ -2433,7 +2495,8 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "Model projection does not exceed market implied probability"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -2471,7 +2534,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 1.09 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 2.857
       }
     },
     {
@@ -2495,10 +2559,10 @@
         "tier": "C"
       },
       "market": {
-        "anytime_td_price": 650,
-        "implied_prob": 0.1333,
-        "edge": 0.0306,
-        "ev": 0.2293,
+        "anytime_td_price": 600,
+        "implied_prob": 0.1429,
+        "edge": 0.021,
+        "ev": 0.1473,
         "source": "live_api"
       },
       "qualification": {
@@ -2509,7 +2573,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.98 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.847
       }
     },
     {
@@ -2545,7 +2610,8 @@
         "reason_codes": [
           "TD projection below 30% threshold",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -2577,7 +2643,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.22 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -2618,7 +2685,8 @@
           "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Model projection does not exceed market implied probability",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 5.038
       }
     },
     {
@@ -2651,7 +2719,8 @@
           "No meaningful red-zone role",
           "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -2690,7 +2759,8 @@
           "No meaningful red-zone role",
           "Matchup rating 0.22 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -2721,7 +2791,8 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -2761,7 +2832,8 @@
           "Matchup rating 0.75 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Model projection does not exceed market implied probability",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 2.06
       }
     },
     {
@@ -2800,7 +2872,8 @@
           "No meaningful red-zone role",
           "Matchup rating 0.65 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.958
       }
     },
     {
@@ -2833,7 +2906,8 @@
           "No meaningful red-zone role",
           "Matchup rating 0.83 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -2865,7 +2939,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.98 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -2898,7 +2973,8 @@
           "No meaningful red-zone role",
           "Matchup rating 0.98 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -2934,7 +3010,8 @@
         "reason_codes": [
           "TD projection below 30% threshold",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 2.667
       }
     },
     {
@@ -2965,7 +3042,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.83 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -2989,10 +3067,10 @@
         "tier": "D"
       },
       "market": {
-        "anytime_td_price": 1700,
-        "implied_prob": 0.0556,
-        "edge": 0.0838,
-        "ev": 1.5086,
+        "anytime_td_price": 1600,
+        "implied_prob": 0.0588,
+        "edge": 0.0805,
+        "ev": 1.3692,
         "source": "live_api"
       },
       "qualification": {
@@ -3003,7 +3081,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -3036,7 +3115,8 @@
           "No meaningful red-zone role",
           "Matchup rating 0.98 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -3067,7 +3147,8 @@
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -3099,7 +3180,8 @@
           "No meaningful red-zone role",
           "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -3131,7 +3213,8 @@
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -3163,7 +3246,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.56 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -3201,7 +3285,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.52 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Model projection does not exceed market implied probability"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -3239,7 +3324,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.22 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Model projection does not exceed market implied probability"
-        ]
+        ],
+        "regression_ratio": 1.292
       }
     },
     {
@@ -3277,7 +3363,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.88 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 2.326
       }
     },
     {
@@ -3315,7 +3402,8 @@
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -3347,7 +3435,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.22 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -3386,7 +3475,8 @@
           "No meaningful red-zone role",
           "Matchup rating 0.22 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -3424,7 +3514,8 @@
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 9.091
       }
     },
     {
@@ -3461,7 +3552,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.22 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -3494,7 +3586,8 @@
           "No meaningful red-zone role",
           "Matchup rating 0.83 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -3526,7 +3619,8 @@
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -3559,7 +3653,8 @@
           "No meaningful red-zone role",
           "Matchup rating 0.83 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -3591,7 +3686,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.56 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 2.326
       }
     },
     {
@@ -3628,7 +3724,8 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -3660,7 +3757,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.98 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 1.621
       }
     },
     {
@@ -3693,7 +3791,8 @@
           "No meaningful red-zone role",
           "Matchup rating 0.75 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -3726,7 +3825,8 @@
           "No meaningful red-zone role",
           "Matchup rating 0.56 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -3758,7 +3858,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.98 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -3791,7 +3892,8 @@
           "No meaningful red-zone role",
           "Matchup rating 0.83 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -3829,7 +3931,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.83 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -3867,7 +3970,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.56 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -3900,7 +4004,8 @@
           "No meaningful red-zone role",
           "Matchup rating 1.09 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -3924,10 +4029,10 @@
         "tier": "D"
       },
       "market": {
-        "anytime_td_price": 540,
-        "implied_prob": 0.1562,
-        "edge": -0.0471,
-        "ev": -0.3015,
+        "anytime_td_price": 500,
+        "implied_prob": 0.1667,
+        "edge": -0.0575,
+        "ev": -0.3451,
         "source": "live_api"
       },
       "qualification": {
@@ -3939,7 +4044,8 @@
           "Matchup rating 1.09 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Model projection does not exceed market implied probability",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -3971,7 +4077,8 @@
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -4009,7 +4116,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.75 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 4.545
       }
     },
     {
@@ -4041,7 +4149,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 2.381
       }
     },
     {
@@ -4073,7 +4182,8 @@
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -4106,7 +4216,8 @@
           "No meaningful red-zone role",
           "Matchup rating 1.09 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -4145,7 +4256,8 @@
           "No meaningful red-zone role",
           "Matchup rating 0.22 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 12.987
       }
     },
     {
@@ -4177,7 +4289,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.56 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 1.563
       }
     },
     {
@@ -4214,7 +4327,8 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -4247,7 +4361,8 @@
           "No meaningful red-zone role",
           "Matchup rating 0.83 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -4279,7 +4394,8 @@
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 14.925
       }
     },
     {
@@ -4317,7 +4433,8 @@
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -4356,7 +4473,8 @@
           "No meaningful red-zone role",
           "Matchup rating 1.09 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -4389,7 +4507,8 @@
           "No meaningful red-zone role",
           "Matchup rating 0.22 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -4422,7 +4541,8 @@
           "Recent TDs outpacing opportunity (regression risk)",
           "Matchup rating 0.85 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 2.829
       }
     },
     {
@@ -4455,7 +4575,8 @@
           "No meaningful red-zone role",
           "Matchup rating 0.56 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -4492,7 +4613,8 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 1.338
       }
     },
     {
@@ -4529,7 +4651,8 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -4568,7 +4691,8 @@
           "No meaningful red-zone role",
           "Matchup rating 0.22 below 1.10 preferred (informational only, not yet a disqualifier)",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -4606,7 +4730,8 @@
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
           "Outside preferred price range (+120/+300)"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -4637,7 +4762,8 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 2.5
       }
     },
     {
@@ -4669,7 +4795,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.83 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -4701,7 +4828,8 @@
           "TD projection below 30% threshold",
           "Matchup rating 0.75 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
-        ]
+        ],
+        "regression_ratio": 0.0
       }
     }
   ]

@@ -161,6 +161,23 @@
   .pr-bar{height:100%;border-radius:3px;}
   .pr-pace{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-dim2);text-align:right;}
 
+  /* ---- TD Props hero cards ---- */
+  .hero-cards{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1px;
+    background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:22px;
+  }
+  .hero-card{background:var(--panel);padding:16px 16px 14px;border-top:3px solid var(--line-2);}
+  .hero-card-name{font-size:14.5px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .hero-card-sub{font-size:10px;color:var(--text-faint);font-family:'IBM Plex Mono',monospace;letter-spacing:.04em;margin-top:1px;margin-bottom:13px;}
+  .hero-card-label{font-size:8.5px;letter-spacing:.1em;color:var(--text-faint);font-family:'IBM Plex Mono',monospace;margin-bottom:3px;}
+  .hero-card-pct-row{display:flex;align-items:baseline;gap:2px;}
+  .hero-card-pct{font-family:'IBM Plex Mono',monospace;font-size:30px;font-weight:700;line-height:1;}
+  .hero-card-pct-sign{font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:700;color:var(--text-faint);}
+  .hero-card-bar-wrap{background:var(--panel-3);border-radius:3px;height:4px;margin:9px 0 11px;overflow:hidden;}
+  .hero-card-bar{height:100%;background:var(--green);border-radius:3px;}
+  .hero-card-foot{font-size:10px;color:var(--text-faint2);font-family:'IBM Plex Mono',monospace;}
+  .hero-card-foot .pos{color:var(--num);}
+
   /* ---- Bet Tracker ---- */
   .tracker-form{
     background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;
@@ -368,6 +385,8 @@
   </div>
 
   <div class="view" id="view-props">
+    <div class="hero-cards" id="td-hero-cards"></div>
+
     <div class="stat-strip" id="props-stats"></div>
 
     <div class="section-head">
@@ -856,6 +875,33 @@
       }).join('');
     }
     renderProps();
+
+    // ---- Hero cards: top players by model probability, same ordering the
+    // sample layout used. Substitutes RAW EDGE (market.edge, which we have
+    // and have validated) for the sample's "SHARE EDGE" sub-stat -- that
+    // metric was discussed but deliberately not built yet (needs real-week
+    // data to sanity-check against RAW EDGE first, see prior discussion),
+    // so this does NOT fabricate a number for it. No player photos, per
+    // request.
+    function renderHeroCards(){
+      const top = [...players].sort((a,b) => b.model.anytime_td_prob - a.model.anytime_td_prob).slice(0, 6);
+      document.getElementById('td-hero-cards').innerHTML = top.map(p => {
+        const pct = Math.round(p.model.anytime_td_prob * 100);
+        const m = p.market;
+        const footer = m
+          ? `market ${fmtOdds(m.anytime_td_price)} \u00B7 edge ${fmtSigned(m.edge)}`
+          : 'no live price yet';
+        return `<div class="hero-card" style="border-top-color:${teamColor(p.team)}">
+          <div class="hero-card-name">${p.player_name}</div>
+          <div class="hero-card-sub">${p.position} \u00B7 ${p.matchup.toUpperCase()}</div>
+          <div class="hero-card-label">SCORES A TD</div>
+          <div class="hero-card-pct-row"><span class="hero-card-pct">${pct}</span><span class="hero-card-pct-sign">%</span></div>
+          <div class="hero-card-bar-wrap"><div class="hero-card-bar" style="width:${Math.min(100,pct)}%"></div></div>
+          <div class="hero-card-foot">${footer}</div>
+        </div>`;
+      }).join('');
+    }
+    renderHeroCards();
   } else {
     document.getElementById('props-caveat').textContent = 'No data found -- run scripts/generate_player_predictions.py to produce data/player_td.js.';
   }

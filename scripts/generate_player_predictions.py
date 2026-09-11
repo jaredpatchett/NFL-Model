@@ -45,6 +45,7 @@ from sklearn.preprocessing import StandardScaler
 
 from player_td_features import build_player_td_table
 from player_td_model import FEATURE_COLS, POSITIONS, MIN_GAMES_PRIOR, _prep
+from game_lines_model import prob_to_fair_moneyline  # reused as-is from Track B -- same conversion, not reimplemented
 from nfl_data import load_pbp, load_snaps, load_id_crosswalk, load_schedules
 from features import build_player_week_features
 from blueprint_qualification import qualify
@@ -139,6 +140,14 @@ def main():
     X_up = scaler.transform(upcoming[FEATURE_COLS])
     upcoming["model_prob"] = model.predict_proba(X_up)[:, 1]
     upcoming["tier"] = upcoming["model_prob"].apply(_tier)
+    # MODEL ODDS: what price this probability would be fair at, using the
+    # exact same prob->odds conversion Track B already relies on for game
+    # moneylines -- reused here, not a second implementation of the same
+    # math. Purely informational (a way to compare the model's confidence
+    # against the market's price on the same odds scale); anytime_td_prob
+    # remains the number everything else (edge, EV, qualification) is
+    # actually computed from.
+    upcoming["model_fair_moneyline"] = upcoming["model_prob"].apply(prob_to_fair_moneyline)
 
     # ---- Live odds: game odds first (for event_ids), then per-event player props ----
     print("\nFetching live odds (The Odds API)...")
@@ -220,6 +229,13 @@ def main():
             "team": r["posteam"],
             "opponent": r["opponent"],
             "matchup": f"{r['posteam']} vs {r['opponent']}" if r["is_home"] == 1 else f"{r['posteam']} @ {r['opponent']}",
+            # Vegas-implied team total for THIS game -- legitimate, un-lagged
+            # market context (set before kickoff, unlike trailing player
+            # stats), already computed in player_td_features.py and merged
+            # onto every candidate row; just wasn't surfaced in the output
+            # before. Team-level, not player-specific, so it lives at the
+            # top level alongside `matchup` rather than inside `usage`.
+            "team_implied_total": round(float(r["implied_team_total"]), 1) if pd.notna(r["implied_team_total"]) else None,
             "usage": {
                 "snap_share": round(float(r["asof_roll4_snap_share"]), 3) if pd.notna(r["asof_roll4_snap_share"]) else None,
                 "rz_target_share": round(float(r["asof_roll4_rz_target_share"]), 3) if pd.notna(r["asof_roll4_rz_target_share"]) else None,
@@ -229,6 +245,7 @@ def main():
             },
             "model": {
                 "anytime_td_prob": round(float(r["model_prob"]), 4),
+                "fair_moneyline": round(float(r["model_fair_moneyline"]), 1) if pd.notna(r["model_fair_moneyline"]) else None,
                 "tier": r["tier"],  # model-confidence-only fallback bucket, see module docstring
             },
             "market": market,  # None if no live odds or no name match found

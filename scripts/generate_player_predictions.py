@@ -324,6 +324,12 @@ def main():
                 "edge": m["edge"] if m else None,
                 "ev": m["ev"] if m else None,
                 "qualifies": q["qualifies"], "blueprint_tier": q["tier"],
+                "regression_ratio": q.get("regression_ratio"),  # real actual/expected TD ratio for
+                    # EVERY candidate with data available, regardless of whether they passed --
+                    # see blueprint_qualification.py's REGRESSION_RATIO comment. Logging this now
+                    # (not just the boolean reason code) is what lets a different cutoff be checked
+                    # against real outcomes later, instead of only ever knowing what happened under
+                    # whichever value was live at prediction time.
                 "reason_codes": q["reason_codes"],
             }, default=odds_api.json_default) + "\n")
 

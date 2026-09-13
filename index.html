@@ -128,20 +128,14 @@
   .edge-pos{color:var(--green);text-shadow:0 0 12px rgba(0,255,156,.45);}
   .edge-neg{color:var(--red);text-shadow:0 0 12px rgba(255,51,85,.4);}
   .edge-flat{color:var(--text-dim2);}
-  .play-badge{
-    display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:22px;padding:0 6px;
-    background:var(--white-badge);color:#000;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;border-radius:5px;
-    box-shadow:0 0 10px rgba(255,255,255,.35);
-  }
-  .play-none{background:transparent;color:var(--text-faint);font-family:'IBM Plex Mono',monospace;font-size:12px;}
 
   .status-pill{
     display:inline-flex;align-items:center;justify-content:center;padding:3px 9px;min-width:60px;
     border-radius:6px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:700;
-    letter-spacing:.04em;cursor:default;
+    letter-spacing:.04em;cursor:default;flex:0 0 auto;
   }
   .status-official{background:rgba(0,255,156,.16);color:var(--green);box-shadow:0 0 10px rgba(0,255,156,.3);}
-  .status-degen{background:rgba(255,201,60,.16);color:var(--amber);}
+  .status-degen,.status-lean{background:rgba(255,201,60,.16);color:var(--amber);}
   .status-none{color:var(--text-faint2);font-family:'IBM Plex Mono',monospace;font-size:12px;}
   .board-footnote{padding:10px 16px 4px;font-size:10px;color:var(--text-faint2);font-family:'IBM Plex Mono',monospace;}
 
@@ -278,12 +272,6 @@
     grid-column:1 / -1;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--text-faint);
     padding-top:8px;display:flex;align-items:center;gap:8px;
   }
-  .verdict-tag{
-    font-size:9px;font-weight:700;letter-spacing:.06em;padding:2px 7px;border-radius:4px;flex:0 0 auto;
-  }
-  .verdict-play{background:rgba(0,255,156,.16);color:var(--green);}
-  .verdict-lean{background:rgba(255,201,60,.16);color:var(--amber);}
-  .verdict-none{background:var(--panel-3);color:var(--text-faint);}
 
   .proj-section{margin-bottom:22px;}
   .proj-section-title{font-size:10px;letter-spacing:.1em;color:var(--text-faint);margin-bottom:10px;font-family:'IBM Plex Mono',monospace;}
@@ -547,13 +535,33 @@
   function fmtOdds(x){ return x==null ? '\u2014' : (x>0?'+':'')+x; }
   function edgeClass(v){ if(v==null) return 'edge-flat'; return v>0 ? 'edge-pos' : v<0 ? 'edge-neg' : 'edge-flat'; }
 
-  function playBadge(absEdgePct){
-    if(absEdgePct == null) return '<span class="play-none">\u2014</span>';
-    let u = null;
-    if(absEdgePct >= 5) u = '3u';
-    else if(absEdgePct >= 3) u = '2u';
-    else if(absEdgePct >= 1.5) u = '1u';
-    return u ? `<span class="play-badge">${u}</span>` : '<span class="play-none">\u2014</span>';
+  // OFFICIAL/LEAN status pills for the Edge Board, same visual language as
+  // the TD Props tab's STATUS column. Spread and total reuse the EXACT
+  // thresholds already established and tested in the Matchup Projector
+  // modal's spreadVerdict()/totalVerdict() (3pt / 1.5pt) -- not new numbers
+  // invented for this table. Moneyline didn't have a verdict system before
+  // this; its thresholds reuse the old playBadge() unit-sizing boundaries
+  // (5% / 1.5% EV) that were already live here, just relabeled instead of
+  // introducing fresh, uncalibrated numbers.
+  function spreadStatus(edge){
+    if(edge == null) return '<span class="status-none">\u2014</span>';
+    const abs = Math.abs(edge);
+    if(abs >= 3) return '<span class="status-pill status-official">OFFICIAL</span>';
+    if(abs >= 1.5) return '<span class="status-pill status-lean">LEAN</span>';
+    return '<span class="status-none">\u2014</span>';
+  }
+  function totalStatus(edge){
+    // Total is explicitly market-anchored and low-confidence (see the
+    // caveat banner) -- never OFFICIAL, only ever a soft LEAN at most.
+    if(edge == null) return '<span class="status-none">\u2014</span>';
+    if(Math.abs(edge) >= 1.5) return '<span class="status-pill status-lean">LEAN</span>';
+    return '<span class="status-none">\u2014</span>';
+  }
+  function moneylineStatus(ev){
+    if(ev == null) return '<span class="status-none">\u2014</span>';
+    if(ev >= 0.05) return '<span class="status-pill status-official">OFFICIAL</span>';
+    if(ev >= 0.015) return '<span class="status-pill status-lean">LEAN</span>';
+    return '<span class="status-none">\u2014</span>';
   }
 
   let generatedAt = null;
@@ -614,7 +622,7 @@
 
       if(currentMarket === 'spread'){
         head.className = 'board-head grid-lines';
-        head.innerHTML = `<div>MATCHUP</div><div class="col-r">MARKET</div><div class="col-r">MODEL</div><div class="col-r">EDGE</div><div class="col-r col-hide">WIN%</div><div class="col-c">PLAY</div>`;
+        head.innerHTML = `<div>MATCHUP</div><div class="col-r">MARKET</div><div class="col-r">MODEL</div><div class="col-r">EDGE</div><div class="col-r col-hide">WIN%</div><div class="col-c">STATUS</div>`;
         const sorted = [...games].sort((a,b)=>Math.abs(b.edges.spread_edge)-Math.abs(a.edges.spread_edge));
         body.innerHTML = sorted.map(g => {
           const e = g.edges.spread_edge;
@@ -626,13 +634,13 @@
             <div class="cell-model col-r">${fmtSign1(g.model.pred_home_margin)}</div>
             <div class="cell-edge col-r ${edgeClass(e)}">${fmtSign1(e)}</div>
             <div class="cell-num col-r col-hide">${(g.model.home_win_prob*100).toFixed(1)}%</div>
-            <div class="col-c">${playBadge(Math.abs(e)>=3?5.5:Math.abs(e)>=1.5?3.2:Math.abs(e)>=0.8?1.8:null)}</div>
+            <div class="col-c">${spreadStatus(e)}</div>
           </div>`;
         }).join('');
-        footnote.textContent = 'Edge in points (model spread minus market spread). PLAY sizing is illustrative only.';
+        footnote.textContent = 'Edge in points (model spread minus market spread). OFFICIAL clears our 3-point threshold; LEAN clears 1.5.';
       } else if(currentMarket === 'total'){
         head.className = 'board-head grid-lines';
-        head.innerHTML = `<div>MATCHUP</div><div class="col-r">MARKET</div><div class="col-r">MODEL</div><div class="col-r">EDGE</div><div class="col-r col-hide">SRC</div><div class="col-c">PLAY</div>`;
+        head.innerHTML = `<div>MATCHUP</div><div class="col-r">MARKET</div><div class="col-r">MODEL</div><div class="col-r">EDGE</div><div class="col-r col-hide">SRC</div><div class="col-c">STATUS</div>`;
         const sorted = [...games].sort((a,b)=>Math.abs(b.edges.total_edge)-Math.abs(a.edges.total_edge));
         body.innerHTML = sorted.map(g => {
           const e = g.edges.total_edge;
@@ -644,13 +652,13 @@
             <div class="cell-model col-r">${g.model.pred_total.toFixed(1)}</div>
             <div class="cell-edge col-r ${edgeClass(e)}">${fmtSign1(e)}</div>
             <div class="cell-num col-r col-hide">${g.market_source==='live'?'LIVE':'SCHED'}</div>
-            <div class="col-c">${playBadge(null)}</div>
+            <div class="col-c">${totalStatus(e)}</div>
           </div>`;
         }).join('');
-        footnote.textContent = 'Total is market-anchored with a heavily-regularized deviation model -- edges here are intentionally small and low-confidence (see caveat above). No PLAY sizing shown for totals.';
+        footnote.textContent = 'Total is market-anchored with a heavily-regularized deviation model -- edges here are intentionally small and low-confidence (see caveat above). Never OFFICIAL for totals, LEAN at most.';
       } else {
         head.className = 'board-head grid-lines';
-        head.innerHTML = `<div>MATCHUP</div><div class="col-r">MARKET ML</div><div class="col-r">MODEL WIN%</div><div class="col-r">EV/u</div><div class="col-r col-hide">IMPL</div><div class="col-c">PLAY</div>`;
+        head.innerHTML = `<div>MATCHUP</div><div class="col-r">MARKET ML</div><div class="col-r">MODEL WIN%</div><div class="col-r">EV/u</div><div class="col-r col-hide">IMPL</div><div class="col-c">STATUS</div>`;
         const sorted = [...games].sort((a,b)=>(b.edges.home_moneyline_ev||-1)-(a.edges.home_moneyline_ev||-1));
         body.innerHTML = sorted.map(g => {
           const ev = g.edges.home_moneyline_ev;
@@ -662,10 +670,10 @@
             <div class="cell-model col-r">${(g.model.home_win_prob*100).toFixed(1)}%</div>
             <div class="cell-edge col-r ${edgeClass(ev)}">${ev!=null?fmtSigned(ev):'\u2014'}</div>
             <div class="cell-num col-r col-hide">${g.market.home_implied_prob!=null?(g.market.home_implied_prob*100).toFixed(1)+'%':'\u2014'}</div>
-            <div class="col-c">${playBadge(ev!=null?ev*100:null)}</div>
+            <div class="col-c">${moneylineStatus(ev)}</div>
           </div>`;
         }).join('');
-        footnote.textContent = 'EV/u = expected profit per $1 staked on the home side at the market moneyline, using the model win probability.';
+        footnote.textContent = 'EV/u = expected profit per $1 staked on the home side at the market moneyline, using the model win probability. OFFICIAL clears 5% EV; LEAN clears 1.5%. Only the home side\'s EV is computed here -- a low home EV does not by itself mean the away side is +EV.';
       }
     }
     renderLines();
@@ -710,16 +718,16 @@
       }
 
       // Verdict thresholds are the SAME real thresholds already used
-      // elsewhere on this dashboard (see playBadge()) -- 1.5 / 3.0 points
-      // for spread -- not new/invented numbers for this view.
+      // elsewhere on this dashboard (see spreadStatus() on the Edge Board)
+      // -- 1.5 / 3.0 points for spread -- not new/invented numbers here.
       function spreadVerdict(){
         const e = g.edges.spread_edge;
         if(e == null) return {tier:'none', text:'No live market price for this game yet.'};
         const side = e >= 0 ? g.home_team : g.away_team;
         const abs = Math.abs(e);
-        if(abs >= 3) return {tier:'play', tag:'PLAY', text:`${side} to cover \u2014 edge of ${fmtSign1(e)} pts clears our 3-point threshold.`};
+        if(abs >= 3) return {tier:'play', tag:'OFFICIAL', text:`${side} to cover \u2014 edge of ${fmtSign1(e)} pts clears our 3-point threshold.`};
         if(abs >= 1.5) return {tier:'lean', tag:'LEAN', text:`${side} to cover \u2014 edge of ${fmtSign1(e)} pts clears our 1.5-point floor.`};
-        return {tier:'none', tag:'NO PLAY', text:`Edge of ${fmtSign1(e)} pts is under our 1.5-point floor.`};
+        return {tier:'none', text:`Edge of ${fmtSign1(e)} pts is under our 1.5-point floor.`};
       }
 
       // Total is explicitly market-anchored and low-confidence (see the
@@ -732,18 +740,36 @@
         const dir = e >= 0 ? 'OVER' : 'UNDER';
         const abs = Math.abs(e);
         if(abs >= 1.5) return {tier:'lean', tag:`LEAN ${dir}`, text:`Total model is market-anchored and low-confidence \u2014 treat this as a soft lean, not a play.`};
-        return {tier:'none', tag:'NO LEAN', text:`Edge of ${fmtSign1(e)} pts is negligible, and the total model is low-confidence regardless.`};
+        return {tier:'none', text:`Edge of ${fmtSign1(e)} pts is negligible, and the total model is low-confidence regardless.`};
       }
 
-      function edgeRow(label, marketField, oursField, edgeVal, verdict){
-        const tagClass = verdict.tier === 'play' ? 'verdict-play' : verdict.tier === 'lean' ? 'verdict-lean' : 'verdict-none';
-        const tagText = verdict.tag || (verdict.tier === 'none' ? 'NO PLAY' : '');
+      // Moneyline didn't have its own verdict in this modal before -- only
+      // home_moneyline_ev is computed (see generate_predictions.py), so
+      // this is specifically about whether HOME's price is worth betting,
+      // not a two-sided signal the way spread/total are. A low/negative
+      // home EV does NOT by itself mean the away side is +EV (both sides
+      // of a well-priced market are commonly slightly -EV due to the
+      // book's own margin) -- said explicitly rather than implied.
+      // Thresholds reuse the same 5%/1.5% EV boundaries already used in
+      // the Edge Board's moneylineStatus(), not fresh numbers for this view.
+      function moneylineVerdict(){
+        const ev = g.edges.home_moneyline_ev;
+        if(ev == null) return {tier:'none', text:'No live moneyline price for this game yet.'};
+        if(ev >= 0.05) return {tier:'play', tag:'OFFICIAL', text:`${g.home_team} ML \u2014 EV of ${fmtSigned(ev)} per $1 clears our 5% threshold.`};
+        if(ev >= 0.015) return {tier:'lean', tag:'LEAN', text:`${g.home_team} ML \u2014 EV of ${fmtSigned(ev)} per $1 clears our 1.5% floor.`};
+        return {tier:'none', text:`${g.home_team} ML's EV of ${fmtSigned(ev)} is under our 1.5% floor \u2014 the away side's EV isn't separately computed here.`};
+      }
+
+      function edgeRow(label, marketField, oursField, edgeVal, verdict, fmtEdge){
+        fmtEdge = fmtEdge || fmtSign1;
+        const tagClass = verdict.tier === 'play' ? 'status-official' : verdict.tier === 'lean' ? 'status-lean' : '';
+        const tagText = verdict.tag || '';
         return `<div class="edge-row">
           <div class="edge-row-label">${label}</div>
           <div class="edge-row-field"><span class="edge-row-field-label">MARKET</span><span class="edge-row-field-value">${marketField}</span></div>
           <div class="edge-row-field"><span class="edge-row-field-label">OURS</span><span class="edge-row-field-value">${oursField}</span></div>
-          <div class="edge-row-field edge-row-edge"><span class="edge-row-field-label">EDGE</span><span class="edge-row-edge-value ${edgeClass(edgeVal)}">${edgeVal!=null?fmtSign1(edgeVal):'\u2014'}</span></div>
-          <div class="edge-verdict">${tagText?`<span class="verdict-tag ${tagClass}">${tagText}</span>`:''}<span>${verdict.text}</span></div>
+          <div class="edge-row-field edge-row-edge"><span class="edge-row-field-label">EDGE</span><span class="edge-row-edge-value ${edgeClass(edgeVal)}">${edgeVal!=null?fmtEdge(edgeVal):'\u2014'}</span></div>
+          <div class="edge-verdict">${tagText?`<span class="status-pill ${tagClass}">${tagText}</span>`:''}<span>${verdict.text}</span></div>
         </div>`;
       }
 
@@ -757,7 +783,8 @@
       // display it was papering over.
       document.getElementById('proj-edge-compare').innerHTML =
         edgeRow('SPREAD', spreadAsTeam(g.market.spread_line), spreadAsTeam(g.model.pred_home_margin), g.edges.spread_edge, spreadVerdict()) +
-        edgeRow('TOTAL', g.market.total_line!=null?g.market.total_line.toFixed(1):'\u2014', g.model.pred_total.toFixed(1), g.edges.total_edge, totalVerdict());
+        edgeRow('TOTAL', g.market.total_line!=null?g.market.total_line.toFixed(1):'\u2014', g.model.pred_total.toFixed(1), g.edges.total_edge, totalVerdict()) +
+        edgeRow('MONEYLINE', fmtOdds(g.market.home_moneyline), fmtOdds(g.model.home_fair_moneyline), g.edges.home_moneyline_ev, moneylineVerdict(), fmtSigned);
 
       // Histogram: real probability mass per bin, shaded where home covers the market spread.
       const dist = p.distribution;

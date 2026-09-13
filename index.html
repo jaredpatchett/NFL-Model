@@ -135,15 +135,14 @@
   }
   .play-none{background:transparent;color:var(--text-faint);font-family:'IBM Plex Mono',monospace;font-size:12px;}
 
-  .qual-tier{
-    display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;
-    border-radius:6px;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;cursor:default;
+  .status-pill{
+    display:inline-flex;align-items:center;justify-content:center;padding:3px 9px;min-width:60px;
+    border-radius:6px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:700;
+    letter-spacing:.04em;cursor:default;
   }
-  .qual-A{background:rgba(0,255,156,.16);color:var(--green);box-shadow:0 0 10px rgba(0,255,156,.3);}
-  .qual-B{background:rgba(76,141,255,.16);color:var(--blue);}
-  .qual-C{background:rgba(255,201,60,.16);color:var(--amber);}
-  .qual-D{background:rgba(255,51,85,.14);color:var(--red);}
-  .qual-U{background:var(--panel-3);color:var(--text-faint);}
+  .status-official{background:rgba(0,255,156,.16);color:var(--green);box-shadow:0 0 10px rgba(0,255,156,.3);}
+  .status-degen{background:rgba(255,201,60,.16);color:var(--amber);}
+  .status-none{color:var(--text-faint2);font-family:'IBM Plex Mono',monospace;font-size:12px;}
   .board-footnote{padding:10px 16px 4px;font-size:10px;color:var(--text-faint2);font-family:'IBM Plex Mono',monospace;}
 
   .grid-lines{grid-template-columns:1.5fr 90px 90px 76px 60px 52px;}
@@ -404,10 +403,10 @@
         <div>PLAYER</div><div class="col-hide">MATCHUP</div><div class="col-r col-hide">MU</div><div class="col-r">MODEL</div>
         <div class="col-r col-hide">MODEL&nbsp;ODDS</div>
         <div class="col-r">BEST&nbsp;PRICE</div><div class="col-r col-hide">BOOK&nbsp;%</div>
-        <div class="col-r">RAW&nbsp;EDGE</div><div class="col-r col-hide">IMP&nbsp;TOT</div><div class="col-c">TIER</div>
+        <div class="col-r">RAW&nbsp;EDGE</div><div class="col-r col-hide">IMP&nbsp;TOT</div><div class="col-c">STATUS</div>
       </div>
       <div id="props-body"></div>
-      <div class="board-footnote">MODEL = model's own probability of scoring anytime. MODEL ODDS = that probability expressed as fair American odds, for a quick side-by-side against BEST PRICE (the actual sportsbook line) — informational only, edge/EV are computed from the real probability, not this conversion. BOOK % = BEST PRICE converted back to an implied probability. RAW EDGE = MODEL minus BOOK % — the full model's disagreement with the market. IMP TOT = Vegas-implied point total for this player's team in this game, real market data set before kickoff, not a trailing stat. MU = opponent's position-specific TD-rate-allowed vs league average (real play-by-play, not points allowed) — 1.00 = league average, informational only, not yet a hard qualifier. TIER is the blueprint's own qualification screen (snap share, red-zone role, edge/EV thresholds, regression check) — hover a badge for the reason codes. "U" = unrated (no live price to evaluate edge/EV against yet).</div>
+      <div class="board-footnote">MODEL = model's own probability of scoring anytime. MODEL ODDS = that probability expressed as fair American odds, for a quick side-by-side against BEST PRICE (the actual sportsbook line) — informational only, edge/EV are computed from the real probability, not this conversion. BOOK % = BEST PRICE converted back to an implied probability. RAW EDGE = MODEL minus BOOK % — the full model's disagreement with the market. IMP TOT = Vegas-implied point total for this player's team in this game, real market data set before kickoff, not a trailing stat. MU = opponent's position-specific TD-rate-allowed vs league average (real play-by-play, not points allowed) — 1.00 = league average, informational only, not yet a hard qualifier. STATUS: OFFICIAL clears every blueprint check (snap share, red-zone role, regression-risk, and edge/EV thresholds) — the fully disciplined plays. DEGEN means the model still shows real positive edge but something in that screen said no — real value, not a clean bet; hover for exactly why. No pill at all means neither: no real edge either way.</div>
     </div>
   </div>
 
@@ -855,7 +854,22 @@
       document.getElementById('props-body').innerHTML = rows.map(p => {
         const m = p.market;
         const q = p.qualification;
-        const tooltip = q.reason_codes.length ? q.reason_codes.join(' \\u00B7 ') : 'Clears all blueprint checks';
+        // OFFICIAL = clears the full blueprint qualification screen (same
+        // meaning as the old Tier A/B). DEGEN = does NOT clear it, but the
+        // model still shows real positive edge against the market -- real
+        // value the discipline screen rejected, not nothing. Everyone else
+        // (no live price, or no real edge either way) gets no status pill --
+        // there's nothing notable to flag either way.
+        let statusHTML;
+        if(q.qualifies){
+          const tooltip = q.reason_codes.length ? q.reason_codes.join(' \u00B7 ') : 'Clears every blueprint check';
+          statusHTML = `<span class="status-pill status-official" title="${tooltip}">OFFICIAL</span>`;
+        } else if(m && m.edge > 0){
+          const tooltip = `Model sees real edge, but didn't clear the qualification screen: ${q.reason_codes.join(' \u00B7 ')}`;
+          statusHTML = `<span class="status-pill status-degen" title="${tooltip}">DEGEN</span>`;
+        } else {
+          statusHTML = `<span class="status-none">\u2014</span>`;
+        }
         const mu = p.usage.matchup_rating;
         const muColor = mu==null ? 'var(--text-faint)' : (mu>=1.10 ? 'var(--green)' : mu<0.90 ? 'var(--red)' : 'var(--text-dim)');
         return `<div class="board-row grid-props">
@@ -870,7 +884,7 @@
           <div class="cell-num col-r col-hide">${m?fmtPct(m.implied_prob):'\u2014'}</div>
           <div class="cell-edge col-r ${m?edgeClass(m.edge):'edge-flat'}">${m?fmtSigned(m.edge):'\u2014'}</div>
           <div class="cell-num col-r col-hide">${p.team_implied_total!=null?p.team_implied_total.toFixed(1):'\u2014'}</div>
-          <div class="col-c"><span class="qual-tier qual-${q.tier}" title="${tooltip}">${q.tier}</span></div>
+          <div class="col-c">${statusHTML}</div>
         </div>`;
       }).join('');
     }

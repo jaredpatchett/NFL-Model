@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-14T21:48:01.698113+00:00",
+  "generated_at": "2026-09-14T22:00:54.735120+00:00",
   "season": 2026,
   "week": 1,
   "model_notes": {
@@ -3267,7 +3267,7 @@
       "market_source": "live",
       "model": {
         "pred_home_margin": -0.65,
-        "pred_total": 42.66,
+        "pred_total": 42.68,
         "home_win_prob": 0.4803,
         "home_fair_moneyline": 108.2
       },
@@ -3281,7 +3281,7 @@
       },
       "edges": {
         "spread_edge": -3.15,
-        "total_edge": -0.84,
+        "total_edge": -0.82,
         "moneyline_edge": -0.0811,
         "home_moneyline_ev": -0.1445
       },
@@ -3313,7 +3313,7 @@
           },
           {
             "bin_start": -39,
-            "prob": 0.00184
+            "prob": 0.00183
           },
           {
             "bin_start": -36,
@@ -3341,11 +3341,11 @@
           },
           {
             "bin_start": -18,
-            "prob": 0.04409
+            "prob": 0.04408
           },
           {
             "bin_start": -15,
-            "prob": 0.05646
+            "prob": 0.05645
           },
           {
             "bin_start": -12,
@@ -3381,7 +3381,7 @@
           },
           {
             "bin_start": 12,
-            "prob": 0.05103
+            "prob": 0.05104
           },
           {
             "bin_start": 15,
@@ -3472,7 +3472,7 @@
         ],
         "situational_flags": [
           "Division game",
-          "High wind (20 mph)"
+          "High wind (19 mph)"
         ]
       }
     }

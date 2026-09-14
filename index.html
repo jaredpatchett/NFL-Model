@@ -139,7 +139,13 @@
   .status-none{color:var(--text-faint2);font-family:'IBM Plex Mono',monospace;font-size:12px;}
   .board-footnote{padding:10px 16px 4px;font-size:10px;color:var(--text-faint2);font-family:'IBM Plex Mono',monospace;}
 
-  .grid-lines{grid-template-columns:1.5fr 90px 90px 76px 60px 52px;}
+  .grid-lines{grid-template-columns:1.5fr 90px 90px 76px 60px 52px 44px;}
+  .track-btn{
+    display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;
+    border-radius:6px;background:var(--panel-3);border:1px solid var(--line-2);color:var(--text-dim);
+    font-size:15px;font-weight:700;cursor:pointer;line-height:1;
+  }
+  .track-btn:hover{border-color:var(--blue);color:var(--blue);}
   .grid-props{grid-template-columns:1.5fr 1fr 60px 70px 70px 88px 66px 66px 70px 52px;}
 
   .pr-table{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;}
@@ -296,7 +302,7 @@
 
   @media (max-width:860px){
     .stat-strip{grid-template-columns:repeat(3,1fr);}
-    .grid-lines{grid-template-columns:1.3fr 76px 76px 52px;}
+    .grid-lines{grid-template-columns:1.1fr 60px 60px 50px 60px 36px;}
     .grid-props{grid-template-columns:1.3fr 60px 76px 60px 52px;}
     .col-hide{display:none;}
     .pr-head,.pr-row{grid-template-columns:28px 1.3fr 60px 70px;}
@@ -622,7 +628,7 @@
 
       if(currentMarket === 'spread'){
         head.className = 'board-head grid-lines';
-        head.innerHTML = `<div>MATCHUP</div><div class="col-r">MARKET</div><div class="col-r">MODEL</div><div class="col-r">EDGE</div><div class="col-r col-hide">WIN%</div><div class="col-c">STATUS</div>`;
+        head.innerHTML = `<div>MATCHUP</div><div class="col-r">MARKET</div><div class="col-r">MODEL</div><div class="col-r">EDGE</div><div class="col-r col-hide">WIN%</div><div class="col-c">STATUS</div><div class="col-c"></div>`;
         const sorted = [...games].sort((a,b)=>Math.abs(b.edges.spread_edge)-Math.abs(a.edges.spread_edge));
         body.innerHTML = sorted.map(g => {
           const e = g.edges.spread_edge;
@@ -635,12 +641,13 @@
             <div class="cell-edge col-r ${edgeClass(e)}">${fmtSign1(e)}</div>
             <div class="cell-num col-r col-hide">${(g.model.home_win_prob*100).toFixed(1)}%</div>
             <div class="col-c">${spreadStatus(e)}</div>
+            <div class="col-c"><button class="track-btn" title="Add to tracker" data-action="add-to-tracker" data-game-id="${g.game_id}" data-market="spread">+</button></div>
           </div>`;
         }).join('');
         footnote.textContent = 'Edge in points (model spread minus market spread). OFFICIAL clears our 3-point threshold; LEAN clears 1.5.';
       } else if(currentMarket === 'total'){
         head.className = 'board-head grid-lines';
-        head.innerHTML = `<div>MATCHUP</div><div class="col-r">MARKET</div><div class="col-r">MODEL</div><div class="col-r">EDGE</div><div class="col-r col-hide">SRC</div><div class="col-c">STATUS</div>`;
+        head.innerHTML = `<div>MATCHUP</div><div class="col-r">MARKET</div><div class="col-r">MODEL</div><div class="col-r">EDGE</div><div class="col-r col-hide">SRC</div><div class="col-c">STATUS</div><div class="col-c"></div>`;
         const sorted = [...games].sort((a,b)=>Math.abs(b.edges.total_edge)-Math.abs(a.edges.total_edge));
         body.innerHTML = sorted.map(g => {
           const e = g.edges.total_edge;
@@ -653,12 +660,13 @@
             <div class="cell-edge col-r ${edgeClass(e)}">${fmtSign1(e)}</div>
             <div class="cell-num col-r col-hide">${g.market_source==='live'?'LIVE':'SCHED'}</div>
             <div class="col-c">${totalStatus(e)}</div>
+            <div class="col-c"><button class="track-btn" title="Add to tracker" data-action="add-to-tracker" data-game-id="${g.game_id}" data-market="total">+</button></div>
           </div>`;
         }).join('');
         footnote.textContent = 'Total is market-anchored with a heavily-regularized deviation model -- edges here are intentionally small and low-confidence (see caveat above). Never OFFICIAL for totals, LEAN at most.';
       } else {
         head.className = 'board-head grid-lines';
-        head.innerHTML = `<div>MATCHUP</div><div class="col-r">MARKET ML</div><div class="col-r">MODEL WIN%</div><div class="col-r">EV/u</div><div class="col-r col-hide">IMPL</div><div class="col-c">STATUS</div>`;
+        head.innerHTML = `<div>MATCHUP</div><div class="col-r">MARKET ML</div><div class="col-r">MODEL WIN%</div><div class="col-r">EV/u</div><div class="col-r col-hide">IMPL</div><div class="col-c">STATUS</div><div class="col-c"></div>`;
         const sorted = [...games].sort((a,b)=>(b.edges.home_moneyline_ev||-1)-(a.edges.home_moneyline_ev||-1));
         body.innerHTML = sorted.map(g => {
           const ev = g.edges.home_moneyline_ev;
@@ -671,6 +679,7 @@
             <div class="cell-edge col-r ${edgeClass(ev)}">${ev!=null?fmtSigned(ev):'\u2014'}</div>
             <div class="cell-num col-r col-hide">${g.market.home_implied_prob!=null?(g.market.home_implied_prob*100).toFixed(1)+'%':'\u2014'}</div>
             <div class="col-c">${moneylineStatus(ev)}</div>
+            <div class="col-c"><button class="track-btn" title="Add to tracker" data-action="add-to-tracker" data-game-id="${g.game_id}" data-market="moneyline">+</button></div>
           </div>`;
         }).join('');
         footnote.textContent = 'EV/u = expected profit per $1 staked on the home side at the market moneyline, using the model win probability. OFFICIAL clears 5% EV; LEAN clears 1.5%. Only the home side\'s EV is computed here -- a low home EV does not by itself mean the away side is +EV.';
@@ -683,10 +692,55 @@
     const modal = document.getElementById('projector-modal');
 
     document.getElementById('lines-body').addEventListener('click', (e) => {
+      const trackBtn = e.target.closest('[data-action="add-to-tracker"]');
+      if(trackBtn){
+        e.stopPropagation();  // don't also open the Matchup Projector modal
+        addLineToTracker(gamesById[trackBtn.dataset.gameId], trackBtn.dataset.market);
+        return;
+      }
       const row = e.target.closest('.board-row[data-game-id]');
       if(!row) return;
       openProjector(gamesById[row.dataset.gameId]);
     });
+
+    // Pre-fills the Bet Tracker's own form (see the tracker module below)
+    // from a real Edge Board row -- game/side/odds computed directly from
+    // the same data already shown in that row, not re-derived separately.
+    // Stops short of adding the bet outright: switches to the Tracker tab
+    // and fills the form, but leaves the actual "+ Add Bet" click to the
+    // user, so stake is always a deliberate choice, never silently defaulted.
+    function addLineToTracker(g, market){
+      const gameLabel = `${g.away_team} @ ${g.home_team}`;
+      let marketLabel, side, odds;
+
+      if(market === 'spread'){
+        marketLabel = 'Spread';
+        const homeSpread = -g.market.spread_line;  // positive=home-favored convention -> home's own displayed number
+        if(g.edges.spread_edge >= 0){
+          side = `${g.home_team} ${fmtSign1(homeSpread)}`;
+        } else {
+          side = `${g.away_team} ${fmtSign1(-homeSpread)}`;
+        }
+        odds = g.market.spread_price != null ? g.market.spread_price : -110;  // -110 standard vig default, same assumption backtest.py already makes for spreads
+      } else if(market === 'total'){
+        marketLabel = 'Total';
+        side = g.edges.total_edge >= 0 ? `Over ${g.market.total_line.toFixed(1)}` : `Under ${g.market.total_line.toFixed(1)}`;
+        odds = -110;  // total side prices aren't individually tracked in this data -- same -110 default backtest.py assumes
+      } else {
+        marketLabel = 'Moneyline';
+        side = `${g.home_team} ML`;  // our moneyline edge/verdict is specifically about the home side -- see moneylineVerdict()
+        odds = g.market.home_moneyline;
+      }
+
+      document.getElementById('tf-game').value = gameLabel;
+      document.getElementById('tf-market').value = marketLabel;
+      document.getElementById('tf-side').value = side;
+      document.getElementById('tf-odds').value = odds != null ? String(odds) : '';
+      document.getElementById('tf-stake').value = '';
+
+      document.querySelector('[data-view="tracker"]').click();  // reuses the existing tab-switch handler
+      document.getElementById('tf-stake').focus();
+    }
     document.getElementById('modal-close').addEventListener('click', () => modal.classList.remove('open'));
     modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.remove('open'); });
     document.addEventListener('keydown', (e) => { if(e.key === 'Escape') modal.classList.remove('open'); });

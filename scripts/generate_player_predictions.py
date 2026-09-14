@@ -95,9 +95,20 @@ def find_upcoming_week(sched: pd.DataFrame) -> tuple[int, int] | None:
 
 def load_id_crosswalk_names() -> pd.DataFrame:
     """player_id -> merge_name (normalized full name), for matching against
-    The Odds API's free-text player names. See module docstring."""
+    The Odds API's free-text player names. See module docstring.
+
+    CONFIRMED REAL BUG (Week 1 2026, second instance -- see
+    player_td_features.py's xwalk_teams fix for the first one, same root
+    cause): load_id_crosswalk() only deduplicates by pfr_id, not by the
+    actual player identity. This function's merge onto `upcoming` later in
+    main() was fanning candidate rows out into duplicates the SAME way
+    xwalk_teams was, just in this file instead of player_td_features.py --
+    missed the first time because it's a separate function in a separate
+    file. Deduplicating here, at the source, same fix pattern as before.
+    """
     xwalk = load_id_crosswalk()
-    return xwalk[["gsis_id", "merge_name"]].rename(columns={"gsis_id": "player_id"}).dropna()
+    names = xwalk[["gsis_id", "merge_name"]].rename(columns={"gsis_id": "player_id"}).dropna()
+    return names.drop_duplicates(subset=["player_id"], keep="first")
 
 
 def _resolve_odds_player_ids(live_props: pd.DataFrame | None, xwalk_names: pd.DataFrame) -> set[str]:
@@ -240,9 +251,29 @@ def main():
         np.where(upcoming["manual_price"].notna(), "manual", None),
     )
 
+    # ---- FINAL GUARANTEE, not a targeted patch: no matter which upstream
+    # step is responsible (two separate instances of the same crosswalk-
+    # duplication bug have now been found and fixed in two different
+    # files -- see load_id_crosswalk_names() and player_td_features.py's
+    # xwalk_teams fix), the output the user actually sees must never have
+    # more than one row per player. This is deliberately the LAST possible
+    # place this could happen, after every merge in this function. Highest
+    # model_prob wins the tiebreak -- deterministic, and after both real
+    # fixes above, duplicates reaching this point should be rare or zero;
+    # if they aren't, the printed count below is the signal something else
+    # upstream still needs to be found, not a silent catch.
+    before_dedup = len(upcoming)
+    upcoming = upcoming.sort_values("model_prob", ascending=False).drop_duplicates(subset=["player_id"], keep="first")
+    if before_dedup != len(upcoming):
+        print(f"WARNING: caught {before_dedup - len(upcoming)} duplicate player_id row(s) at the "
+              f"final output stage that shouldn't have existed after the upstream fixes -- this "
+              f"means there's still an unidentified duplication source somewhere in the pipeline. "
+              f"Output is safe (one row per player, highest model_prob kept), but this is worth "
+              f"investigating, not just relying on this catch every run.")
+
     # ---- Build output ----
     players = []
-    for _, r in upcoming.sort_values("model_prob", ascending=False).iterrows():
+    for _, r in upcoming.iterrows():
         price = r.get("final_price")
         market = None
         if pd.notna(price):

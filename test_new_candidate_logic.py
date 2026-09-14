@@ -20,12 +20,13 @@ import numpy as np
 # ============================================================================
 
 def _apply_position_fallback(asof: pd.DataFrame, xwalk: pd.DataFrame) -> pd.DataFrame:
-    xwalk_pos = xwalk[["gsis_id", "position"]].rename(
-        columns={"gsis_id": "player_id", "position": "crosswalk_position"}
+    xwalk_lookup = xwalk[["gsis_id", "position", "name"]].rename(
+        columns={"gsis_id": "player_id", "position": "crosswalk_position", "name": "crosswalk_name"}
     ).drop_duplicates(subset=["player_id"])
-    asof = asof.merge(xwalk_pos, on="player_id", how="left")
+    asof = asof.merge(xwalk_lookup, on="player_id", how="left")
     asof["position"] = asof["position"].where(asof["position"].notna(), asof["crosswalk_position"])
-    asof = asof.drop(columns=["crosswalk_position"])
+    asof["player_name"] = asof["player_name"].where(asof["player_name"].notna(), asof["crosswalk_name"])
+    asof = asof.drop(columns=["crosswalk_position", "crosswalk_name"])
 
     still_missing = asof[asof["position"].isna()]["player_id"].unique()
     if len(still_missing):
@@ -44,7 +45,8 @@ def verify_verbatim_match():
     # Check a distinctive, multi-line chunk of the real function is present verbatim.
     chunk = (
         'asof["position"] = asof["position"].where(asof["position"].notna(), asof["crosswalk_position"])\n'
-        '    asof = asof.drop(columns=["crosswalk_position"])'
+        '    asof["player_name"] = asof["player_name"].where(asof["player_name"].notna(), asof["crosswalk_name"])\n'
+        '    asof = asof.drop(columns=["crosswalk_position", "crosswalk_name"])'
     )
     return chunk in real_content
 
@@ -111,10 +113,12 @@ def main():
     asof = pd.DataFrame({
         "player_id": ["A", "B", "C"],
         "position": ["RB", None, None],
+        "player_name": ["A.Player", "B.Player", "C.Player"],
     })
     xwalk = pd.DataFrame({
         "gsis_id": ["A", "B", "C"],
         "position": ["RB", "WR", None],
+        "name": ["A Player", "B Player", None],
     })
     result = _apply_position_fallback(asof, xwalk)
     checks.append(("Player A: normal weekly position untouched", result.loc[result.player_id=="A", "position"].iloc[0], "RB"))

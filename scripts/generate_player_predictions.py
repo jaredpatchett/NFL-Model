@@ -13,6 +13,18 @@ returns full names ("Saquon Barkley"). Matched via the ID crosswalk's
 normalization applied to the Odds API's player names -- NOT via player_name
 directly, which would never match.
 
+ODDS FETCHED BEFORE THE CANDIDATE POOL IS BUILT (changed after a real Week 1
+gap was found -- see player_td_features.py's module docstring): live odds
+used to be fetched AFTER build_player_td_table() had already finalized the
+candidate list, purely to price players already in it. That meant a real,
+established player with a live sportsbook price (e.g. Jahmyr Gibbs, Derrick
+Henry) who happened to fall through a gap in the usage-based candidate
+heuristic was invisible to the ENTIRE rest of the pipeline -- there was no
+odds-driven path back in. Odds are now fetched first, resolved to player_ids,
+and passed into build_player_td_table() as additional_candidate_ids, so a
+real live price is its own, independent path to being considered -- not
+contingent on our own usage heuristic being bug-free.
+
 QUALIFICATION / TIER: `tier` (and the new `qualification` block) come from
 blueprint_qualification.py, which implements the eligibility screen and
 A/B/C/D framework from the user's uploaded blueprint PDF -- snap share,
@@ -88,6 +100,22 @@ def load_id_crosswalk_names() -> pd.DataFrame:
     return xwalk[["gsis_id", "merge_name"]].rename(columns={"gsis_id": "player_id"}).dropna()
 
 
+def _resolve_odds_player_ids(live_props: pd.DataFrame | None, xwalk_names: pd.DataFrame) -> set[str]:
+    """
+    Turns the raw live-odds player list into a set of real player_ids, via
+    the SAME merge_name matching already used for the final odds-to-
+    candidate merge later in main() -- not a second, different matching
+    scheme. Returns an empty set (not None) when there are no live odds,
+    so callers don't need a separate None-check.
+    """
+    if live_props is None or live_props.empty:
+        return set()
+    matched = live_props.rename(columns={"player_name_norm": "merge_name"}).merge(
+        xwalk_names, on="merge_name", how="inner"
+    )
+    return set(matched["player_id"].dropna().unique())
+
+
 def main():
     sched = load_schedules(ALL_SEASONS)
     target = find_upcoming_week(sched)
@@ -97,8 +125,35 @@ def main():
     season, week = target
     print(f"Predicting: season={season} week={week}")
 
+    # ---- Live odds fetched FIRST -- see module docstring for why this
+    # moved ahead of build_player_td_table(). Reused later for the final
+    # price merge too, so this is the only place odds get fetched. ----
+    print("Fetching live odds (The Odds API)...")
+    live_games = odds_api.fetch_game_odds()
+    live_props = None
+    if live_games is not None:
+        this_week_sched = sched[(sched["season"] == season) & (sched["week"] == week)]
+        our_matchups = set(zip(this_week_sched["home_team"], this_week_sched["away_team"])) | \
+                       set(zip(this_week_sched["away_team"], this_week_sched["home_team"]))
+        relevant_events = live_games[
+            live_games.apply(lambda r: (r["home_team"], r["away_team"]) in our_matchups
+                              or (r["away_team"], r["home_team"]) in our_matchups, axis=1)
+        ]
+        print(f"  {len(relevant_events)} of {len(live_games)} live games match this week's schedule.")
+        live_props = odds_api.fetch_player_td_odds(relevant_events)
+    if live_props is not None:
+        print(f"  Got anytime-TD prices for {len(live_props)} player-lines.")
+    else:
+        print("  No live player-prop odds available -- candidate pool will be usage-based only.")
+
+    xwalk_names = load_id_crosswalk_names()
+    odds_candidate_ids = _resolve_odds_player_ids(live_props, xwalk_names)
+    print(f"  {len(odds_candidate_ids)} of those resolved to a real player_id via the ID crosswalk "
+          f"(these are eligible to be added as candidates even if the usage heuristic misses them).")
+
     print("Building player-week table (all available seasons)...")
-    full = build_player_td_table(ALL_SEASONS, upcoming_season=season, upcoming_week=week)
+    full = build_player_td_table(ALL_SEASONS, upcoming_season=season, upcoming_week=week,
+                                  additional_candidate_ids=odds_candidate_ids)
 
     # ---- Training set: real played rows only, with the real target merged in ----
     played_seasons = [
@@ -133,7 +188,8 @@ def main():
     missing = upcoming[FEATURE_COLS].isna().any(axis=1)
     if missing.any():
         print(f"Dropping {missing.sum()} candidates with incomplete trailing features "
-              f"(true rookies / insufficient prior-season usage):")
+              f"(true rookies / insufficient prior-season usage -- this now legitimately means "
+              f"'no real trailing history in either source', not a silent pipeline gap):")
         print(upcoming.loc[missing, ["player_name", "position", "posteam"]].to_string(index=False))
     upcoming = upcoming[~missing].reset_index(drop=True)
 
@@ -149,32 +205,14 @@ def main():
     # actually computed from.
     upcoming["model_fair_moneyline"] = upcoming["model_prob"].apply(prob_to_fair_moneyline)
 
-    # ---- Live odds: game odds first (for event_ids), then per-event player props ----
-    print("\nFetching live odds (The Odds API)...")
-    live_games = odds_api.fetch_game_odds()
-    live_props = None
-    if live_games is not None:
-        # Only need event_ids for games actually in our upcoming slate.
-        our_matchups = set(zip(upcoming["posteam"], upcoming["opponent"]))
-        relevant_events = live_games[
-            live_games.apply(lambda r: (r["home_team"], r["away_team"]) in our_matchups
-                              or (r["away_team"], r["home_team"]) in our_matchups, axis=1)
-        ]
-        print(f"  {len(relevant_events)} of {len(live_games)} live games match our upcoming slate.")
-        live_props = odds_api.fetch_player_td_odds(relevant_events)
-    if live_props is not None:
-        print(f"  Got anytime-TD prices for {len(live_props)} player-lines.")
-    else:
-        print("  No live player-prop odds available -- model-only output.")
-
-    # Name-matching join key: merge_name (normalized full name), NOT
-    # player_name (abbreviated "S.Barkley" -- would never match "Saquon Barkley").
-    xwalk_names = load_id_crosswalk_names()
+    # ---- Merge the ALREADY-FETCHED live odds onto final candidates (no
+    # second fetch -- live_props/xwalk_names came from earlier in this
+    # function) ----
     upcoming = upcoming.merge(xwalk_names, on="player_id", how="left")
     if live_props is not None:
-        live_props = live_props.rename(columns={"player_name_norm": "merge_name"})
+        live_props_renamed = live_props.rename(columns={"player_name_norm": "merge_name"})
         upcoming = upcoming.merge(
-            live_props[["merge_name", "live_anytime_td_price"]].drop_duplicates(subset=["merge_name"]),
+            live_props_renamed[["merge_name", "live_anytime_td_price"]].drop_duplicates(subset=["merge_name"]),
             on="merge_name", how="left",
         )
     else:
@@ -274,8 +312,10 @@ def main():
             f"{total_priced} of {len(upcoming)} players matched to a real anytime-TD price this run "
             f"({', '.join(source_bits)}; unmatched players show usage/model only, either no line "
             f"posted for that player or a name-matching miss). {blueprint_note} Candidate pool is "
-            f"last season's active players corrected for known offseason trades; true rookies and any "
-            f"very recent retirements the crosswalk hasn't caught are not included yet."
+            f"last season's active players corrected for known offseason trades, PLUS any player "
+            f"with a live anytime-TD price this week that the usage heuristic alone would have "
+            f"missed (see player_td_features.py). True rookies and any very recent retirements the "
+            f"crosswalk hasn't caught are still not included unless they have real trailing history."
         )
     else:
         caveat = (

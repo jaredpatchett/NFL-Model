@@ -173,37 +173,51 @@ def _load_weekly_resilient(seasons: list[int]) -> pd.DataFrame:
 def _apply_position_fallback(asof: pd.DataFrame, xwalk: pd.DataFrame) -> pd.DataFrame:
     """
     FIX for the confirmed Week 1 2026 gap (see _load_weekly_resilient()'s
-    docstring): `weekly` is the ONLY source of `position` before this
-    function ran, and a left-merge against a source with real coverage gaps
-    means real, active players can end up with position=NaN through no
-    fault of their own usage or the crosswalk's team-resolution step. The
-    position filter right after this (`asof["position"].isin(VALID_POSITIONS)`)
-    then silently drops them -- NaN.isin(...) is False, with no warning
-    printed anywhere. That silence is exactly how Gibbs/Henry/etc. went
-    unnoticed until a real week of outcomes was checked by hand.
+    docstring): `weekly` is the ONLY source of `position` AND `player_name`
+    before this function ran, and a left-merge against a source with real
+    coverage gaps means real, active players can end up with position=NaN
+    (and, confirmed separately in production, player_name=NaN too -- a raw
+    Python float('nan') for a string field serializes as a bare, unquoted
+    NaN token, which is valid JavaScript but not valid JSON; the dashboard
+    then displays the literal string "NaN" when it interpolates that real
+    NaN value into a template) through no fault of their own usage or the
+    crosswalk's team-resolution step. The position filter right after this
+    (`asof["position"].isin(VALID_POSITIONS)`) then silently drops the
+    position-less rows -- NaN.isin(...) is False, with no warning printed
+    anywhere. That silence is exactly how Gibbs/Henry/etc. went unnoticed
+    until a real week of outcomes was checked by hand; the name gap was
+    caught the same way, from a real screenshot of "NaN" rows in production.
 
-    Fix: fall back to the ID crosswalk's OWN `position` field (already
-    loaded elsewhere in this module for team correction -- not a new data
-    source, not a new API call) for any row where the weekly-sourced
-    position is missing. And instead of a silent drop, print exactly who
-    still has no position after BOTH sources are tried, so a gap like this
-    is visible the next time it happens rather than discovered a week later
-    from real game outcomes.
+    Fix: fall back to the ID crosswalk's OWN `position` and `name` fields
+    (already loaded elsewhere in this module for team correction -- not a
+    new data source, not a new API call) for any row where the weekly-
+    sourced value is missing. And instead of a silent drop, print exactly
+    who still has no position after BOTH sources are tried, so a gap like
+    this is visible the next time it happens rather than discovered a week
+    later from real game outcomes.
     """
-    xwalk_pos = xwalk[["gsis_id", "position"]].rename(
-        columns={"gsis_id": "player_id", "position": "crosswalk_position"}
+    xwalk_lookup = xwalk[["gsis_id", "position", "name"]].rename(
+        columns={"gsis_id": "player_id", "position": "crosswalk_position", "name": "crosswalk_name"}
     ).drop_duplicates(subset=["player_id"])
-    asof = asof.merge(xwalk_pos, on="player_id", how="left")
+    asof = asof.merge(xwalk_lookup, on="player_id", how="left")
     asof["position"] = asof["position"].where(asof["position"].notna(), asof["crosswalk_position"])
-    asof = asof.drop(columns=["crosswalk_position"])
+    asof["player_name"] = asof["player_name"].where(asof["player_name"].notna(), asof["crosswalk_name"])
+    asof = asof.drop(columns=["crosswalk_position", "crosswalk_name"])
 
-    still_missing = asof[asof["position"].isna()]["player_id"].unique()
-    if len(still_missing):
-        print(f"WARNING: {len(still_missing)} player_id(s) have no position from EITHER "
+    still_missing_pos = asof[asof["position"].isna()]["player_id"].unique()
+    if len(still_missing_pos):
+        print(f"WARNING: {len(still_missing_pos)} player_id(s) have no position from EITHER "
               f"weekly data or the ID crosswalk, and will be dropped by the position filter "
               f"below (real, not usage-related -- likely a genuine data gap for that player_id, "
               f"worth a manual check if any of these look like they should be active):")
-        print(f"  {list(still_missing)}")
+        print(f"  {list(still_missing_pos)}")
+    still_missing_name = asof[asof["player_name"].isna()]["player_id"].unique()
+    if len(still_missing_name):
+        print(f"WARNING: {len(still_missing_name)} player_id(s) have no player_name from EITHER "
+              f"source -- these will still get a real prediction (name is cosmetic, unlike "
+              f"position which is used as a real feature), but will display as a literal 'NaN' "
+              f"or blank in any downstream UI until this resolves itself. Worth a manual check:")
+        print(f"  {list(still_missing_name)}")
     return asof
 
 
@@ -234,11 +248,27 @@ def build_player_td_table(
     # ---- Candidate pool + team correction for the upcoming week's stub rows ----
     candidates = _build_candidate_pool(player_feat, upcoming_season)
     xwalk_teams = xwalk[["gsis_id", "team"]].rename(columns={"gsis_id": "player_id"})
+    # CONFIRMED REAL BUG (Week 1 2026): load_id_crosswalk() only deduplicates
+    # by pfr_id, not gsis_id/player_id -- if the same player has multiple
+    # pfr_id-distinct rows sharing one gsis_id (real, observed in the ID
+    # crosswalk data), the merge below fans candidates out into duplicate
+    # rows for the same player, each potentially predicted from a slightly
+    # different feature snapshot. Confirmed in production: S.Barkley alone
+    # had 4 duplicate rows with 4 different probabilities. Deduplicating
+    # HERE, at the source, protects every downstream use of xwalk_teams
+    # (both the original usage-based path and the additional-candidates
+    # path below), rather than patching each merge site separately.
+    xwalk_teams = xwalk_teams.drop_duplicates(subset=["player_id"], keep="first")
     xwalk_teams["current_team"] = xwalk_teams["team"].apply(_map_ids_team)
     candidates = candidates.merge(xwalk_teams[["player_id", "current_team"]], on="player_id", how="left")
     # Fall back to last-known team if the crosswalk has no current entry (e.g. missed merge).
     candidates["resolved_team"] = candidates["current_team"].fillna(candidates["posteam"])
     candidates = candidates.dropna(subset=["resolved_team"])
+    # Defensive final dedup -- xwalk_teams is now deduplicated at the source
+    # above, but this stays as a safety net: a candidate table should never
+    # have two rows for the same player_id, and this guarantees it regardless
+    # of whether some other, not-yet-found path could also produce a dupe.
+    candidates = candidates.drop_duplicates(subset=["player_id"], keep="first")
 
     # ---- Additional candidates from live sportsbook odds (see module
     # docstring) -- a player with a real anytime-TD price is real evidence

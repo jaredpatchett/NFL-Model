@@ -28,8 +28,26 @@ usage (no trailing history to build from at all) and any player who
 retired/is a free agent. Known, flagged limitation -- gets fixed automatically
 once real 2026 games start generating real trailing data.
 
+ADDITIONAL CANDIDATES FROM LIVE ODDS (added after a real Week 1 gap was
+found -- see README): the usage-based pool above is a REASONABLE heuristic,
+not a guarantee of completeness, and it has a real, confirmed failure mode
+-- see _apply_position_fallback()'s docstring. Rather than trust the
+heuristic alone, build_player_td_table() also accepts additional_candidate_ids:
+any player the sportsbook is actually offering an anytime-TD price on, for
+the games in this week's slate, regardless of whether our own usage filter
+would have caught them. A live market price is real, external evidence of
+relevance that doesn't depend on our own pipeline being bug-free. These
+extra players go through the EXACT same trailing-feature and position-
+resolution logic as usage-based candidates -- no special-cased, thinner
+version of the pipeline for them. A true rookie with no real trailing
+history added this way will still correctly end up with NaN features and
+get dropped by generate_player_predictions.py's existing missing-features
+check, with a printed reason -- that's honest, not a bug this change routes
+around.
+
 Public API:
-    build_player_td_table(seasons, upcoming_season, upcoming_week) ->
+    build_player_td_table(seasons, upcoming_season, upcoming_week,
+                           additional_candidate_ids=None) ->
         DataFrame of ALL played historical player-weeks (for training) PLUS
         stub rows for the upcoming week (for prediction), all with leakage-
         safe asof_* features, position, snap_share trailing, and
@@ -59,6 +77,7 @@ IDS_INACTIVE_CODES = {"FA", "FA*", "OAK", "SDC", "STL", "RAM"}
 
 MIN_TRAILING_SNAP_SHARE = 0.15  # candidate-pool bar: meaningfully used, not garbage-time only
 CANDIDATE_LOOKBACK_WEEKS = 8    # "meaningful usage in the last N games of the most recent season"
+VALID_POSITIONS = {"QB", "RB", "WR", "TE", "FB"}
 
 SNAP_SHARE_WINDOWS = ROLL_WINDOWS
 
@@ -130,6 +149,14 @@ def _load_weekly_resilient(seasons: list[int]) -> pd.DataFrame:
     even once games are actually complete (2025's pbp/snaps were available,
     its weekly stats were not, at time of writing) -- worth re-checking this
     each time it's touched, since it may just resolve itself over time.
+
+    CONFIRMED REAL-WORLD IMPACT (Week 1 2026): this lag turned out to affect
+    far more than just that season's true rookies. A meaningful number of
+    established, heavily-used veterans (Jahmyr Gibbs, Derrick Henry, Bijan
+    Robinson, and others -- confirmed missing from a real production run)
+    had no matching row in `weekly` at all, which silently dropped them
+    later at the position filter in build_player_td_table() -- see
+    _apply_position_fallback() for the fix.
     """
     frames = []
     for s in seasons:
@@ -143,8 +170,46 @@ def _load_weekly_resilient(seasons: list[int]) -> pd.DataFrame:
     return pd.concat(frames, ignore_index=True)
 
 
+def _apply_position_fallback(asof: pd.DataFrame, xwalk: pd.DataFrame) -> pd.DataFrame:
+    """
+    FIX for the confirmed Week 1 2026 gap (see _load_weekly_resilient()'s
+    docstring): `weekly` is the ONLY source of `position` before this
+    function ran, and a left-merge against a source with real coverage gaps
+    means real, active players can end up with position=NaN through no
+    fault of their own usage or the crosswalk's team-resolution step. The
+    position filter right after this (`asof["position"].isin(VALID_POSITIONS)`)
+    then silently drops them -- NaN.isin(...) is False, with no warning
+    printed anywhere. That silence is exactly how Gibbs/Henry/etc. went
+    unnoticed until a real week of outcomes was checked by hand.
+
+    Fix: fall back to the ID crosswalk's OWN `position` field (already
+    loaded elsewhere in this module for team correction -- not a new data
+    source, not a new API call) for any row where the weekly-sourced
+    position is missing. And instead of a silent drop, print exactly who
+    still has no position after BOTH sources are tried, so a gap like this
+    is visible the next time it happens rather than discovered a week later
+    from real game outcomes.
+    """
+    xwalk_pos = xwalk[["gsis_id", "position"]].rename(
+        columns={"gsis_id": "player_id", "position": "crosswalk_position"}
+    ).drop_duplicates(subset=["player_id"])
+    asof = asof.merge(xwalk_pos, on="player_id", how="left")
+    asof["position"] = asof["position"].where(asof["position"].notna(), asof["crosswalk_position"])
+    asof = asof.drop(columns=["crosswalk_position"])
+
+    still_missing = asof[asof["position"].isna()]["player_id"].unique()
+    if len(still_missing):
+        print(f"WARNING: {len(still_missing)} player_id(s) have no position from EITHER "
+              f"weekly data or the ID crosswalk, and will be dropped by the position filter "
+              f"below (real, not usage-related -- likely a genuine data gap for that player_id, "
+              f"worth a manual check if any of these look like they should be active):")
+        print(f"  {list(still_missing)}")
+    return asof
+
+
 def build_player_td_table(
-    seasons: list[int], upcoming_season: int, upcoming_week: int
+    seasons: list[int], upcoming_season: int, upcoming_week: int,
+    additional_candidate_ids: set[str] | None = None,
 ) -> pd.DataFrame:
     # Same "no data for a season with zero games played" guard as Track B's
     # game_features.py (2026 pbp/weekly/snaps all 404 right now, correctly --
@@ -174,6 +239,28 @@ def build_player_td_table(
     # Fall back to last-known team if the crosswalk has no current entry (e.g. missed merge).
     candidates["resolved_team"] = candidates["current_team"].fillna(candidates["posteam"])
     candidates = candidates.dropna(subset=["resolved_team"])
+
+    # ---- Additional candidates from live sportsbook odds (see module
+    # docstring) -- a player with a real anytime-TD price is real evidence
+    # of relevance independent of our own usage-heuristic's blind spots.
+    # These go through the identical stub-row/trailing-feature/position-
+    # resolution path below as usage-based candidates; nothing thinner.
+    if additional_candidate_ids:
+        already_included = set(candidates["player_id"])
+        new_ids = set(additional_candidate_ids) - already_included
+        if new_ids:
+            new_teams = xwalk_teams[xwalk_teams["player_id"].isin(new_ids)][["player_id", "current_team"]]
+            new_teams = new_teams.rename(columns={"current_team": "resolved_team"}).dropna(subset=["resolved_team"])
+            found_ids = set(new_teams["player_id"])
+            unresolved = new_ids - found_ids
+            if unresolved:
+                print(f"WARNING: {len(unresolved)} player_id(s) had a live odds price but no "
+                      f"resolvable current team in the ID crosswalk, so they can't be added as "
+                      f"candidates (no team means no schedule/matchup context to build features "
+                      f"from): {list(unresolved)}")
+            print(f"Adding {len(found_ids)} additional candidate(s) from live odds coverage "
+                  f"that the usage-based pool alone did not include.")
+            candidates = pd.concat([candidates[["player_id", "resolved_team"]], new_teams], ignore_index=True)
 
     stub_rows = pd.DataFrame({
         "season": upcoming_season, "week": upcoming_week,
@@ -209,6 +296,10 @@ def build_player_td_table(
         .drop_duplicates(subset=["player_id"], keep="last")
     )
     asof = asof.merge(names, on="player_id", how="left")
+    # FIX (see _apply_position_fallback docstring): weekly-only position
+    # lookup has confirmed real coverage gaps -- fall back to the crosswalk
+    # before filtering on position, and print anyone still unresolved.
+    asof = _apply_position_fallback(asof, xwalk)
 
     # ---- Implied team total: legitimate, un-lagged (set before kickoff, not
     # a leakage risk the way trailing stats are) -- same formula as Track B.
@@ -246,8 +337,10 @@ def build_player_td_table(
     # Skill positions only -- OL/DL/specialists essentially never score
     # offensive TDs and just add noise; a missing position is either a stale/
     # unmatched crosswalk entry or a season load_weekly() failed to cover
-    # (see _load_weekly_resilient) -- neither is usable here.
-    asof = asof[asof["position"].isin(["QB", "RB", "WR", "TE", "FB"])].reset_index(drop=True)
+    # (see _load_weekly_resilient) -- neither is usable here. Position
+    # fallback above means a NaN here now genuinely means "unresolvable in
+    # either source", already warned about, not a silent, avoidable drop.
+    asof = asof[asof["position"].isin(list(VALID_POSITIONS))].reset_index(drop=True)
 
     return asof
 

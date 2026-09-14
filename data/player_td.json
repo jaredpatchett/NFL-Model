@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-14T21:33:27.076854+00:00",
+  "generated_at": "2026-09-14T21:48:18.943673+00:00",
   "season": 2026,
   "week": 1,
   "model_notes": {
@@ -462,7 +462,7 @@
     },
     {
       "player_id": "00-0040122",
-      "player_name": NaN,
+      "player_name": "Ashton Jeanty",
       "position": "RB",
       "team": "LV",
       "opponent": "MIA",
@@ -492,7 +492,7 @@
     },
     {
       "player_id": "00-0040122",
-      "player_name": NaN,
+      "player_name": "Ashton Jeanty",
       "position": "RB",
       "team": "LV",
       "opponent": "MIA",
@@ -522,7 +522,7 @@
     },
     {
       "player_id": "00-0040122",
-      "player_name": NaN,
+      "player_name": "Ashton Jeanty",
       "position": "RB",
       "team": "LV",
       "opponent": "MIA",
@@ -552,7 +552,7 @@
     },
     {
       "player_id": "00-0040122",
-      "player_name": NaN,
+      "player_name": "Ashton Jeanty",
       "position": "RB",
       "team": "LV",
       "opponent": "MIA",
@@ -1404,7 +1404,7 @@
     },
     {
       "player_id": "00-0040126",
-      "player_name": NaN,
+      "player_name": "Colston Loveland",
       "position": "TE",
       "team": "CHI",
       "opponent": "CAR",
@@ -1434,7 +1434,7 @@
     },
     {
       "player_id": "00-0040126",
-      "player_name": NaN,
+      "player_name": "Colston Loveland",
       "position": "TE",
       "team": "CHI",
       "opponent": "CAR",
@@ -1813,7 +1813,7 @@
     },
     {
       "player_id": "00-0040236",
-      "player_name": NaN,
+      "player_name": "Kyle Monangai",
       "position": "RB",
       "team": "CHI",
       "opponent": "CAR",
@@ -1845,7 +1845,7 @@
     },
     {
       "player_id": "00-0040236",
-      "player_name": NaN,
+      "player_name": "Kyle Monangai",
       "position": "RB",
       "team": "CHI",
       "opponent": "CAR",
@@ -1942,7 +1942,7 @@
     },
     {
       "player_id": "00-0040719",
-      "player_name": NaN,
+      "player_name": "Bhayshul Tuten",
       "position": "RB",
       "team": "JAX",
       "opponent": "CLE",
@@ -2069,7 +2069,7 @@
     },
     {
       "player_id": "00-0040126",
-      "player_name": NaN,
+      "player_name": "Colston Loveland",
       "position": "TE",
       "team": "CHI",
       "opponent": "CAR",
@@ -2130,7 +2130,7 @@
     },
     {
       "player_id": "00-0040126",
-      "player_name": NaN,
+      "player_name": "Colston Loveland",
       "position": "TE",
       "team": "CHI",
       "opponent": "CAR",
@@ -2348,7 +2348,7 @@
     },
     {
       "player_id": "00-0040719",
-      "player_name": NaN,
+      "player_name": "Bhayshul Tuten",
       "position": "RB",
       "team": "JAX",
       "opponent": "CLE",
@@ -2794,7 +2794,7 @@
     },
     {
       "player_id": "00-0040718",
-      "player_name": NaN,
+      "player_name": "Travis Hunter",
       "position": "WR",
       "team": "JAX",
       "opponent": "CLE",
@@ -2951,7 +2951,7 @@
     },
     {
       "player_id": "00-0040124",
-      "player_name": NaN,
+      "player_name": "Tetairoa McMillan",
       "position": "WR",
       "team": "CAR",
       "opponent": "CHI",
@@ -3013,7 +3013,7 @@
     },
     {
       "player_id": "00-0040715",
-      "player_name": NaN,
+      "player_name": "Cam Skattebo",
       "position": "RB",
       "team": "NYG",
       "opponent": "DAL",
@@ -3045,7 +3045,7 @@
     },
     {
       "player_id": "00-0040128",
-      "player_name": NaN,
+      "player_name": "Tyler Warren",
       "position": "TE",
       "team": "IND",
       "opponent": "BAL",
@@ -3076,7 +3076,7 @@
     },
     {
       "player_id": "00-0040124",
-      "player_name": NaN,
+      "player_name": "Tetairoa McMillan",
       "position": "WR",
       "team": "CAR",
       "opponent": "CHI",
@@ -3169,7 +3169,7 @@
     },
     {
       "player_id": "00-0040128",
-      "player_name": NaN,
+      "player_name": "Tyler Warren",
       "position": "TE",
       "team": "IND",
       "opponent": "BAL",
@@ -3546,7 +3546,7 @@
     },
     {
       "player_id": "00-0040236",
-      "player_name": NaN,
+      "player_name": "Kyle Monangai",
       "position": "RB",
       "team": "CHI",
       "opponent": "CAR",
@@ -3578,7 +3578,7 @@
     },
     {
       "player_id": "00-0040236",
-      "player_name": NaN,
+      "player_name": "Kyle Monangai",
       "position": "RB",
       "team": "CHI",
       "opponent": "CAR",
@@ -3642,7 +3642,7 @@
     },
     {
       "player_id": "00-0040124",
-      "player_name": NaN,
+      "player_name": "Tetairoa McMillan",
       "position": "WR",
       "team": "CAR",
       "opponent": "CHI",
@@ -3705,7 +3705,7 @@
     },
     {
       "player_id": "00-0040124",
-      "player_name": NaN,
+      "player_name": "Tetairoa McMillan",
       "position": "WR",
       "team": "CAR",
       "opponent": "CHI",
@@ -3987,7 +3987,7 @@
     },
     {
       "player_id": "00-0040691",
-      "player_name": NaN,
+      "player_name": "Jaxson Dart",
       "position": "QB",
       "team": "NYG",
       "opponent": "DAL",
@@ -4019,7 +4019,7 @@
     },
     {
       "player_id": "00-0040691",
-      "player_name": NaN,
+      "player_name": "Jaxson Dart",
       "position": "QB",
       "team": "NYG",
       "opponent": "DAL",
@@ -4145,7 +4145,7 @@
     },
     {
       "player_id": "00-0040202",
-      "player_name": NaN,
+      "player_name": "Devin Neal",
       "position": "RB",
       "team": "NO",
       "opponent": "DET",
@@ -5286,7 +5286,7 @@
     },
     {
       "player_id": "00-0040691",
-      "player_name": NaN,
+      "player_name": "Jaxson Dart",
       "position": "QB",
       "team": "NYG",
       "opponent": "DAL",
@@ -5381,7 +5381,7 @@
     },
     {
       "player_id": "00-0040691",
-      "player_name": NaN,
+      "player_name": "Jaxson Dart",
       "position": "QB",
       "team": "NYG",
       "opponent": "DAL",
@@ -5674,7 +5674,7 @@
     },
     {
       "player_id": "00-0040128",
-      "player_name": NaN,
+      "player_name": "Tyler Warren",
       "position": "TE",
       "team": "IND",
       "opponent": "BAL",
@@ -5771,7 +5771,7 @@
     },
     {
       "player_id": "00-0040128",
-      "player_name": NaN,
+      "player_name": "Tyler Warren",
       "position": "TE",
       "team": "IND",
       "opponent": "BAL",
@@ -5935,7 +5935,7 @@
     },
     {
       "player_id": "00-0040586",
-      "player_name": NaN,
+      "player_name": "Jaydon Blue",
       "position": "RB",
       "team": "PHI",
       "opponent": "WAS",
@@ -6296,7 +6296,7 @@
     },
     {
       "player_id": "00-0040735",
-      "player_name": NaN,
+      "player_name": "Luther Burden",
       "position": "WR",
       "team": "CHI",
       "opponent": "CAR",
@@ -6555,7 +6555,7 @@
     },
     {
       "player_id": "00-0040735",
-      "player_name": NaN,
+      "player_name": "Luther Burden",
       "position": "WR",
       "team": "CHI",
       "opponent": "CAR",
@@ -7445,7 +7445,7 @@
     },
     {
       "player_id": "00-0040743",
-      "player_name": NaN,
+      "player_name": "Tyler Shough",
       "position": "QB",
       "team": "NO",
       "opponent": "DET",
@@ -7510,7 +7510,7 @@
     },
     {
       "player_id": "00-0040743",
-      "player_name": NaN,
+      "player_name": "Tyler Shough",
       "position": "QB",
       "team": "NO",
       "opponent": "DET",
@@ -7542,7 +7542,7 @@
     },
     {
       "player_id": "00-0040667",
-      "player_name": NaN,
+      "player_name": "Matthew Golden",
       "position": "WR",
       "team": "GB",
       "opponent": "MIN",
@@ -7705,7 +7705,7 @@
     },
     {
       "player_id": "00-0040719",
-      "player_name": NaN,
+      "player_name": "Bhayshul Tuten",
       "position": "RB",
       "team": "JAX",
       "opponent": "CLE",
@@ -7937,7 +7937,7 @@
     },
     {
       "player_id": "00-0040277",
-      "player_name": NaN,
+      "player_name": "Jahdae Walker",
       "position": "WR",
       "team": "CHI",
       "opponent": "CAR",
@@ -8002,7 +8002,7 @@
     },
     {
       "player_id": "00-0040277",
-      "player_name": NaN,
+      "player_name": "Jahdae Walker",
       "position": "WR",
       "team": "CHI",
       "opponent": "CAR",
@@ -8036,7 +8036,7 @@
     },
     {
       "player_id": "00-0040729",
-      "player_name": NaN,
+      "player_name": "Jack Bech",
       "position": "WR",
       "team": "LV",
       "opponent": "MIA",
@@ -8688,7 +8688,7 @@
     },
     {
       "player_id": "00-0040667",
-      "player_name": NaN,
+      "player_name": "Matthew Golden",
       "position": "WR",
       "team": "GB",
       "opponent": "MIN",
@@ -8917,7 +8917,7 @@
     },
     {
       "player_id": "00-0040719",
-      "player_name": NaN,
+      "player_name": "Bhayshul Tuten",
       "position": "RB",
       "team": "JAX",
       "opponent": "CLE",
@@ -9149,7 +9149,7 @@
     },
     {
       "player_id": "00-0040729",
-      "player_name": NaN,
+      "player_name": "Jack Bech",
       "position": "WR",
       "team": "LV",
       "opponent": "MIA",
@@ -9181,7 +9181,7 @@
     },
     {
       "player_id": "00-0040743",
-      "player_name": NaN,
+      "player_name": "Tyler Shough",
       "position": "QB",
       "team": "NO",
       "opponent": "DET",
@@ -9213,7 +9213,7 @@
     },
     {
       "player_id": "00-0040743",
-      "player_name": NaN,
+      "player_name": "Tyler Shough",
       "position": "QB",
       "team": "NO",
       "opponent": "DET",
@@ -9342,7 +9342,7 @@
     },
     {
       "player_id": "00-0040735",
-      "player_name": NaN,
+      "player_name": "Luther Burden",
       "position": "WR",
       "team": "CHI",
       "opponent": "CAR",
@@ -9632,7 +9632,7 @@
     },
     {
       "player_id": "00-0040735",
-      "player_name": NaN,
+      "player_name": "Luther Burden",
       "position": "WR",
       "team": "CHI",
       "opponent": "CAR",
@@ -9664,7 +9664,7 @@
     },
     {
       "player_id": "00-0040198",
-      "player_name": NaN,
+      "player_name": "Ollie Gordon",
       "position": "RB",
       "team": "MIA",
       "opponent": "LV",
@@ -9796,7 +9796,7 @@
     },
     {
       "player_id": "00-0039923",
-      "player_name": NaN,
+      "player_name": "J.J. McCarthy",
       "position": "QB",
       "team": "MIN",
       "opponent": "GB",
@@ -9829,7 +9829,7 @@
     },
     {
       "player_id": "00-0040277",
-      "player_name": NaN,
+      "player_name": "Jahdae Walker",
       "position": "WR",
       "team": "CHI",
       "opponent": "CAR",
@@ -9898,7 +9898,7 @@
     },
     {
       "player_id": "00-0040277",
-      "player_name": NaN,
+      "player_name": "Jahdae Walker",
       "position": "WR",
       "team": "CHI",
       "opponent": "CAR",
@@ -10159,7 +10159,7 @@
     },
     {
       "player_id": "00-0040628",
-      "player_name": NaN,
+      "player_name": "Drake Dabney",
       "position": "TE",
       "team": "GB",
       "opponent": "MIN",
@@ -10326,7 +10326,7 @@
     },
     {
       "player_id": "00-0040388",
-      "player_name": NaN,
+      "player_name": "Jakobie Keeney-James",
       "position": "WR",
       "team": "GB",
       "opponent": "MIN",
@@ -10462,7 +10462,7 @@
     },
     {
       "player_id": "00-0040494",
-      "player_name": NaN,
+      "player_name": "Max Brosmer",
       "position": "QB",
       "team": "MIN",
       "opponent": "GB",
@@ -10562,7 +10562,7 @@
     },
     {
       "player_id": "00-0040179",
-      "player_name": NaN,
+      "player_name": "DJ Giddens",
       "position": "RB",
       "team": "IND",
       "opponent": "BAL",
@@ -10955,7 +10955,7 @@
     },
     {
       "player_id": "00-0040234",
-      "player_name": NaN,
+      "player_name": "Quinn Ewers",
       "position": "QB",
       "team": "JAX",
       "opponent": "CLE",
@@ -10988,7 +10988,7 @@
     },
     {
       "player_id": "00-0040238",
-      "player_name": NaN,
+      "player_name": "LeQuint Allen",
       "position": "RB",
       "team": "JAX",
       "opponent": "CLE",
@@ -11087,7 +11087,7 @@
     },
     {
       "player_id": "00-0022942",
-      "player_name": NaN,
+      "player_name": "Philip Rivers",
       "position": "QB",
       "team": "IND",
       "opponent": "BAL",
@@ -11318,7 +11318,7 @@
     },
     {
       "player_id": "00-0040206",
-      "player_name": NaN,
+      "player_name": "Riley Leonard",
       "position": "QB",
       "team": "IND",
       "opponent": "BAL",
@@ -11484,7 +11484,7 @@
     },
     {
       "player_id": "00-0040194",
-      "player_name": NaN,
+      "player_name": "Jackson Hawes",
       "position": "TE",
       "team": "BUF",
       "opponent": "HOU",
@@ -11682,7 +11682,7 @@
     },
     {
       "player_id": "00-0040024",
-      "player_name": NaN,
+      "player_name": "Darius Cooper",
       "position": "WR",
       "team": "PHI",
       "opponent": "WAS",
@@ -12012,7 +12012,7 @@
     },
     {
       "player_id": "00-0040398",
-      "player_name": NaN,
+      "player_name": "Brady Cook",
       "position": "QB",
       "team": "MIA",
       "opponent": "LV",
@@ -12145,7 +12145,7 @@
     },
     {
       "player_id": "00-0040187",
-      "player_name": NaN,
+      "player_name": "Mitchell Evans",
       "position": "TE",
       "team": "CAR",
       "opponent": "CHI",
@@ -12211,7 +12211,7 @@
     },
     {
       "player_id": "00-0040218",
-      "player_name": NaN,
+      "player_name": "Jimmy Horn",
       "position": "WR",
       "team": "CAR",
       "opponent": "CHI",
@@ -12244,7 +12244,7 @@
     },
     {
       "player_id": "00-0040581",
-      "player_name": NaN,
+      "player_name": "Dont'e Thornton",
       "position": "WR",
       "team": "LV",
       "opponent": "MIA",
@@ -12309,7 +12309,7 @@
     },
     {
       "player_id": "00-0040218",
-      "player_name": NaN,
+      "player_name": "Jimmy Horn",
       "position": "WR",
       "team": "CAR",
       "opponent": "CHI",
@@ -12375,7 +12375,7 @@
     },
     {
       "player_id": "00-0040187",
-      "player_name": NaN,
+      "player_name": "Mitchell Evans",
       "position": "TE",
       "team": "CAR",
       "opponent": "CHI",
@@ -12476,7 +12476,7 @@
     },
     {
       "player_id": "00-0040363",
-      "player_name": NaN,
+      "player_name": "Keleki Latu",
       "position": "TE",
       "team": "BUF",
       "opponent": "HOU",
@@ -12708,7 +12708,7 @@
     },
     {
       "player_id": "00-0040729",
-      "player_name": NaN,
+      "player_name": "Jack Bech",
       "position": "WR",
       "team": "LV",
       "opponent": "MIA",
@@ -12739,7 +12739,7 @@
     },
     {
       "player_id": "00-0040509",
-      "player_name": NaN,
+      "player_name": "Ben Yurosek",
       "position": "TE",
       "team": "MIN",
       "opponent": "GB",
@@ -12841,7 +12841,7 @@
     },
     {
       "player_id": "00-0040218",
-      "player_name": NaN,
+      "player_name": "Jimmy Horn",
       "position": "WR",
       "team": "CAR",
       "opponent": "CHI",
@@ -12874,7 +12874,7 @@
     },
     {
       "player_id": "00-0040218",
-      "player_name": NaN,
+      "player_name": "Jimmy Horn",
       "position": "WR",
       "team": "CAR",
       "opponent": "CHI",
@@ -12973,7 +12973,7 @@
     },
     {
       "player_id": "00-0040244",
-      "player_name": NaN,
+      "player_name": "Moliki Matavao",
       "position": "TE",
       "team": "NO",
       "opponent": "DET",
@@ -13370,7 +13370,7 @@
     },
     {
       "player_id": "00-0040729",
-      "player_name": NaN,
+      "player_name": "Jack Bech",
       "position": "WR",
       "team": "LV",
       "opponent": "MIA",
@@ -13435,7 +13435,7 @@
     },
     {
       "player_id": "00-0038440",
-      "player_name": NaN,
+      "player_name": "Zavier Scott",
       "position": "RB",
       "team": "CHI",
       "opponent": "CAR",
@@ -14303,7 +14303,7 @@
     },
     {
       "player_id": "00-0040009",
-      "player_name": NaN,
+      "player_name": "Savion Williams",
       "position": "WR",
       "team": "GB",
       "opponent": "MIN",
@@ -14337,7 +14337,7 @@
     },
     {
       "player_id": "00-0040142",
-      "player_name": NaN,
+      "player_name": "Kaleb Johnson",
       "position": "RB",
       "team": "GB",
       "opponent": "MIN",
@@ -14371,7 +14371,7 @@
     },
     {
       "player_id": "00-0040187",
-      "player_name": NaN,
+      "player_name": "Mitchell Evans",
       "position": "TE",
       "team": "CAR",
       "opponent": "CHI",
@@ -14501,7 +14501,7 @@
     },
     {
       "player_id": "00-0040187",
-      "player_name": NaN,
+      "player_name": "Mitchell Evans",
       "position": "TE",
       "team": "CAR",
       "opponent": "CHI",
@@ -14568,7 +14568,7 @@
     },
     {
       "player_id": "00-0036679",
-      "player_name": NaN,
+      "player_name": "Shane Buechele",
       "position": "QB",
       "team": "BUF",
       "opponent": "HOU",
@@ -14602,7 +14602,7 @@
     },
     {
       "player_id": "00-0039471",
-      "player_name": NaN,
+      "player_name": "Frank Gore Jr.",
       "position": "RB",
       "team": "BUF",
       "opponent": "HOU",
@@ -14768,7 +14768,7 @@
     },
     {
       "player_id": "00-0040667",
-      "player_name": NaN,
+      "player_name": "Matthew Golden",
       "position": "WR",
       "team": "GB",
       "opponent": "MIN",
@@ -14800,7 +14800,7 @@
     },
     {
       "player_id": "00-0040667",
-      "player_name": NaN,
+      "player_name": "Matthew Golden",
       "position": "WR",
       "team": "GB",
       "opponent": "MIN",
@@ -14833,7 +14833,7 @@
     },
     {
       "player_id": "00-0039884",
-      "player_name": NaN,
+      "player_name": "Tahj Washington",
       "position": "WR",
       "team": "MIA",
       "opponent": "LV",

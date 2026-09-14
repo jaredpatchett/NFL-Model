@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-14T14:38:26.202301+00:00",
+  "generated_at": "2026-09-14T21:33:28.915171+00:00",
   "note": "Both tracks have real, logged-prediction-vs-outcome results below.",
   "track_b": {
     "n_available": 15,
@@ -37,12 +37,12 @@
     }
   },
   "track_a": {
-    "n_available": 88,
-    "hit_rate": 0.3068181818181818,
-    "mean_predicted_prob": 0.2877363636363636,
-    "auc": 0.7355798421372192,
-    "log_loss": 0.5509672699562728,
-    "brier": 0.18599718045454547,
+    "n_available": 105,
+    "hit_rate": 0.3142857142857143,
+    "mean_predicted_prob": 0.29495714285714286,
+    "auc": 0.7226430976430976,
+    "log_loss": 0.557328282880218,
+    "brier": 0.18877380638095242,
     "n_priced_bets": 1,
     "roi_all_pct": -100.0,
     "n_positive_edge_bets": 1,

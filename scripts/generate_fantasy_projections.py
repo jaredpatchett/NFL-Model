@@ -58,10 +58,11 @@ MATCHUP_FACTOR_MIN = 0.75
 MATCHUP_FACTOR_MAX = 1.35
 SHRINKAGE_GAMES = 3  # prior "weight" in games -- see build_trailing_player_avg's shrinkage estimator
 MARKET_BLEND_WEIGHT = 0.8  # weight given to real market signal over our own trailing model, when available -- see blend_with_market
+DISPLAY_MIN_GAMES = 3  # below this many current-season games, show full prior season instead -- see build_percentiles
 POSITIONS = ["QB", "RB", "WR", "TE"]
 
 
-def load_inputs() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+def load_inputs() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     if not os.path.exists(STATS_CSV):
         raise FileNotFoundError(
             f"{STATS_CSV} not found -- run fetch_player_stats.py first "
@@ -74,22 +75,30 @@ def load_inputs() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     if os.path.exists(SNAPS_CSV):
         snaps = pd.read_csv(SNAPS_CSV)
 
-    # Prior-season data for the per-player shrinkage prior (see
-    # build_trailing_player_avg's docstring). Pulled directly from
-    # nflverse-data via fetch_player_stats.py's own fetch_player_stats()
-    # function -- same source, not re-fetched into a separate CSV on disk,
-    # since this is only needed transiently to compute one prior per player.
+    # Prior-season data, used for TWO things: (1) the per-player shrinkage
+    # prior (see build_trailing_player_avg's docstring), and (2) bridging
+    # the game log / snap-share chart when the current season is too thin
+    # to show much (see build_game_log / build_snap_share_by_week below --
+    # same real gap the sample player-card screenshot itself was almost
+    # certainly showing: a full 17-game 2025 season, not a near-empty 2026
+    # one, because that's what's actually informative at this point in a
+    # season). Pulled directly via fetch_player_stats.py's own functions --
+    # same source as the current-season CSVs, not a new one.
     prior_season = pd.DataFrame()
+    prior_snaps = pd.DataFrame()
     try:
-        from fetch_player_stats import fetch_player_stats as _fetch_prior
-        prior_season = _fetch_prior(SEASON - 1)
+        from fetch_player_stats import fetch_player_stats as _fetch_prior_stats
+        from fetch_player_stats import fetch_snap_counts as _fetch_prior_snaps
+        prior_season = _fetch_prior_stats(SEASON - 1)
         prior_season = prior_season[prior_season["position"].isin(POSITIONS)]
+        prior_snaps = _fetch_prior_snaps(SEASON - 1)
     except Exception as e:
-        print(f"  WARNING: couldn't load {SEASON - 1} prior-season data for shrinkage "
-              f"priors ({e}) -- falling back to generic position median for everyone.",
+        print(f"  WARNING: couldn't load {SEASON - 1} prior-season data "
+              f"({e}) -- falling back to generic position median for shrinkage, "
+              f"and game log/snap chart will only show {SEASON}.",
               file=sys.stderr)
 
-    return stats, snaps, prior_season
+    return stats, snaps, prior_season, prior_snaps
 
 
 def build_trailing_player_avg(stats: pd.DataFrame, prior_season_stats: pd.DataFrame) -> pd.DataFrame:
@@ -239,36 +248,42 @@ def build_weekly_def_rank(stats: pd.DataFrame) -> pd.DataFrame:
     game): this ranks all 32 teams by what they ACTUALLY allowed to a
     position in one specific past week, since it's purely descriptive
     (showing what really happened in a game already played), not a model
-    input, so there's no leakage question here."""
+    input, so there's no leakage question here.
+
+    Groups by season now too, since `stats` can span two seasons (current +
+    prior, for the game log/snap chart bridge) and Week 1 exists in both --
+    conflating them would rank a 2025 defense against a 2026 defense in the
+    same bucket, which is wrong."""
     team_pos_week = (
-        stats.groupby(["opponent_team", "position", "week"], as_index=False)
+        stats.groupby(["opponent_team", "position", "season", "week"], as_index=False)
         .agg(pts_allowed=("fantasy_points_ppr", "sum"))
     )
-    team_pos_week["week_def_rank"] = team_pos_week.groupby(["position", "week"])["pts_allowed"].rank(
+    team_pos_week["week_def_rank"] = team_pos_week.groupby(["position", "season", "week"])["pts_allowed"].rank(
         ascending=False, method="min"
     ).astype(int)
-    team_pos_week["week_def_rank_of"] = team_pos_week.groupby(["position", "week"])["opponent_team"].transform("nunique")
-    return team_pos_week[["opponent_team", "position", "week", "week_def_rank", "week_def_rank_of"]]
+    team_pos_week["week_def_rank_of"] = team_pos_week.groupby(["position", "season", "week"])["opponent_team"].transform("nunique")
+    return team_pos_week[["opponent_team", "position", "season", "week", "week_def_rank", "week_def_rank_of"]]
 
 
-def build_percentiles(stats: pd.DataFrame) -> pd.DataFrame:
-    """Season-average percentile rank within position for the stat tiles
-    (targets, receptions, rec yards, touchdowns, fantasy pts) -- purely
-    descriptive of games actually played, not a projection."""
+def _season_avg_one(stats: pd.DataFrame) -> pd.DataFrame:
+    """Season-average + percentile rank within position, for ONE season's
+    worth of rows -- factored out of build_percentiles so it can be run
+    separately on the current season and the prior season (see
+    build_percentiles's docstring for why)."""
+    if stats.empty:
+        return pd.DataFrame(columns=["player_id", "position"])
     season_avg = stats.groupby(["player_id", "position"], as_index=False).agg(
         targets_avg=("targets", "mean"),
         receptions_avg=("receptions", "mean"),
         rec_yards_avg=("receiving_yards", "mean"),
         rush_yards_avg=("rushing_yards", "mean"),
-        touchdowns_avg=("rushing_tds", lambda s: s.mean()),  # placeholder, combined below
         fantasy_pts_avg=("fantasy_points_ppr", "mean"),
         games=("week", "nunique"),
     )
-    # touchdowns_avg needs rushing_tds + receiving_tds per game, not a single column mean
     td_avg = stats.groupby("player_id").apply(
         lambda g: (g["rushing_tds"] + g["receiving_tds"]).mean(), include_groups=False
     ).rename("touchdowns_avg")
-    season_avg = season_avg.drop(columns=["touchdowns_avg"]).merge(td_avg, on="player_id", how="left")
+    season_avg = season_avg.merge(td_avg, on="player_id", how="left")
 
     stat_cols = ["targets_avg", "receptions_avg", "rec_yards_avg", "touchdowns_avg", "fantasy_pts_avg"]
     for col in stat_cols:
@@ -279,28 +294,63 @@ def build_percentiles(stats: pd.DataFrame) -> pd.DataFrame:
     return season_avg
 
 
+def build_percentiles(current_stats: pd.DataFrame, prior_stats: pd.DataFrame) -> pd.DataFrame:
+    """Season-average percentile rank within position for the stat tiles --
+    purely descriptive of games actually played, not a projection.
+
+    DISPLAY-SEASON SELECTION: this season's numbers alone are barely
+    informative early on (a single game is not a season average), so a
+    player with fewer than DISPLAY_MIN_GAMES played this season is shown
+    using their FULL PRIOR season instead -- same reasoning as the sample
+    player-card screenshot this whole tab is modeled on, which shows a
+    full 17-game season, not a 1-game one. Each player's percentile is
+    computed against PEERS FROM THE SAME DISPLAY SEASON (a 2025-based
+    percentile compares only to other 2025 rows, a 2026-based one only to
+    2026 rows) -- comparing a full-season average to a 1-game sample would
+    be comparing different things, not a real percentile. True rookies
+    with no prior-season row keep their thin current-season numbers -- it's
+    the only option available for them."""
+    cur = _season_avg_one(current_stats)
+    prior = _season_avg_one(prior_stats)
+    cur["display_season"] = current_stats["season"].iloc[0] if not current_stats.empty else None
+    if not prior.empty:
+        prior["display_season"] = prior_stats["season"].iloc[0]
+
+    use_prior_ids = set(cur.loc[cur["games"] < DISPLAY_MIN_GAMES, "player_id"]) & set(prior["player_id"]) if not prior.empty else set()
+    cur_keep = cur[~cur["player_id"].isin(use_prior_ids)]
+    prior_keep = prior[prior["player_id"].isin(use_prior_ids)] if not prior.empty else prior
+    return pd.concat([cur_keep, prior_keep], ignore_index=True)
+
+
 def build_snap_share_by_week(snaps: pd.DataFrame) -> dict:
+    """Combines current + prior season snap counts (snaps arg can span both,
+    with a `season` column) into one continuous by-week series per player,
+    most-recent-first isn't needed here since the chart draws left-to-right
+    chronologically -- sorted by (season, week) ascending."""
     if snaps.empty:
         return {}
     out = {}
-    for player, g in snaps.sort_values("week").groupby("player"):
+    for player, g in snaps.sort_values(["season", "week"]).groupby("player"):
         out[player] = [
-            {"week": int(w), "pct": None if pd.isna(p) else round(float(p), 3)}
-            for w, p in zip(g["week"], g["offense_pct"])
+            {"season": int(s), "week": int(w), "pct": None if pd.isna(p) else round(float(p), 3)}
+            for s, w, p in zip(g["season"], g["week"], g["offense_pct"])
         ]
     return out
 
 
 def build_game_log(stats: pd.DataFrame, weekly_def_rank: pd.DataFrame) -> dict:
+    """Combines current + prior season rows (stats arg can span both) into
+    one game log per player, most-recent-first (current season's latest
+    week first, all the way back through the prior season) -- same
+    "most recent first" convention as the sample screenshot's game log."""
     merged = stats.merge(
-        weekly_def_rank, left_on=["opponent_team", "position", "week"],
-        right_on=["opponent_team", "position", "week"], how="left"
+        weekly_def_rank, on=["opponent_team", "position", "season", "week"], how="left"
     )
-    merged = merged.sort_values(["player_id", "week"], ascending=[True, False])
+    merged = merged.sort_values(["player_id", "season", "week"], ascending=[True, False, False])
     out = {}
     for pid, g in merged.groupby("player_id"):
         out[pid] = [{
-            "week": int(r["week"]),
+            "season": int(r["season"]), "week": int(r["week"]),
             "opponent": r["opponent_team"],
             "week_def_rank": None if pd.isna(r.get("week_def_rank")) else int(r["week_def_rank"]),
             "week_def_rank_of": None if pd.isna(r.get("week_def_rank_of")) else int(r["week_def_rank_of"]),
@@ -467,7 +517,7 @@ def find_upcoming_matchups(season: int) -> pd.DataFrame:
 
 def main():
     print(f"Building fantasy projections for {SEASON}...")
-    stats, snaps, prior_season = load_inputs()
+    stats, snaps, prior_season, prior_snaps = load_inputs()
     if stats.empty:
         print("No player stats available yet -- nothing to project.")
         return
@@ -476,10 +526,20 @@ def main():
     team_pos_week = build_defense_vs_position(stats)
     def_ranks = rank_defense_vs_position(team_pos_week, {})
     snap_pct = build_snap_pct(snaps)
-    weekly_def_rank = build_weekly_def_rank(stats)
-    percentiles = build_percentiles(stats)
-    snap_share_by_week = build_snap_share_by_week(snaps)
-    game_logs = build_game_log(stats, weekly_def_rank)
+
+    # Combined current+prior tables, for the game log / snap-share chart /
+    # percentile display only -- NOT for projection (build_trailing_player_avg
+    # / build_defense_vs_position / the upcoming-week `latest_row` below all
+    # stay current-season-only, unchanged from before). See build_percentiles,
+    # build_game_log, build_snap_share_by_week docstrings for why the display
+    # side of this needs both seasons.
+    combined_stats = pd.concat([stats, prior_season], ignore_index=True, sort=False)
+    combined_snaps = pd.concat([snaps, prior_snaps], ignore_index=True, sort=False) if not prior_snaps.empty else snaps
+
+    weekly_def_rank = build_weekly_def_rank(combined_stats)
+    percentiles = build_percentiles(stats, prior_season)
+    snap_share_by_week = build_snap_share_by_week(combined_snaps)
+    game_logs = build_game_log(combined_stats, weekly_def_rank)
     team_logos = fetch_team_logos()
 
     latest_row = (
@@ -544,6 +604,7 @@ def main():
             "headshot_url": r.get("headshot_url"),
             "team_logo_url": team_logos.get(r["team"]),
             "games_played": int(r.get("games", r["trailing_games"])),
+            "display_season": None if pd.isna(r.get("display_season")) else int(r["display_season"]),
             "trailing_avg_pts": None if pd.isna(r["trailing_avg_pts"]) else round(float(r["trailing_avg_pts"]), 2),
             "trailing_games": int(r["trailing_games"]),
             "proj_fantasy_pts": None if pd.isna(r["proj_fantasy_pts"]) else float(r["proj_fantasy_pts"]),

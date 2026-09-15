@@ -1195,17 +1195,38 @@
           <div class="pc-stat-sub">${pctlLabel(pctl,peerN)} pctile</div>
         </div>`).join('');
 
-      document.getElementById('pc-prop-note').textContent =
-        `Projected ${p.proj_fantasy_pts!=null?p.proj_fantasy_pts.toFixed(1):'\u2014'} fantasy pts vs ${p.opponent} ` +
-        `(matchup factor ${p.matchup_factor.toFixed(2)}, def rank ${p.def_rank!=null?p.def_rank+'/'+p.def_rank_of:'\u2014'}). ` +
-        `Per-stat prop lines (rec yds/receptions/rush yds) with live sportsbook pricing aren't wired in yet -- ` +
-        `this is the model's own season-average-based projection only, not a priced market line.`;
+      document.getElementById('pc-prop-note').innerHTML = renderPropBox(p);
 
       renderSnapChart(p.snap_share_by_week);
       renderRadarChart(pc);
       renderGameLog(p.game_log);
 
       pcModal.classList.add('open');
+    }
+
+    function renderPropBox(p){
+      const stats = [['REC YDS', p.prop.rec_yards], ['RECEPTIONS', p.prop.receptions], ['RUSH YDS', p.prop.rush_yards]]
+        .filter(([_,v]) => v && v.line != null);
+      const header = `<div style="font-size:10px;color:var(--text-faint2);font-family:'IBM Plex Mono',monospace;margin-bottom:8px;">` +
+        `PROJECTED ${p.proj_fantasy_pts!=null?p.proj_fantasy_pts.toFixed(1):'\u2014'} FANTASY PTS vs ${p.opponent} ` +
+        `\u00B7 matchup ${p.matchup_factor.toFixed(2)} \u00B7 def rank ${p.def_rank!=null?p.def_rank+'/'+p.def_rank_of:'\u2014'}` +
+        (p.anytime_td_prob!=null ? ` \u00B7 anytime-TD ${(p.anytime_td_prob*100).toFixed(0)}%` : '') + `</div>`;
+
+      if(!p.has_market_data || !stats.length){
+        return header + `<div style="color:var(--text-faint2)">No live prop lines for this player right now -- ` +
+          `projection above is the model's own trailing-average estimate, not a priced market line. ` +
+          `(Props may not be posted yet for this matchup, or the API budget/key wasn't available this run.)</div>`;
+      }
+      const rows = stats.map(([label, v]) => {
+        const chance = v.devigged_over_prob!=null ? (v.devigged_over_prob*100).toFixed(0)+'%' : '\u2014';
+        return `<div style="display:flex;justify-content:space-between;gap:10px;padding:4px 0;border-top:1px solid var(--line);font-size:11px;">
+          <span style="color:var(--text-dim)">${label} O/U ${v.line}</span>
+          <span>Over ${fmtOdds(v.over_price)} <span style="color:var(--text-faint2)">(${chance} to hit)</span></span>
+        </div>`;
+      }).join('');
+      return header + `<div>${rows}</div><div style="font-size:9px;color:var(--text-faint2);margin-top:8px">` +
+        `Live sportsbook lines, best price across bookmakers. Not yet backtested for this market -- ` +
+        `same "not yet smoke-tested against a live key" caveat as the rest of this integration.</div>`;
     }
 
     function renderSnapChart(weeks){

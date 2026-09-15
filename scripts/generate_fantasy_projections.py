@@ -57,6 +57,7 @@ MIN_TRAILING_WEEKS_FOR_MATCHUP = 3  # below this, default matchup_factor to 1.00
 MATCHUP_FACTOR_MIN = 0.75
 MATCHUP_FACTOR_MAX = 1.35
 SHRINKAGE_GAMES = 3  # prior "weight" in games -- see build_trailing_player_avg's shrinkage estimator
+MARKET_BLEND_WEIGHT = 0.8  # weight given to real market signal over our own trailing model, when available -- see blend_with_market
 POSITIONS = ["QB", "RB", "WR", "TE"]
 
 
@@ -329,6 +330,122 @@ def fetch_team_logos() -> dict:
         return {}
 
 
+def fetch_fantasy_prop_odds_for_upcoming(upcoming: pd.DataFrame) -> pd.DataFrame:
+    """Live rec-yds/receptions/rush-yds prop odds for this week's games, via
+    odds_api.py -- same fetch_game_odds() -> filter-to-this-week -> per-event
+    fetch pattern generate_player_predictions.py already uses for Track A,
+    reused here rather than reinvented. Returns empty DataFrame (not None)
+    on any failure/no-key so callers can treat "no market data" uniformly
+    without a None-check at every call site."""
+    try:
+        import odds_api
+    except ImportError:
+        return pd.DataFrame()
+
+    if upcoming.empty:
+        return pd.DataFrame()
+
+    live_games = odds_api.fetch_game_odds()
+    if live_games is None or live_games.empty:
+        return pd.DataFrame()
+
+    this_week_pairs = set(zip(upcoming["team"], upcoming["opponent"]))
+    relevant_events = live_games[
+        live_games.apply(lambda r: (r["home_team"], r["away_team"]) in this_week_pairs
+                          or (r["away_team"], r["home_team"]) in this_week_pairs, axis=1)
+    ]
+    if relevant_events.empty:
+        return pd.DataFrame()
+
+    props = odds_api.fetch_fantasy_prop_odds(relevant_events)
+    return props if props is not None else pd.DataFrame()
+
+
+def load_track_a_td_probs() -> pd.DataFrame:
+    """Anytime-TD probabilities from Track A's own live output
+    (../data/player_td.json, written earlier in the same workflow run) --
+    reused as-is, not recomputed, so market-blended projections can include
+    expected TD value without duplicating Track A's model."""
+    path = "../data/player_td.json"
+    if not os.path.exists(path):
+        return pd.DataFrame(columns=["player_name_norm", "anytime_td_prob"])
+    try:
+        with open(path) as f:
+            data = json.load(f)
+        import odds_api
+        rows = [{
+            "player_name_norm": odds_api.normalize_name(p["player_name"]),
+            "anytime_td_prob": p["model"]["anytime_td_prob"],
+        } for p in data.get("players", [])]
+        return pd.DataFrame(rows)
+    except Exception as e:
+        print(f"  WARNING: couldn't load Track A TD probabilities ({e}) -- "
+              f"market-blended projection will exclude expected TD value.", file=sys.stderr)
+        return pd.DataFrame(columns=["player_name_norm", "anytime_td_prob"])
+
+
+def blend_with_market(latest_row: pd.DataFrame, props: pd.DataFrame, td_probs: pd.DataFrame) -> pd.DataFrame:
+    """Market-anchored blend, same philosophy as Track B's market-blended
+    total model: when a real market signal exists, trust it heavily (80%
+    weight here) over our own trailing-average model (20%) -- Track B's own
+    alpha sweep found the market beat its feature set at every tried
+    regularization strength, and there's no reason to assume our simpler
+    trailing-average approach does any better here. Falls back ENTIRELY to
+    the existing trailing_avg_pts x matchup_factor projection for any player
+    with no market data (props not posted yet, bye week, API budget/error) --
+    never silently zeroes out a player just because the market doesn't have
+    them priced.
+
+    market_pts = 0.1*rec_yds + 1.0*receptions + 0.1*rush_yds + 6*anytime_td_prob
+    (PPR scoring weights, matching fetch_player_stats.py's own formula) --
+    computed from whichever components are actually available; a player
+    with e.g. only a rush-yds prop still gets a partial market signal rather
+    than being treated as having none."""
+    import odds_api
+    latest_row = latest_row.copy()
+    latest_row["_name_norm"] = latest_row["player_display_name"].apply(odds_api.normalize_name)
+
+    if not props.empty:
+        latest_row = latest_row.merge(
+            props, left_on="_name_norm", right_on="player_name_norm", how="left", suffixes=("", "_prop")
+        )
+    # Ensure every expected prop column exists regardless of which markets
+    # actually came back -- a real API response can easily be missing an
+    # entire market for a given event/day, and merge only creates columns
+    # for markets present in `props`. Caught by mocking a props response
+    # that only had rec_yds/receptions and no rush_yds -- crashed here with
+    # KeyError('rush_yds_point') before this fix.
+    for col in ["rec_yds_point", "rec_yds_over_price", "rec_yds_under_price",
+                "receptions_point", "receptions_over_price", "receptions_under_price",
+                "rush_yds_point", "rush_yds_over_price", "rush_yds_under_price"]:
+        if col not in latest_row.columns:
+            latest_row[col] = None
+
+    if not td_probs.empty:
+        latest_row = latest_row.merge(td_probs, left_on="_name_norm", right_on="player_name_norm", how="left", suffixes=("", "_td"))
+    else:
+        latest_row["anytime_td_prob"] = None
+
+    rec_pts = latest_row["rec_yds_point"].fillna(0) * 0.1 + latest_row["receptions_point"].fillna(0) * 1.0
+    rush_pts = latest_row["rush_yds_point"].fillna(0) * 0.1
+    td_pts = latest_row["anytime_td_prob"].fillna(0) * 6.0
+    latest_row["market_based_pts"] = rec_pts + rush_pts + td_pts
+
+    has_any_market = (
+        latest_row["rec_yds_point"].notna() | latest_row["receptions_point"].notna()
+        | latest_row["rush_yds_point"].notna() | latest_row["anytime_td_prob"].notna()
+    )
+    latest_row["has_market_data"] = has_any_market
+
+    own_model_pts = latest_row["trailing_avg_pts"].fillna(0) * latest_row["matchup_factor"]
+    latest_row["proj_fantasy_pts"] = np.where(
+        has_any_market,
+        (MARKET_BLEND_WEIGHT * latest_row["market_based_pts"] + (1 - MARKET_BLEND_WEIGHT) * own_model_pts).round(2),
+        own_model_pts.round(2),
+    )
+    return latest_row
+
+
 def find_upcoming_matchups(season: int) -> pd.DataFrame:
     """Earliest unplayed week per team, with opponent -- same
     find_upcoming_week pattern as generate_predictions.py, but keyed by team
@@ -382,9 +499,12 @@ def main():
     latest_row = latest_row.merge(percentiles, on=["player_id", "position"], how="left")
 
     latest_row["matchup_factor"] = latest_row["matchup_factor"].fillna(1.0)
-    latest_row["proj_fantasy_pts"] = (
-        latest_row["trailing_avg_pts"].fillna(0) * latest_row["matchup_factor"]
-    ).round(2)
+
+    print("Fetching live prop odds for market-blended projections...")
+    props = fetch_fantasy_prop_odds_for_upcoming(upcoming)
+    td_probs = load_track_a_td_probs()
+    latest_row = blend_with_market(latest_row, props, td_probs)
+    print(f"  {int(latest_row['has_market_data'].sum())} / {len(latest_row)} players have live market data this run.")
 
     def _pctl(r, col):
         v = r.get(f"pctl_{col}")
@@ -393,6 +513,23 @@ def main():
     def _peers(r, col):
         v = r.get(f"peers_{col}")
         return None if pd.isna(v) else int(v)
+
+    def _prop_dict(r, field):
+        import odds_api
+        line = r.get(f"{field}_point")
+        over_p = r.get(f"{field}_over_price")
+        under_p = r.get(f"{field}_under_price")
+        devig = None
+        if pd.notna(over_p) and pd.notna(under_p):
+            io_, iu_ = odds_api.american_to_implied_prob(over_p), odds_api.american_to_implied_prob(under_p)
+            if (io_ + iu_) > 0:
+                devig = round(io_ / (io_ + iu_), 3)
+        return {
+            "line": None if pd.isna(line) else float(line),
+            "over_price": None if pd.isna(over_p) else int(over_p),
+            "under_price": None if pd.isna(under_p) else int(under_p),
+            "devigged_over_prob": devig,
+        }
 
     players = []
     for _, r in latest_row.iterrows():
@@ -437,6 +574,14 @@ def main():
             },
             "snap_share_by_week": snap_share_by_week.get(r["player_display_name"], []),
             "game_log": game_logs.get(r["player_id"], []),
+            "has_market_data": bool(r.get("has_market_data", False)),
+            "market_based_pts": None if pd.isna(r.get("market_based_pts")) else round(float(r["market_based_pts"]), 2),
+            "anytime_td_prob": None if pd.isna(r.get("anytime_td_prob")) else round(float(r["anytime_td_prob"]), 3),
+            "prop": {
+                "rec_yards": _prop_dict(r, "rec_yds"),
+                "receptions": _prop_dict(r, "receptions"),
+                "rush_yards": _prop_dict(r, "rush_yds"),
+            },
         })
 
     players.sort(key=lambda p: (p["proj_fantasy_pts"] or 0), reverse=True)
@@ -444,7 +589,7 @@ def main():
     output = {
         "season": SEASON,
         "generated_at": datetime.now(timezone.utc).isoformat(),
-        "method": "trailing_L4_avg x opponent_matchup_factor (baseline, not yet validated against held-out data)",
+        "method": "market-blended (80% live prop odds + Track A TD prob, 20% own trailing model) when live odds are available; falls back to trailing_L4_avg x opponent_matchup_factor per player otherwise. Not yet validated against held-out data.",
         "players": players,
     }
 

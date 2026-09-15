@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "generated_at": "2026-09-15T19:38:31.628847+00:00",
+  "generated_at": "2026-09-15T20:00:04.020440+00:00",
   "method": "market-blended (80% live prop odds + Track A TD prob, 20% own trailing model) when live odds are available; falls back to trailing_L4_avg x opponent_matchup_factor per player otherwise. Not yet validated against held-out data.",
   "players": [
     {

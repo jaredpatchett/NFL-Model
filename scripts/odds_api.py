@@ -227,6 +227,90 @@ def fetch_player_td_odds(events: pd.DataFrame, api_key: str | None = None) -> pd
     return pd.DataFrame(rows)
 
 
+def fetch_fantasy_prop_odds(events: pd.DataFrame, api_key: str | None = None) -> pd.DataFrame | None:
+    """
+    Best-price rec yards / rush yards / receptions O/U lines per player,
+    across all events in `events` -- same shape as fetch_player_td_odds, one
+    call PER EVENT, but all three markets requested together in a single
+    call (comma-separated `markets` param) rather than three separate calls.
+    Per the API's own documented cost formula (unique markets present in the
+    response x regions), this costs UP TO 3 credits per event (up from Track
+    A's 1 credit/event for player_anytime_td alone) -- re-check the combined
+    Track A + Track C credit budget against the free tier's ~2,250/season
+    if running both at the existing Tue-Fri cadence (see this module's
+    CREDIT BUDGET docstring above, written for Track A/B only -- Track C
+    adds to it, not yet re-totaled here).
+
+    For each player/market, keeps the point value tied to whichever
+    bookmaker gave the single BEST (highest) Over price -- same
+    "best-price across bookmakers" convention fetch_player_td_odds already
+    uses, not a new one invented for this function.
+
+    NOT YET SMOKE-TESTED AGAINST A LIVE KEY (same caveat fetch_player_td_odds
+    originally shipped with) -- built and parses against the API's
+    documented response shape, validated with a mocked fixture
+    (test_fantasy_prop_odds.py), but real bookmaker responses can drift from
+    docs. Worth a real run with ODDS_API_KEY set and checking the Action log
+    for '[odds api] ... credits remaining' lines before trusting it blind.
+
+    Returns None if no key, no events, or every call fails.
+    """
+    key = _get_api_key(api_key)
+    if key is None or events is None or events.empty:
+        return None
+
+    MARKETS = "player_rush_yds,player_reception_yds,player_receptions"
+    rows_by_player: dict[tuple, dict] = {}
+
+    for _, ev in events.iterrows():
+        try:
+            resp = requests.get(
+                f"{BASE_URL}/events/{ev['event_id']}/odds",
+                params={"regions": "us", "markets": MARKETS, "oddsFormat": "american", "apiKey": key},
+                timeout=REQUEST_TIMEOUT,
+            )
+            resp.raise_for_status()
+            _log_usage(resp, f"fantasy props {ev['home_team']}v{ev['away_team']}")
+            data = resp.json()
+        except Exception as e:
+            print(f"WARNING: fetch_fantasy_prop_odds failed for event {ev['event_id']} "
+                  f"({ev['home_team']} v {ev['away_team']}): {e} -- skipping this game's props.")
+            continue
+
+        MARKET_FIELD = {
+            "player_rush_yds": "rush_yds", "player_reception_yds": "rec_yds", "player_receptions": "receptions",
+        }
+        for bk in data.get("bookmakers", []):
+            for mkt in bk.get("markets", []):
+                field = MARKET_FIELD.get(mkt["key"])
+                if field is None:
+                    continue
+                for o in mkt.get("outcomes", []):
+                    player = o.get("description")
+                    if not player:
+                        continue
+                    key_tuple = (ev["event_id"], player)
+                    row = rows_by_player.setdefault(key_tuple, {
+                        "event_id": ev["event_id"], "home_team": ev["home_team"], "away_team": ev["away_team"],
+                        "player_name_raw": player, "player_name_norm": normalize_name(player),
+                    })
+                    if o["name"] == "Over":
+                        price_field, point_field = f"{field}_over_price", f"{field}_point"
+                        if row.get(price_field) is None or o["price"] > row[price_field]:
+                            row[price_field] = o["price"]
+                            row[point_field] = o.get("point")
+                    elif o["name"] == "Under":
+                        price_field = f"{field}_under_price"
+                        if row.get(price_field) is None or o["price"] > row[price_field]:
+                            row[price_field] = o["price"]
+
+        time.sleep(0.15)  # light self-throttle, polite to the API
+
+    if not rows_by_player:
+        return None
+    return pd.DataFrame(list(rows_by_player.values()))
+
+
 def american_to_implied_prob(price: float) -> float:
     if price > 0:
         return 100 / (price + 100)

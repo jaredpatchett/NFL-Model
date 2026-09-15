@@ -171,12 +171,14 @@ def build_game_model_table(seasons: list[int]) -> pd.DataFrame:
     ratings = build_power_ratings(sched)
     ratings = ratings.rename(columns={"team": "team"})
     long = long.merge(
-        ratings[["season", "week", "team", "power_rating", "hfa_as_of_week"]],
+        ratings[["season", "week", "team", "power_rating", "hfa_as_of_week", "games_used"]],
         on=["season", "week", "team"], how="left",
     )
-    opp_ratings = ratings.rename(columns={"team": "opponent", "power_rating": "opp_power_rating"})
+    opp_ratings = ratings.rename(columns={
+        "team": "opponent", "power_rating": "opp_power_rating", "games_used": "opp_games_used",
+    })
     long = long.merge(
-        opp_ratings[["season", "week", "opponent", "opp_power_rating"]],
+        opp_ratings[["season", "week", "opponent", "opp_power_rating", "opp_games_used"]],
         on=["season", "week", "opponent"], how="left",
     )
 

@@ -1,441 +1,189 @@
 """
-backtest.py — Joins the persistent prediction logs (data/predictions_log.jsonl,
-data/player_td_log.jsonl, data/fantasy_projections_log.jsonl) against REAL,
-now-known game outcomes to report genuine model performance: ATS/O-U/
-moneyline records and ROI for Track B, hit rate and calibration for Track A,
-MAE/RMSE for Track C's fantasy point projections.
-
-WHY THIS IS DIFFERENT FROM game_lines_model.py / player_td_model.py's
-VALIDATION: those check calibration against CLOSING lines from a historical
-dataset -- useful for confirming the model itself is sound, but explicitly
-NOT a valid profitability backtest per the blueprint's own principle (never
-backtest against hindsight/closing prices). This script uses the ACTUAL
-logged predictions_log.jsonl / player_td_log.jsonl entries -- genuine
-pre-game snapshots, timestamped before any outcome was known, accumulated
-by the production scripts on every cron run. This is the real thing.
-
-WHICH SNAPSHOT COUNTS AS "THE BET": a game gets logged every cron run
-between when it enters the upcoming slate and kickoff (multiple snapshots
-as the week progresses). This script uses the LAST snapshot logged before
-kickoff for each game/player -- the freshest information actually available,
-which is what a bettor would have acted on. Earlier snapshots are still in
-the log (untouched) for anyone who wants to study how predictions moved
-over the week; this script just doesn't evaluate every one of them as if
-each were a separate bet.
-
-PRICE APPROXIMATION FOR ATS/TOTALS: predictions_log.jsonl records the
-market LINE (spread_line, total_line) but not the per-side PRICE for those
-markets (only moneyline prices are logged). Standard -110 is assumed for
-ATS/totals ROI -- a reasonable default (most books' standard vig) but an
-approximation; moneyline ROI uses the actual logged price.
-
-EXPECT ~0 RESULTS RIGHT NOW: built ahead of the season specifically so it's
-ready the moment games start finishing -- as of this build there are no
-completed 2026 games yet. Validated against synthetic fixtures
-(test_backtest.py) to confirm the join/ROI logic itself is correct before
-there's real data to point it at.
-
-Usage:
-    python backtest.py
+test_backtest.py — Validates backtest.py's evaluation logic (ATS/totals/
+moneyline record + ROI for Track B, hit rate/ROI for Track A) against
+synthetic fixtures with hand-computable expected results. No network needed
+-- evaluate_track_b()/evaluate_track_a() take already-joined DataFrames, so
+this never touches load_schedules() or any real data.
 """
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from __future__ import annotations
-import json
-import os
-from datetime import datetime, timezone
-
-import numpy as np
 import pandas as pd
-
-from nfl_data import load_schedules
-import odds_api  # reusing json_default -- see that module's docstring for why
-                  # this is needed (numpy.int64 doesn't subclass int, so a
-                  # bare json.dump on anything touched by a DataFrame column
-                  # can raise TypeError with no indication of where from)
-
-TRACK_B_LOG = "../data/predictions_log.jsonl"
-TRACK_A_LOG = "../data/player_td_log.jsonl"
-TRACK_C_LOG = "../data/fantasy_projections_log.jsonl"
-STANDARD_VIG_PRICE = -110  # assumed price for ATS/totals -- see module docstring
-
-OUT_JSON = "../data/backtest_results.json"
-OUT_JS = "../data/backtest_results.js"
+from backtest import evaluate_track_b, evaluate_track_a, evaluate_track_c, profit_per_unit, _latest_snapshot
 
 
-def _load_jsonl(path: str) -> pd.DataFrame:
-    if not os.path.exists(path):
-        return pd.DataFrame()
-    rows = []
-    with open(path) as f:
-        for line in f:
-            line = line.strip()
-            if line:
-                rows.append(json.loads(line))
-    return pd.DataFrame(rows)
+def approx(a, b, tol=0.01):
+    if a is None or b is None:
+        return a == b
+    return abs(a - b) < tol
 
 
-def _latest_snapshot(df: pd.DataFrame, key_cols: list[str]) -> pd.DataFrame:
-    """One row per key_cols group: the row with the max logged_at."""
-    if df.empty:
-        return df
-    df = df.copy()
-    df["logged_at"] = pd.to_datetime(df["logged_at"])
-    idx = df.groupby(key_cols)["logged_at"].idxmax()
-    return df.loc[idx].reset_index(drop=True)
-
-
-def profit_per_unit(price: float) -> float:
-    """American odds -> profit on a 1-unit win (not counting the stake back)."""
-    return price / 100 if price > 0 else 100 / -price
-
-
-def _record_and_roi(bet_won: pd.Series, push: pd.Series, prices: pd.Series) -> dict:
-    decided = ~push
-    n_bets = int(decided.sum())
-    if n_bets == 0:
-        return {"n_bets": 0, "wins": 0, "losses": 0, "pushes": int(push.sum()),
-                "win_pct": None, "roi_pct": None}
-    wins = int((bet_won & decided).sum())
-    losses = n_bets - wins
-    profits = np.where(
-        bet_won[decided], prices[decided].apply(profit_per_unit), -1.0
-    )
-    roi = float(np.sum(profits) / n_bets * 100)
-    return {
-        "n_bets": n_bets, "wins": wins, "losses": losses, "pushes": int(push.sum()),
-        "win_pct": round(100 * wins / n_bets, 1), "roi_pct": round(roi, 2),
-    }
-
-
-def evaluate_track_b(bets_with_results: pd.DataFrame, min_edge: float = 0.0) -> dict:
-    """
-    Pure evaluation logic, separated from data-fetching so it's testable
-    against synthetic fixtures (see test_backtest.py). Expects one row per
-    game with both the logged prediction fields AND home_score/away_score
-    already joined on.
-    """
-    df = bets_with_results.copy()
-    if df.empty:
-        return {"n_available": 0}
-
-    df["actual_margin"] = df["home_score"] - df["away_score"]
-    df["actual_total"] = df["home_score"] + df["away_score"]
-
-    # ---- ATS ----
-    df["our_side_home"] = df["pred_home_margin"] > df["market_spread_line"]
-    df["home_covers"] = df["actual_margin"] > df["market_spread_line"]
-    df["ats_push"] = df["actual_margin"] == df["market_spread_line"]
-    df["ats_won"] = np.where(df["our_side_home"], df["home_covers"], ~df["home_covers"])
-    ats_all = _record_and_roi(df["ats_won"], df["ats_push"], pd.Series(STANDARD_VIG_PRICE, index=df.index))
-    edge_mask = df["spread_edge"].abs() >= min_edge
-    ats_edge = _record_and_roi(
-        df.loc[edge_mask, "ats_won"], df.loc[edge_mask, "ats_push"],
-        pd.Series(STANDARD_VIG_PRICE, index=df.index)[edge_mask],
-    )
-
-    # ---- Totals ----
-    df["our_side_over"] = df["pred_total"] > df["market_total_line"]
-    df["actual_over"] = df["actual_total"] > df["market_total_line"]
-    df["total_push"] = df["actual_total"] == df["market_total_line"]
-    df["total_won"] = np.where(df["our_side_over"], df["actual_over"], ~df["actual_over"])
-    total_all = _record_and_roi(df["total_won"], df["total_push"], pd.Series(STANDARD_VIG_PRICE, index=df.index))
-
-    # ---- Moneyline ----
-    df["our_side_home_ml"] = df["home_win_prob"] > 0.5
-    df["home_won"] = df["actual_margin"] > 0
-    df["ml_push"] = df["actual_margin"] == 0  # a tie
-    df["ml_won"] = np.where(df["our_side_home_ml"], df["home_won"], ~df["home_won"])
-    ml_price = np.where(df["our_side_home_ml"], df["market_home_moneyline"], df["market_away_moneyline"])
-    ml_all = _record_and_roi(df["ml_won"], df["ml_push"], pd.Series(ml_price, index=df.index))
-
-    return {
-        "n_available": len(df), "ats_all": ats_all, "ats_edge_filtered": ats_edge,
-        "totals_all": total_all, "moneyline_all": ml_all,
-    }
-
-
-def backtest_track_b(min_edge: float = 0.0) -> dict:
-    log = _load_jsonl(TRACK_B_LOG)
-    if log.empty:
-        print("Track B: no predictions_log.jsonl entries found.")
-        return {}
-
-    bets = _latest_snapshot(log, ["game_id"])
-    seasons = sorted(bets["season"].unique().tolist())
-    sched = load_schedules(seasons)
-    results = sched[sched["home_score"].notna()][
-        ["game_id", "home_score", "away_score"]
+def test_profit_per_unit():
+    return [
+        ("profit +150", profit_per_unit(150), 1.5),
+        ("profit -150", profit_per_unit(-150), 100 / 150),
     ]
 
-    df = bets.merge(results, on="game_id", how="inner")
-    print(f"Track B: {len(bets)} games logged, {len(df)} have final scores available.")
-    if df.empty:
-        return {"n_available": 0}
 
-    out = evaluate_track_b(df, min_edge=min_edge)
-    print(f"\n  ATS (all logged bets):        {out['ats_all']}")
-    print(f"  ATS (|edge| >= {min_edge} pts):   {out['ats_edge_filtered']}")
-    print(f"  Totals (all logged bets):     {out['totals_all']}")
-    print(f"  Moneyline (all logged bets):  {out['moneyline_all']}")
-    return out
+def test_latest_snapshot():
+    """3 snapshots for one game at different times -- must pick the latest."""
+    df = pd.DataFrame([
+        {"game_id": "g1", "logged_at": "2026-09-08T10:00:00+00:00", "pred_home_margin": 3.0},
+        {"game_id": "g1", "logged_at": "2026-09-09T10:00:00+00:00", "pred_home_margin": 4.0},
+        {"game_id": "g1", "logged_at": "2026-09-07T10:00:00+00:00", "pred_home_margin": 2.0},
+    ])
+    latest = _latest_snapshot(df, ["game_id"])
+    return [("latest snapshot picks most recent logged_at", latest.iloc[0]["pred_home_margin"], 4.0)]
 
 
-def evaluate_track_a(bets_with_results: pd.DataFrame) -> dict:
+def test_track_b_ats_totals_ml():
     """
-    Pure evaluation logic for Track A, separated from data-fetching for
-    testability. Expects one row per player-game with scored_td already
-    joined on.
+    Hand-computable 4-game fixture:
+      G1: home favored by our model AND covers -> ATS win for home side
+      G2: home favored by market, we predict away side wins ATS, and away covers -> ATS win
+      G3: push (actual margin == spread line exactly)
+      G4: our side loses ATS
+    Standard -110 assumed on all ATS/total bets -> profit_per_unit(-110) = 100/110 = 0.9091
     """
-    df = bets_with_results.copy()
-    if df.empty:
-        return {"n_available": 0}
+    rows = [
+        # G1: market spread_line=3 (home favored by 3), we predict home margin=7 (favor home),
+        #     actual: home wins by 10 -> home covers (10>3) -> WIN
+        {"game_id": "g1", "pred_home_margin": 7.0, "market_spread_line": 3.0,
+         "pred_total": 45.0, "market_total_line": 44.0,
+         "home_win_prob": 0.7, "market_home_moneyline": -150, "market_away_moneyline": 130,
+         "home_score": 27, "away_score": 17},  # margin=10, total=44
+        # G2: market spread_line=3, we predict home margin=1 (favor AWAY side, since 1<3),
+        #     actual: home wins by only 2 -> home does NOT cover (2<3) -> away covers -> WIN for us
+        {"game_id": "g2", "pred_home_margin": 1.0, "market_spread_line": 3.0,
+         "pred_total": 40.0, "market_total_line": 44.0,
+         "home_win_prob": 0.55, "market_home_moneyline": -120, "market_away_moneyline": 100,
+         "home_score": 20, "away_score": 18},  # margin=2, total=38
+        # G3: push -- actual margin exactly equals spread line
+        {"game_id": "g3", "pred_home_margin": 5.0, "market_spread_line": 3.0,
+         "pred_total": 44.0, "market_total_line": 44.0,
+         "home_win_prob": 0.6, "market_home_moneyline": -130, "market_away_moneyline": 110,
+         "home_score": 24, "away_score": 21},  # margin=3 == spread_line -> push; total=45!=44
+        # G4: we favor home (pred_margin=6 > spread_line=3), actual home wins by only 1 -> LOSS
+        {"game_id": "g4", "pred_home_margin": 6.0, "market_spread_line": 3.0,
+         "pred_total": 50.0, "market_total_line": 44.0,
+         "home_win_prob": 0.65, "market_home_moneyline": -140, "market_away_moneyline": 120,
+         "home_score": 22, "away_score": 21},  # margin=1, total=43
+    ]
+    for r in rows:
+        r["spread_edge"] = r["pred_home_margin"] - r["market_spread_line"]
+    df = pd.DataFrame(rows)
 
-    from sklearn.metrics import roc_auc_score, log_loss, brier_score_loss
-    out = {
-        "n_available": len(df),
-        "hit_rate": float(df["scored_td"].mean()),
-        "mean_predicted_prob": float(df["anytime_td_prob"].mean()),
-    }
-    if df["scored_td"].nunique() > 1:
-        out["auc"] = float(roc_auc_score(df["scored_td"], df["anytime_td_prob"]))
-        out["log_loss"] = float(log_loss(df["scored_td"], df["anytime_td_prob"]))
-        out["brier"] = float(brier_score_loss(df["scored_td"], df["anytime_td_prob"]))
+    out = evaluate_track_b(df, min_edge=0.0)
+    checks = []
+    checks.append(("n_available", out["n_available"], 4))
 
-    priced = df.dropna(subset=["anytime_td_price"])
-    if len(priced):
-        priced = priced.copy()
-        priced["bet_won"] = priced["scored_td"] == 1
-        profits = np.where(
-            priced["bet_won"], priced["anytime_td_price"].apply(profit_per_unit), -1.0
-        )
-        out["n_priced_bets"] = len(priced)
-        out["roi_all_pct"] = round(100 * float(np.mean(profits)), 2)
+    # ATS: G1 win, G2 win, G3 push, G4 loss -> 2 wins, 1 loss, 1 push, n_bets=3 (decided)
+    ats = out["ats_all"]
+    checks.append(("ATS n_bets (excl push)", ats["n_bets"], 3))
+    checks.append(("ATS wins", ats["wins"], 2))
+    checks.append(("ATS losses", ats["losses"], 1))
+    checks.append(("ATS pushes", ats["pushes"], 1))
+    # ROI: 2 wins @ profit_per_unit(-110)=0.9091, 1 loss @ -1, over 3 bets
+    expected_ats_roi = ((2 * (100/110)) + (1 * -1)) / 3 * 100
+    checks.append(("ATS ROI %", ats["roi_pct"], round(expected_ats_roi, 2)))
 
-        positive_edge = priced[priced["edge"] > 0] if "edge" in priced.columns else pd.DataFrame()
-        if len(positive_edge):
-            pe_profits = np.where(
-                positive_edge["scored_td"] == 1,
-                positive_edge["anytime_td_price"].apply(profit_per_unit), -1.0,
-            )
-            out["n_positive_edge_bets"] = len(positive_edge)
-            out["roi_positive_edge_pct"] = round(100 * float(np.mean(pe_profits)), 2)
-    else:
-        out["n_priced_bets"] = 0
+    # Totals: G1 total_line=44, actual=44 -> push (44==44). G2: pred=40<44 (under), actual=38<44 -> under wins -> WIN
+    # G3: pred=44==market(44) -> our_side_over = (44>44)=False -> under; actual=45>44 -> over hits -> our under LOSES
+    # G4: pred=50>44 (over), actual=43<44 -> under hits -> our over LOSES
+    totals = out["totals_all"]
+    checks.append(("Totals n_bets (excl push)", totals["n_bets"], 3))
+    checks.append(("Totals wins", totals["wins"], 1))
+    checks.append(("Totals losses", totals["losses"], 2))
+    checks.append(("Totals pushes", totals["pushes"], 1))
 
-    return out
+    # Moneyline: all 4 games favor home (prob>0.5), all 4 home teams won (positive margins) -> 4 wins
+    ml = out["moneyline_all"]
+    checks.append(("ML n_bets", ml["n_bets"], 4))
+    checks.append(("ML wins", ml["wins"], 4))
+    checks.append(("ML losses", ml["losses"], 0))
+
+    return checks
 
 
-def backtest_track_a() -> dict:
-    log = _load_jsonl(TRACK_A_LOG)
-    if log.empty:
-        print("Track A: no player_td_log.jsonl entries found.")
-        return {}
-
-    bets = _latest_snapshot(log, ["season", "week", "player_id"])
-    seasons = sorted(bets["season"].unique().tolist())
-
-    # Real outcomes come from play-by-play (scored_td), not the schedule.
-    sched = load_schedules(seasons)
-    played_seasons = [s for s in seasons if sched.loc[sched["season"] == s, "home_score"].notna().any()]
-    if not played_seasons:
-        print(f"Track A: {len(bets)} player-games logged, 0 have played seasons with real outcomes yet.")
-        return {"n_available": 0}
-
-    from nfl_data import load_pbp, load_snaps, load_id_crosswalk
-    from features import build_player_week_features
-    pbp = load_pbp(played_seasons)
-    snaps = load_snaps(played_seasons)
-    xwalk = load_id_crosswalk()
-    raw = build_player_week_features(pbp, snaps, id_crosswalk=xwalk)
-    results = raw[["season", "week", "player_id", "scored_td"]]
-
-    df = bets.merge(results, on=["season", "week", "player_id"], how="inner")
-    print(f"Track A: {len(bets)} player-games logged, {len(df)} have real outcomes available.")
-    if df.empty:
-        return {"n_available": 0}
-
+def test_track_a_hit_rate_and_roi():
+    """
+    3 players: 2 scored, 1 didn't. 2 have a live price logged.
+    """
+    df = pd.DataFrame([
+        {"player_id": "p1", "anytime_td_prob": 0.6, "scored_td": 1,
+         "anytime_td_price": -150, "edge": 0.05},
+        {"player_id": "p2", "anytime_td_prob": 0.3, "scored_td": 0,
+         "anytime_td_price": 120, "edge": -0.02},
+        {"player_id": "p3", "anytime_td_prob": 0.4, "scored_td": 1,
+         "anytime_td_price": None, "edge": None},
+    ])
     out = evaluate_track_a(df)
-    print(f"\n  Actual anytime-TD rate among logged predictions: {out['hit_rate']:.3f}")
-    print(f"  Mean predicted probability: {out['mean_predicted_prob']:.3f}")
-    if "auc" in out:
-        print(f"  AUC: {out['auc']:.4f}")
-        print(f"  LogLoss: {out['log_loss']:.4f}")
-        print(f"  Brier: {out['brier']:.4f}")
-    if out.get("n_priced_bets"):
-        print(f"\n  Bets with a live price at logging time: {out['n_priced_bets']}")
-        print(f"  ROI if betting every logged player: {out['roi_all_pct']:.2f}%")
-        if "roi_positive_edge_pct" in out:
-            print(f"  ROI if betting only positive-edge picks ({out['n_positive_edge_bets']} bets): "
-                  f"{out['roi_positive_edge_pct']:.2f}%")
-    else:
-        print("\n  No logged predictions had a live price at the time -- ROI not computable "
-              "(this is expected for any run before ODDS_API_KEY was connected).")
-
-    return out
+    checks = []
+    checks.append(("n_available", out["n_available"], 3))
+    checks.append(("hit_rate", round(out["hit_rate"], 4), round(2/3, 4)))
+    checks.append(("n_priced_bets", out["n_priced_bets"], 2))
+    # p1 won @ -150 -> profit_per_unit(-150)=100/150=0.6667; p2 lost @ 120 -> -1
+    expected_roi_all = ((100/150) + (-1)) / 2 * 100
+    checks.append(("roi_all_pct", out["roi_all_pct"], round(expected_roi_all, 2)))
+    # positive edge only: p1 (edge=0.05, won) -> roi = +0.6667*100
+    checks.append(("n_positive_edge_bets", out["n_positive_edge_bets"], 1))
+    checks.append(("roi_positive_edge_pct", out["roi_positive_edge_pct"], round((100/150)*100, 2)))
+    return checks
 
 
-def evaluate_track_c(bets_with_results: pd.DataFrame) -> dict:
+def test_track_c_mae_rmse_and_market_split():
     """
-    Pure evaluation logic for Track C (fantasy projections), separated from
-    data-fetching for testability -- same split as evaluate_track_a/b.
-    Expects one row per player-week with `actual_fantasy_pts` already
-    joined on. Reports plain regression accuracy (MAE/RMSE, not a betting
-    record -- fantasy points aren't a win/loss market), broken out by
-    whether the projection had live market data at logging time, since the
-    whole point of the market blend is that it should be MORE accurate than
-    the trailing-average-only fallback -- this is the only way to actually
-    check that claim against real outcomes instead of assuming it.
+    4 player-weeks: 2 had live market data, 2 fell back to trailing-avg
+    only -- checks the overall MAE/RMSE/bias AND the per-source breakdown
+    that's the whole point of logging has_market_data (proving whether the
+    market blend is actually more accurate, not just assuming it).
     """
-    df = bets_with_results.copy()
-    if df.empty:
-        return {"n_available": 0}
-
-    df["error"] = df["proj_fantasy_pts"] - df["actual_fantasy_pts"]
-    out = {
-        "n_available": len(df),
-        "mae": round(float(df["error"].abs().mean()), 3),
-        "rmse": round(float(np.sqrt((df["error"] ** 2).mean())), 3),
-        "bias": round(float(df["error"].mean()), 3),  # positive = over-projecting on average
-    }
-
-    has_market = df[df["has_market_data"] == True]  # noqa: E712 -- explicit bool compare, logged as a real bool not a numpy one
-    no_market = df[df["has_market_data"] == False]  # noqa: E712
-    if len(has_market):
-        out["market_blended"] = {
-            "n": len(has_market),
-            "mae": round(float((has_market["proj_fantasy_pts"] - has_market["actual_fantasy_pts"]).abs().mean()), 3),
-        }
-    if len(no_market):
-        out["trailing_avg_fallback"] = {
-            "n": len(no_market),
-            "mae": round(float((no_market["proj_fantasy_pts"] - no_market["actual_fantasy_pts"]).abs().mean()), 3),
-        }
-    return out
-
-
-def backtest_track_c() -> dict:
-    log = _load_jsonl(TRACK_C_LOG)
-    if log.empty:
-        print("Track C: no fantasy_projections_log.jsonl entries found.")
-        return {}
-
-    bets = _latest_snapshot(log, ["season", "week", "player_id"])
-
-    # Real outcomes come from the same nflverse weekly stats table every
-    # other Track C script already reads -- NOT play-by-play/pbp like Track
-    # A needs (Track A's outcome, "did this player score a TD," isn't a
-    # simple weekly-stats column; Track C's outcome, fantasy points scored,
-    # already IS one -- fetch_player_stats.py already computes it). This is
-    # actually a simpler join than Track A's, not a re-derivation of it.
-    import sys as _sys
-    _repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    if _repo_root not in _sys.path:
-        _sys.path.insert(0, _repo_root)
-    from fetch_player_stats import fetch_player_stats
-
-    seasons = sorted(bets["season"].unique().tolist())
-    all_results = []
-    for s in seasons:
-        try:
-            season_stats = fetch_player_stats(s)
-            all_results.append(season_stats[["player_id", "season", "week", "fantasy_points_ppr"]])
-        except Exception as e:
-            print(f"Track C: couldn't fetch {s} results for backtesting ({e}) -- skipping that season.")
-    if not all_results:
-        return {"n_available": 0}
-    results = pd.concat(all_results, ignore_index=True).rename(columns={"fantasy_points_ppr": "actual_fantasy_pts"})
-
-    df = bets.merge(results, on=["season", "week", "player_id"], how="inner")
-    print(f"Track C: {len(bets)} player-weeks logged, {len(df)} have real outcomes available.")
-    if df.empty:
-        return {"n_available": 0}
-
+    df = pd.DataFrame([
+        {"player_id": "p1", "proj_fantasy_pts": 18.0, "actual_fantasy_pts": 20.0, "has_market_data": True},
+        {"player_id": "p2", "proj_fantasy_pts": 12.0, "actual_fantasy_pts": 11.0, "has_market_data": True},
+        {"player_id": "p3", "proj_fantasy_pts": 25.0, "actual_fantasy_pts": 15.0, "has_market_data": False},
+        {"player_id": "p4", "proj_fantasy_pts": 5.0, "actual_fantasy_pts": 5.0, "has_market_data": False},
+    ])
     out = evaluate_track_c(df)
-    print(f"\n  MAE: {out['mae']:.3f} fantasy pts")
-    print(f"  RMSE: {out['rmse']:.3f} fantasy pts")
-    print(f"  Bias: {out['bias']:+.3f} (positive = over-projecting on average)")
-    if "market_blended" in out:
-        print(f"  Market-blended projections (n={out['market_blended']['n']}): MAE {out['market_blended']['mae']:.3f}")
-    if "trailing_avg_fallback" in out:
-        print(f"  Trailing-avg-only fallback (n={out['trailing_avg_fallback']['n']}): MAE {out['trailing_avg_fallback']['mae']:.3f}")
-
-    return out
-
-
-def write_results(track_b: dict, track_a: dict, track_c: dict) -> None:
-    """
-    Writes backtest results to data/backtest_results.json + .js -- same
-    OVERWRITTEN-SNAPSHOT pattern as nfl_lines.js / player_td.js (current
-    state only; the real historical record lives in the untouched
-    predictions_log.jsonl / player_td_log.jsonl this script reads from).
-
-    This is what makes the results actually usable without someone running
-    this script by hand and reading console output: wire this script into
-    the cron (see workflow YAML) and a dashboard, or anything else, can just
-    read backtest_results.js like it already does for the other two data
-    files, refreshed automatically every run.
-
-    `note` is a plain-language summary of which tracks have real results
-    yet, since backtest_track_b()/backtest_track_a() can each independently
-    return {} (log file doesn't exist yet) or {"n_available": 0} (logged
-    predictions exist but no games have finished) -- both real, expected,
-    non-error states this early in a season, not something to alarm a
-    reader with a wall of null values and no explanation.
-    """
-    b_available = bool(track_b) and track_b.get("n_available", 0) > 0
-    a_available = bool(track_a) and track_a.get("n_available", 0) > 0
-    c_available = bool(track_c) and track_c.get("n_available", 0) > 0
-
-    available_tracks = [name for name, avail in [("Track B", b_available), ("Track A", a_available), ("Track C", c_available)] if avail]
-    if not available_tracks:
-        note = (
-            "No completed games with a logged pre-game prediction yet -- all three tracks show 0 "
-            "results. Expected until real games finish; predictions_log.jsonl, player_td_log.jsonl, "
-            "and fantasy_projections_log.jsonl already accumulate a fresh timestamped snapshot every "
-            "cron run, so results populate automatically as games are played -- no other action needed."
-        )
-    else:
-        missing = [name for name in ["Track B", "Track A", "Track C"] if name not in available_tracks]
-        note = f"{' and '.join(available_tracks)} {'has' if len(available_tracks)==1 else 'have'} real logged-prediction-vs-outcome results below"
-        note += f"; {' and '.join(missing)} does not yet." if missing else "."
-
-    output = {
-        "generated_at": datetime.now(timezone.utc).isoformat(),
-        "note": note,
-        "track_b": track_b,
-        "track_a": track_a,
-        "track_c": track_c,
-    }
-
-    out_dir = os.path.dirname(os.path.abspath(OUT_JSON))
-    os.makedirs(out_dir, exist_ok=True)
-    with open(OUT_JSON, "w") as f:
-        json.dump(output, f, indent=2, default=odds_api.json_default)
-    with open(OUT_JS, "w") as f:
-        f.write("// Auto-generated by scripts/backtest.py -- do not edit by hand.\n")
-        f.write(f"const BACKTEST_DATA = {json.dumps(output, indent=2, default=odds_api.json_default)};\n")
-
-    print(f"\nWrote backtest results to {OUT_JSON} and {OUT_JS}")
+    checks = []
+    checks.append(("n_available", out["n_available"], 4))
+    # errors: -2, +1, +10, 0 -> |errors|: 2,1,10,0 -> MAE = 13/4 = 3.25
+    checks.append(("mae", out["mae"], 3.25))
+    # RMSE = sqrt((4+1+100+0)/4) = sqrt(26.25)
+    import math
+    checks.append(("rmse", round(out["rmse"], 4), round(math.sqrt(26.25), 4)))
+    # bias = mean(-2,1,10,0) = 9/4 = 2.25 (over-projecting on average)
+    checks.append(("bias", out["bias"], 2.25))
+    # market-blended (p1,p2): |errors| 2,1 -> MAE 1.5
+    checks.append(("market_blended.n", out["market_blended"]["n"], 2))
+    checks.append(("market_blended.mae", out["market_blended"]["mae"], 1.5))
+    # fallback (p3,p4): |errors| 10,0 -> MAE 5.0
+    checks.append(("trailing_avg_fallback.n", out["trailing_avg_fallback"]["n"], 2))
+    checks.append(("trailing_avg_fallback.mae", out["trailing_avg_fallback"]["mae"], 5.0))
+    return checks
 
 
 def main():
-    print("=" * 70)
-    print("TRACK B BACKTEST (spreads / totals / moneyline)")
-    print("=" * 70)
-    track_b = backtest_track_b()
+    all_checks = (
+        test_profit_per_unit()
+        + test_latest_snapshot()
+        + test_track_b_ats_totals_ml()
+        + test_track_a_hit_rate_and_roi()
+        + test_track_c_mae_rmse_and_market_split()
+    )
 
-    print("\n" + "=" * 70)
-    print("TRACK A BACKTEST (anytime TD)")
-    print("=" * 70)
-    track_a = backtest_track_a()
-
-    print("\n" + "=" * 70)
-    print("TRACK C BACKTEST (fantasy projections)")
-    print("=" * 70)
-    track_c = backtest_track_c()
-
-    write_results(track_b, track_a, track_c)
+    print(f"{'check':40s} {'got':>15s} {'want':>15s}  ok")
+    print("-" * 78)
+    all_ok = True
+    for name, got, want in all_checks:
+        ok = approx(got, want) if isinstance(want, float) else (got == want)
+        all_ok &= ok
+        print(f"{name:40s} {str(got):>15s} {str(want):>15s}  {'PASS' if ok else 'FAIL'}")
+    print("-" * 78)
+    print("ALL PASS" if all_ok else "SOME FAILED")
+    return 0 if all_ok else 1
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

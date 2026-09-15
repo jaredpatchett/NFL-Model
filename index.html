@@ -589,7 +589,7 @@
       </div>
       <div>
         <div class="pc-section-title">GAME LOG</div>
-        <div class="pc-chart-wrap" style="max-height:280px;overflow-y:auto;">
+        <div class="pc-chart-wrap" style="max-height:280px;overflow-y:auto;overflow-x:auto;">
           <table class="pc-gamelog" id="pc-gamelog"></table>
         </div>
       </div>
@@ -1177,7 +1177,7 @@
       document.getElementById('pc-name').textContent = p.player_name;
       document.getElementById('pc-badges').innerHTML = [
         [p.position, ''], [p.team, 'pc-badge-team'],
-        [`${p.games_played} game${p.games_played===1?'':'s'}`, ''],
+        [`${p.games_played} game${p.games_played===1?'':'s'}${p.display_season?' ('+p.display_season+')':''}`, ''],
         [p.latest_snap_pct!=null ? (p.latest_snap_pct*100).toFixed(1)+'% snaps' : '\u2014 snaps', ''],
       ].map(([label,cls]) => `<span class="pc-badge ${cls}">${label}</span>`).join('');
 
@@ -1232,19 +1232,28 @@
     function renderSnapChart(weeks){
       const el = document.getElementById('pc-snap-chart');
       if(!weeks || !weeks.length){ el.innerHTML = '<div style="color:var(--text-faint2);font-size:11px;padding:20px;text-align:center">No snap data yet</div>'; return; }
-      const W = 560, H = 140, pad = 28;
+      const W = 560, H = 150, pad = 28;
       const xStep = weeks.length>1 ? (W-pad*2)/(weeks.length-1) : 0;
       const pts = weeks.map((w,i) => {
         const x = pad + i*xStep;
-        const y = pad + (1-(w.pct||0))*(H-pad*2-10);
+        const y = pad + (1-(w.pct||0))*(H-pad*2-18);
         return {x,y,w};
       });
       const path = pts.map((p,i)=> (i===0?'M':'L')+p.x.toFixed(1)+','+p.y.toFixed(1)).join(' ');
       const dots = pts.map(p => `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="3.5" fill="var(--blue)"/>`).join('');
-      const labels = pts.map(p => `<text x="${p.x.toFixed(1)}" y="${H-6}" font-size="9" fill="var(--text-faint2)" text-anchor="middle" font-family="'IBM Plex Mono',monospace">${p.w.week}</text>`).join('');
+      // label every point's week number; only label the SEASON at the first point of each season and whenever the season changes (matches the sample card's "2026" marker at the season boundary)
+      const labels = pts.map((p,i) => {
+        const seasonChanged = i===0 || pts[i-1].w.season !== p.w.season;
+        const weekLabel = `<text x="${p.x.toFixed(1)}" y="${H-20}" font-size="9" fill="var(--text-faint2)" text-anchor="middle" font-family="'IBM Plex Mono',monospace">${p.w.week}</text>`;
+        const seasonLabel = seasonChanged
+          ? `<text x="${p.x.toFixed(1)}" y="${H-8}" font-size="8" fill="var(--blue)" text-anchor="middle" font-family="'IBM Plex Mono',monospace">${p.w.season}</text>
+             <line x1="${p.x.toFixed(1)}" y1="${pad}" x2="${p.x.toFixed(1)}" y2="${H-pad-18}" stroke="var(--line-2)" stroke-width="1" stroke-dasharray="2,2"/>`
+          : '';
+        return weekLabel + seasonLabel;
+      }).join('');
       el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}">
         <line x1="${pad}" y1="${pad}" x2="${W-pad}" y2="${pad}" stroke="var(--line)" stroke-width="1"/>
-        <line x1="${pad}" y1="${H-pad-10}" x2="${W-pad}" y2="${H-pad-10}" stroke="var(--line)" stroke-width="1"/>
+        <line x1="${pad}" y1="${H-pad-18}" x2="${W-pad}" y2="${H-pad-18}" stroke="var(--line)" stroke-width="1"/>
         <path d="${path}" fill="none" stroke="var(--blue)" stroke-width="2"/>
         ${dots}${labels}
       </svg>`;
@@ -1280,14 +1289,14 @@
 
     function renderGameLog(log){
       const el = document.getElementById('pc-gamelog');
-      if(!log || !log.length){ el.innerHTML = '<tr><td style="padding:16px;color:var(--text-faint2);text-align:center" colspan="8">No games played yet</td></tr>'; return; }
-      const head = `<tr><th>WK</th><th>OPP</th><th>DEF</th><th>TGT</th><th>REC</th><th>YDS</th><th>TD</th><th>FP</th></tr>`;
+      if(!log || !log.length){ el.innerHTML = '<tr><td style="padding:16px;color:var(--text-faint2);text-align:center" colspan="10">No games played yet</td></tr>'; return; }
+      const head = `<tr><th>YR</th><th>WK</th><th>OPP</th><th>DEF</th><th>TGT</th><th>REC</th><th>REC YD</th><th>RUSH YD</th><th>TD</th><th>FP</th></tr>`;
       const rows = log.map(g => {
         const rankCls = g.week_def_rank==null ? '' : g.week_def_rank<=10 ? 'pc-def-soft' : g.week_def_rank>=23 ? 'pc-def-tough' : '';
         return `<tr>
-          <td>${g.week}</td><td>${g.opponent}</td>
+          <td>${g.season}</td><td>${g.week}</td><td>${g.opponent}</td>
           <td class="${rankCls}">${g.week_def_rank!=null?g.week_def_rank+'/'+g.week_def_rank_of:'\u2014'}</td>
-          <td>${g.targets}</td><td>${g.receptions}</td><td>${g.receiving_yards}</td><td>${g.touchdowns}</td><td>${g.fantasy_pts}</td>
+          <td>${g.targets}</td><td>${g.receptions}</td><td>${g.receiving_yards}</td><td>${g.rushing_yards}</td><td>${g.touchdowns}</td><td>${g.fantasy_pts}</td>
         </tr>`;
       }).join('');
       el.innerHTML = head + rows;

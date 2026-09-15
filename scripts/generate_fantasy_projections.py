@@ -87,11 +87,29 @@ def load_inputs() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFram
     prior_season = pd.DataFrame()
     prior_snaps = pd.DataFrame()
     try:
+        # fetch_player_stats.py lives at the REPO ROOT (it writes to data/
+        # relative to cwd, and its own workflow step deliberately runs with
+        # no working-directory override -- see that script's own comments).
+        # This script runs with working-directory: scripts, so a plain
+        # `import fetch_player_stats` can't see it -- Python only searches
+        # the running script's own directory plus sys.path, not the repo
+        # tree. Add the repo root explicitly. (Real bug, caught via a live
+        # Action log: "No module named 'fetch_player_stats'" -- local
+        # testing had missed it because the test setup happened to have a
+        # copy of the file in both locations, masking the real repo's
+        # actual layout.)
+        import sys as _sys
+        _repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        if _repo_root not in _sys.path:
+            _sys.path.insert(0, _repo_root)
+
         from fetch_player_stats import fetch_player_stats as _fetch_prior_stats
         from fetch_player_stats import fetch_snap_counts as _fetch_prior_snaps
         prior_season = _fetch_prior_stats(SEASON - 1)
         prior_season = prior_season[prior_season["position"].isin(POSITIONS)]
         prior_snaps = _fetch_prior_snaps(SEASON - 1)
+        print(f"  Loaded {SEASON - 1} prior-season data: {len(prior_season)} stat rows, "
+              f"{len(prior_snaps)} snap rows, {prior_season['player_id'].nunique() if not prior_season.empty else 0} unique players.")
     except Exception as e:
         print(f"  WARNING: couldn't load {SEASON - 1} prior-season data "
               f"({e}) -- falling back to generic position median for shrinkage, "

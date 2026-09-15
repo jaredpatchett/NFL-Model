@@ -64,13 +64,21 @@ jobs:
         run: python generate_player_predictions.py
 
       - name: Generate fantasy point projections (Track C)
-        # Baseline trailing-average projections + opponent-adjustment, built
-        # on top of the player_stats/snap_counts CSVs the earlier fetch step
-        # wrote to data/. Independent of Track A/B -- reads data/, doesn't
-        # need live odds. Early-season weeks will show blank/zero
-        # projections by design (leakage-safe trailing average needs at
-        # least one PRIOR game) -- not a bug, resolves itself week to week.
+        # Baseline trailing-average projections + opponent-adjustment,
+        # market-blended with live rec-yds/receptions/rush-yds prop odds
+        # (80% market weight when available, same market-anchored philosophy
+        # as Track B's total-points model) + Track A's anytime-TD
+        # probability for expected TD value. Falls back entirely to the
+        # trailing-average-only projection for any player with no live
+        # market data this run (props not posted yet, bye week, budget/key
+        # issue) -- built on the player_stats/snap_counts CSVs the earlier
+        # fetch step wrote to data/. Early-season weeks will show blank/zero
+        # trailing-average projections by design (leakage-safe trailing
+        # average needs at least one PRIOR game) -- not a bug, resolves
+        # itself week to week.
         working-directory: scripts
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: python generate_fantasy_projections.py
 
       - name: Backtest against real completed games

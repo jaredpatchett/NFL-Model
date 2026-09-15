@@ -308,6 +308,18 @@ def main():
             "home_team": row["team"],
             "away_team": row["opponent"],
             "market_source": market_source,  # "live" (The Odds API) or "schedule_fallback"
+            # How many real games (league-wide) fed the power-rating solve
+            # these predictions are built on -- e.g. 16 at Week 2 (just
+            # Week 1's slate). LOW VALUES MEAN THE RATING IS STILL MOSTLY
+            # LAST SEASON'S CARRYOVER, NOT REAL CURRENT-SEASON EVIDENCE --
+            # added after a real Week 2 case (Titans/Raiders home-dog
+            # moneylines all flagging OFFICIAL off ratings barely
+            # distinguishable from league-average). The dashboard uses this
+            # to require a minimum amount of real evidence before a big
+            # edge/EV number is allowed to reach OFFICIAL status, regardless
+            # of how large the edge itself looks -- see MIN_GAMES_FOR_OFFICIAL
+            # in index.html.
+            "games_used": int(row["games_used"]) if pd.notna(row.get("games_used")) else 0,
             "model": {
                 "pred_home_margin": round(float(row["pred_margin"]), 2),
                 "pred_total": round(float(row["pred_total"]), 2),

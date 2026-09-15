@@ -52,6 +52,9 @@ OUT_JS = "../data/fantasy_projections.js"
 OUT_LOG = "../data/fantasy_projections_log.jsonl"
 
 TRAILING_WINDOW = 4
+MIN_TRAILING_WEEKS_FOR_MATCHUP = 3  # below this, default matchup_factor to 1.00 -- see build_defense_vs_position
+MATCHUP_FACTOR_MIN = 0.75
+MATCHUP_FACTOR_MAX = 1.35
 POSITIONS = ["QB", "RB", "WR", "TE"]
 
 
@@ -71,19 +74,35 @@ def load_inputs() -> tuple[pd.DataFrame, pd.DataFrame]:
 
 
 def build_trailing_player_avg(stats: pd.DataFrame) -> pd.DataFrame:
-    """Leakage-safe trailing mean fantasy_points_ppr per player, shift(1)
-    before rolling so a week's own result never enters its own average."""
+    """LIVE trailing mean fantasy_points_ppr per player, as of right now --
+    averages over each player's most recent (up to TRAILING_WINDOW) PLAYED
+    games, including their most recent one.
+
+    This is deliberately NOT shifted the way rolling_features.py's
+    shift-before-aggregate engine is. That shift exists to stop a game from
+    using its OWN result as an input to its OWN prediction when building a
+    per-week HISTORICAL training table (many rows, one per played week).
+    Here there is no "own result" problem: we're projecting a genuinely
+    unplayed future week, so every game played so far -- including the most
+    recent one -- is legitimate, already-known information for that
+    projection. Shifting here was the bug: it excluded each player's latest
+    game from their own trailing average, producing NaN for anyone with
+    only one game played (exactly what happened at Week 1 -- see the
+    conversation this was caught in)."""
     stats = stats.sort_values(["player_id", "week"]).reset_index(drop=True)
-    shifted = stats.groupby("player_id")["fantasy_points_ppr"].shift(1)
-    stats["trailing_avg_pts"] = shifted.groupby(stats["player_id"]).transform(
+    grp = stats.groupby("player_id")["fantasy_points_ppr"]
+    stats["trailing_avg_pts"] = grp.transform(
         lambda s: s.rolling(TRAILING_WINDOW, min_periods=1).mean()
     )
-    stats["trailing_games"] = shifted.groupby(stats["player_id"]).cumcount()
+    stats["trailing_games"] = grp.transform("cumcount") + 1
     return stats
 
 
 def build_defense_vs_position(stats: pd.DataFrame) -> pd.DataFrame:
-    """Trailing fantasy points allowed by each team to each position_group,
+    """LIVE trailing fantasy points allowed by each team to each
+    position_group, as of right now (not shifted -- same reasoning as
+    build_trailing_player_avg above: every played week is legitimate
+    already-known information for projecting the next, unplayed one),
     normalized against that same week's league-average allowed to that
     position -- same approach as Track A's matchup_rating."""
     team_pos_week = (
@@ -91,12 +110,10 @@ def build_defense_vs_position(stats: pd.DataFrame) -> pd.DataFrame:
         .agg(pts_allowed=("fantasy_points_ppr", "sum"),
              players=("player_id", "nunique"))
     )
-    # per-team-per-position trailing (leakage-safe: shift before roll)
     team_pos_week = team_pos_week.sort_values(["opponent_team", "position", "week"])
-    shifted = team_pos_week.groupby(["opponent_team", "position"])["pts_allowed"].shift(1)
-    team_pos_week["trailing_allowed"] = shifted.groupby(
-        [team_pos_week["opponent_team"], team_pos_week["position"]]
-    ).transform(lambda s: s.rolling(TRAILING_WINDOW, min_periods=1).mean())
+    team_pos_week["trailing_allowed"] = team_pos_week.groupby(
+        ["opponent_team", "position"]
+    )["pts_allowed"].transform(lambda s: s.rolling(TRAILING_WINDOW, min_periods=1).mean())
 
     # league-average allowed to that position, same week, same trailing basis
     league_avg = (
@@ -105,6 +122,27 @@ def build_defense_vs_position(stats: pd.DataFrame) -> pd.DataFrame:
     )
     team_pos_week["matchup_factor"] = np.where(
         league_avg > 0, team_pos_week["trailing_allowed"] / league_avg, 1.0
+    )
+
+    # Sample-size guardrail: with only 1-2 games of trailing defensive data,
+    # a single unusually high/low game looks like a real tendency but is
+    # mostly noise (confirmed against real Week 1 2026 data -- one big game
+    # allowed produced a 2.27x matchup_factor off a single sample). Two
+    # protections, both standard shrinkage/capping, not invented for this
+    # specific number:
+    #   1. Below MIN_TRAILING_WEEKS_FOR_MATCHUP games of defensive history,
+    #      don't trust the factor at all -- default to 1.00 (league average)
+    #      rather than react to n=1 noise.
+    #   2. Even with enough games, cap the factor to a plausible range so one
+    #      remaining outlier week can't swing a projection more than +/-40%.
+    team_pos_week["trailing_def_weeks"] = team_pos_week.groupby(
+        ["opponent_team", "position"]
+    ).cumcount() + 1
+    team_pos_week.loc[
+        team_pos_week["trailing_def_weeks"] < MIN_TRAILING_WEEKS_FOR_MATCHUP, "matchup_factor"
+    ] = 1.0
+    team_pos_week["matchup_factor"] = team_pos_week["matchup_factor"].clip(
+        MATCHUP_FACTOR_MIN, MATCHUP_FACTOR_MAX
     )
     return team_pos_week
 

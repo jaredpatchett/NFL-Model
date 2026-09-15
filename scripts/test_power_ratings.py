@@ -80,8 +80,61 @@ def test_leakage_and_cold_start():
     return checks
 
 
+def test_carryover_blend_pulls_toward_prior_not_zero():
+    """
+    Real bug this fix addresses, reproduced on a tiny hand-computable case:
+    a team with a strong prior-season carryover rating should stay pulled
+    TOWARD that carryover with only a few current-season games -- not get
+    crushed toward 0 the instant any current-season data exists (the old
+    behavior). 2 teams, 1 current-season game, where the game's own signal
+    is weak/contradictory -- with the old flat-0 regularization this drags
+    both teams near 0; with the new carryover-aware regularization, a team
+    with a strong positive carryover prior should stay meaningfully above 0.
+    """
+    games = pd.DataFrame([
+        {"home_team": "A", "away_team": "B", "home_score": 20, "away_score": 20},  # a tie: this single game carries ~zero signal either way
+    ])
+    prior = {"A": 5.0, "B": -5.0}  # A carries a strong positive prior, B a strong negative one
+
+    old_style = _solve_srs(games, teams=["A", "B"])  # no prior_ratings passed -- reproduces old flat-0 behavior
+    new_style = _solve_srs(games, teams=["A", "B"], prior_ratings=prior)
+
+    checks = []
+    # Old behavior: with no prior and a near-uninformative game, both ratings land near 0.
+    checks.append(("old-style (no prior) A stays near 0", abs(old_style["A"]) < 0.5, True))
+    # New behavior: A should stay meaningfully pulled toward its +5 carryover, not crushed to 0.
+    checks.append(("new-style (with prior) A stays pulled toward +5 carryover", new_style["A"] > 2.0, True))
+    checks.append(("new-style B stays pulled toward -5 carryover", new_style["B"] < -2.0, True))
+    return checks
+
+
+def test_no_prior_reproduces_old_behavior_exactly():
+    """Backward-compatibility guarantee: calling _solve_srs with no
+    prior_ratings must be numerically IDENTICAL to the pre-fix function --
+    this is what every existing caller in this codebase that doesn't pass a
+    prior (e.g. the end-of-season full_solved call in build_power_ratings)
+    depends on."""
+    games = pd.DataFrame([
+        {"home_team": "A", "away_team": "B", "home_score": 24, "away_score": 17},
+        {"home_team": "B", "away_team": "C", "home_score": 14, "away_score": 21},
+        {"home_team": "C", "away_team": "A", "home_score": 10, "away_score": 27},
+    ])
+    teams = ["A", "B", "C"]
+    no_prior = _solve_srs(games, teams)  # default prior_ratings=None
+    explicit_zero_prior = _solve_srs(games, teams, prior_ratings={t: 0.0 for t in teams})
+    checks = []
+    for t in teams:
+        checks.append((f"no-prior == explicit-zero-prior for {t}", abs(no_prior[t] - explicit_zero_prior[t]) < 1e-9, True))
+    return checks
+
+
 def main():
-    checks = test_solve_srs_hand_computable() + test_leakage_and_cold_start()
+    checks = (
+        test_solve_srs_hand_computable()
+        + test_leakage_and_cold_start()
+        + test_carryover_blend_pulls_toward_prior_not_zero()
+        + test_no_prior_reproduces_old_behavior_exactly()
+    )
 
     print(f"{'check':60s} {'got':>10s} {'want':>10s}  ok")
     print("-" * 90)

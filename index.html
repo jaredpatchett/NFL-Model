@@ -147,6 +147,7 @@
   }
   .track-btn:hover{border-color:var(--blue);color:var(--blue);}
   .grid-props{grid-template-columns:1.5fr 1fr 60px 70px 70px 88px 66px 66px 70px 52px;}
+  .grid-fantasy{grid-template-columns:1.5fr 60px 1fr 70px 70px 80px 70px;}
 
   .pr-table{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;}
   .pr-head{display:grid;grid-template-columns:32px 1.4fr 70px 1fr 80px;padding:10px 16px;font-size:9px;letter-spacing:.09em;color:var(--text-faint);font-family:'IBM Plex Mono',monospace;border-bottom:1px solid var(--line);background:var(--panel-2);}
@@ -328,6 +329,7 @@
   <div class="tabs">
     <button class="tab-btn active" data-view="lines">Lines</button>
     <button class="tab-btn" data-view="props">TD Props</button>
+    <button class="tab-btn" data-view="fantasy">Fantasy</button>
     <button class="tab-btn" data-view="tracker">Tracker</button>
   </div>
 
@@ -401,6 +403,30 @@
       </div>
       <div id="props-body"></div>
       <div class="board-footnote">MODEL = model's own probability of scoring anytime. MODEL ODDS = that probability expressed as fair American odds, for a quick side-by-side against BEST PRICE (the actual sportsbook line) — informational only, edge/EV are computed from the real probability, not this conversion. BOOK % = BEST PRICE converted back to an implied probability. RAW EDGE = MODEL minus BOOK % — the full model's disagreement with the market. IMP TOT = Vegas-implied point total for this player's team in this game, real market data set before kickoff, not a trailing stat. MU = opponent's position-specific TD-rate-allowed vs league average (real play-by-play, not points allowed) — 1.00 = league average, informational only, not yet a hard qualifier. STATUS: OFFICIAL clears every blueprint check (snap share, red-zone role, regression-risk, and edge/EV thresholds) — the fully disciplined plays. DEGEN means the model still shows real positive edge but something in that screen said no — real value, not a clean bet; hover for exactly why. No pill at all means neither: no real edge either way.</div>
+    </div>
+  </div>
+
+  <div class="view" id="view-fantasy">
+    <div class="stat-strip" id="fantasy-stats"></div>
+
+    <div class="section-head">
+      <div class="section-title">
+        <span class="section-bar"></span>
+        <span class="section-label">FANTASY PROJECTIONS — FULL PPR</span>
+      </div>
+    </div>
+
+    <div class="caveat" id="fantasy-caveat"></div>
+    <div class="filters" id="fantasy-pos-filters"></div>
+
+    <div class="board">
+      <div class="board-head grid-fantasy">
+        <div>PLAYER</div><div class="col-r">POS</div><div class="col-hide">MATCHUP</div>
+        <div class="col-r">PROJ&nbsp;PTS</div><div class="col-r col-hide">TRAILING&nbsp;L4</div>
+        <div class="col-r">DEF&nbsp;RANK</div><div class="col-r col-hide">SNAP%</div>
+      </div>
+      <div id="fantasy-body"></div>
+      <div class="board-footnote">PROJ PTS = trailing L4-game average fantasy points (leakage-safe — never includes the game being predicted) times a matchup adjustment factor. DEF RANK = how many fantasy points the upcoming opponent has trailingly allowed to this position, ranked 1 (softest matchup) to 32 (toughest) among teams with enough games played. SNAP% = most recent game's offensive snap share. Baseline projection method, not yet validated against held-out data the way Track A/B are — see repo README. Early season weeks show blank/zero projections by design: the trailing average needs at least one PRIOR game to stay leakage-safe, so it can't project until each player has one game of history.</div>
     </div>
   </div>
 
@@ -513,6 +539,7 @@
 
 <script src="data/nfl_lines.js"></script>
 <script src="data/player_td.js"></script>
+<script src="data/fantasy_projections.js"></script>
 <script>
 (function(){
   document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -999,6 +1026,64 @@
     renderHeroCards();
   } else {
     document.getElementById('props-caveat').textContent = 'No data found -- run scripts/generate_player_predictions.py to produce data/player_td.js.';
+  }
+
+  // Fantasy tab -- data/fantasy_projections.js declares `const FANTASY_DATA
+  // = {...}`, same non-window-attaching const pattern as the other two data
+  // files (see the FIX comments above for why `typeof ... !== 'undefined'`
+  // is required here instead of `window.FANTASY_DATA`).
+  const fantasyData = (typeof FANTASY_DATA !== 'undefined') ? FANTASY_DATA : null;
+  if(fantasyData){
+    setGeneratedAt(fantasyData.generated_at);
+    document.getElementById('fantasy-caveat').textContent = fantasyData.method;
+
+    const fplayers = fantasyData.players;
+    const projected = fplayers.filter(p => p.proj_fantasy_pts != null && p.proj_fantasy_pts > 0);
+    const topProj = projected.length ? Math.max(...projected.map(p => p.proj_fantasy_pts)) : null;
+    document.getElementById('fantasy-stats').innerHTML = [
+      ['PLAYERS LISTED', fplayers.length],
+      ['WITH A PROJECTION', projected.length, 'color:var(--blue);text-shadow:0 0 14px rgba(76,141,255,.5)', 'needs 1+ prior game'],
+      ['TOP PROJECTION', topProj!=null?topProj.toFixed(1):'\u2014', 'color:var(--green);text-shadow:0 0 14px rgba(0,255,156,.5)'],
+      ['SEASON', fantasyData.season],
+    ].map(([label,val,style,sub]) => `
+      <div class="stat-box">
+        <div class="stat-label mono">${label}</div>
+        <div class="stat-value" style="${style||''}">${val}</div>
+        ${sub?`<div style="font-size:9px;color:var(--text-faint2);margin-top:3px;font-family:'IBM Plex Mono',monospace">${sub}</div>`:''}
+      </div>`).join('');
+
+    let fantasyPosFilter = 'ALL';
+    const fantasyPositions = ['ALL','QB','RB','WR','TE'];
+    function renderFantasyFilters(){
+      const el = document.getElementById('fantasy-pos-filters');
+      el.innerHTML = fantasyPositions.map(p => `<button class="filter-btn ${p===fantasyPosFilter?'active':''}" data-pos="${p}">${p}</button>`).join('');
+      el.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => { fantasyPosFilter = btn.dataset.pos; renderFantasy(); });
+      });
+    }
+    function renderFantasy(){
+      renderFantasyFilters();
+      const rows = fplayers.filter(p => fantasyPosFilter==='ALL' || p.position===fantasyPosFilter)
+        .sort((a,b) => (b.proj_fantasy_pts||0) - (a.proj_fantasy_pts||0));
+      document.getElementById('fantasy-body').innerHTML = rows.map(p => {
+        const rank = p.def_rank!=null ? `${p.def_rank}/${p.def_rank_of}` : '\u2014';
+        const rankColor = p.def_rank==null ? 'var(--text-faint)' : (p.def_rank<=10 ? 'var(--green)' : p.def_rank>=23 ? 'var(--red)' : 'var(--text-dim)');
+        return `<div class="board-row grid-fantasy">
+          <div class="row-inner"><span class="team-bar" style="background:${teamColor(p.team)}"></span>
+            <div class="matchup-block"><div class="matchup-main">${p.player_name}</div>
+            <div class="matchup-sub">${p.team} vs ${p.opponent}</div></div></div>
+          <div class="cell-num col-r">${p.position}</div>
+          <div class="cell-num col-hide">${p.team} @ ${p.opponent}</div>
+          <div class="cell-model col-r">${p.proj_fantasy_pts!=null?p.proj_fantasy_pts.toFixed(1):'\u2014'}</div>
+          <div class="cell-num col-r col-hide">${p.trailing_avg_pts!=null?p.trailing_avg_pts.toFixed(1):'\u2014'}</div>
+          <div class="cell-num col-r" style="color:${rankColor}">${rank}</div>
+          <div class="cell-num col-r col-hide">${p.latest_snap_pct!=null?(p.latest_snap_pct*100).toFixed(0)+'%':'\u2014'}</div>
+        </div>`;
+      }).join('');
+    }
+    renderFantasy();
+  } else {
+    document.getElementById('fantasy-caveat').textContent = 'No data found -- run scripts/generate_fantasy_projections.py to produce data/fantasy_projections.js.';
   }
 
   // ============================================================

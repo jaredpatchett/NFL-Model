@@ -1,3 +1,4 @@
+---
 # Runs on a schedule during the season, plus lets you trigger it manually.
 # Generates BOTH tracks in one run: spread/total/moneyline (Track B) and
 # anytime-TD player probabilities (Track A). Mirrors the wc-7-dashboard cron
@@ -39,6 +40,16 @@ jobs:
           # modern versions of everything it actually needs ourselves.
           pip install --no-deps nfl_data_py
           pip install pandas numpy pyarrow scikit-learn scipy requests appdirs
+
+      - name: Fetch weekly player stats + snap counts (Track C data)
+        # Pulls current-season weekly player stats and snap counts from
+        # nflverse-data (GitHub releases, no API key needed). Writes
+        # data/player_stats_{season}.csv and data/snap_counts_{season}.csv --
+        # feeds Track C (fantasy projections), defense-vs-position ranks,
+        # player percentiles, and the snap-share chart. Independent of
+        # Track A/B, so it's fine for this to run without blocking them --
+        # separate step, not chained.
+        run: python fetch_player_stats.py
 
       - name: Generate spread/total/moneyline predictions (Track B)
         working-directory: scripts

@@ -63,6 +63,16 @@ jobs:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: python generate_player_predictions.py
 
+      - name: Generate fantasy point projections (Track C)
+        # Baseline trailing-average projections + opponent-adjustment, built
+        # on top of the player_stats/snap_counts CSVs the earlier fetch step
+        # wrote to data/. Independent of Track A/B -- reads data/, doesn't
+        # need live odds. Early-season weeks will show blank/zero
+        # projections by design (leakage-safe trailing average needs at
+        # least one PRIOR game) -- not a bug, resolves itself week to week.
+        working-directory: scripts
+        run: python generate_fantasy_projections.py
+
       - name: Backtest against real completed games
         working-directory: scripts
         # Runs after both prediction steps so this run's fresh entries are
@@ -84,6 +94,7 @@ jobs:
           git add data/nfl_lines.json data/nfl_lines.js data/predictions_log.jsonl
           git add data/player_td.json data/player_td.js data/player_td_log.jsonl
           git add data/backtest_results.json data/backtest_results.js
+          git add data/fantasy_projections.json data/fantasy_projections.js data/fantasy_projections_log.jsonl
           if git diff --cached --quiet; then
             echo "No changes to predictions -- nothing to commit."
           else

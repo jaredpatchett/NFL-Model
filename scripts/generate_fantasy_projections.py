@@ -569,6 +569,15 @@ def main():
 
     upcoming = find_upcoming_matchups(SEASON)
     latest_row = latest_row.merge(upcoming, left_on="team", right_on="team", how="left")
+    # `stats` already has its own "week" (the player's last PLAYED week);
+    # `upcoming` also has "week" (the week being PROJECTED, i.e. the target
+    # week for this prediction) -- the merge above collides them into
+    # week_x/week_y. Name the target one explicitly so it's unambiguous
+    # everywhere downstream, especially the backtest log (see main()'s
+    # log_row below -- this was previously missing entirely, which would
+    # have made backtesting impossible: no way to know which week a logged
+    # projection was even FOR).
+    latest_row = latest_row.rename(columns={"week_y": "target_week"})
 
     latest_row = latest_row.merge(
         def_ranks, left_on=["opponent", "position"], right_on=["opponent_team", "position"], how="left"
@@ -619,6 +628,7 @@ def main():
             "position": r["position"],
             "team": r["team"],
             "opponent": r["opponent"],
+            "target_week": int(r["target_week"]),
             "headshot_url": r.get("headshot_url"),
             "team_logo_url": team_logos.get(r["team"]),
             "games_played": int(r.get("games", r["trailing_games"])),
@@ -694,7 +704,8 @@ def main():
                 "position": p["position"], "team": p["team"], "opponent": p["opponent"],
                 "trailing_avg_pts": p["trailing_avg_pts"], "matchup_factor": p["matchup_factor"],
                 "proj_fantasy_pts": p["proj_fantasy_pts"], "def_rank": p["def_rank"],
-                "season": SEASON, "logged_at": output["generated_at"],
+                "has_market_data": p["has_market_data"], "market_based_pts": p["market_based_pts"],
+                "season": SEASON, "week": p["target_week"], "logged_at": output["generated_at"],
             }
             f.write(json.dumps(log_row) + "\n")
 

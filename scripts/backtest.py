@@ -1,8 +1,9 @@
 """
 backtest.py — Joins the persistent prediction logs (data/predictions_log.jsonl,
-data/player_td_log.jsonl) against REAL, now-known game outcomes to report
-genuine model performance: ATS/O-U/moneyline records and ROI for Track B,
-hit rate and calibration for Track A.
+data/player_td_log.jsonl, data/fantasy_projections_log.jsonl) against REAL,
+now-known game outcomes to report genuine model performance: ATS/O-U/
+moneyline records and ROI for Track B, hit rate and calibration for Track A,
+MAE/RMSE for Track C's fantasy point projections.
 
 WHY THIS IS DIFFERENT FROM game_lines_model.py / player_td_model.py's
 VALIDATION: those check calibration against CLOSING lines from a historical
@@ -54,6 +55,7 @@ import odds_api  # reusing json_default -- see that module's docstring for why
 
 TRACK_B_LOG = "../data/predictions_log.jsonl"
 TRACK_A_LOG = "../data/player_td_log.jsonl"
+TRACK_C_LOG = "../data/fantasy_projections_log.jsonl"
 STANDARD_VIG_PRICE = -110  # assumed price for ATS/totals -- see module docstring
 
 OUT_JSON = "../data/backtest_results.json"
@@ -272,7 +274,95 @@ def backtest_track_a() -> dict:
     return out
 
 
-def write_results(track_b: dict, track_a: dict) -> None:
+def evaluate_track_c(bets_with_results: pd.DataFrame) -> dict:
+    """
+    Pure evaluation logic for Track C (fantasy projections), separated from
+    data-fetching for testability -- same split as evaluate_track_a/b.
+    Expects one row per player-week with `actual_fantasy_pts` already
+    joined on. Reports plain regression accuracy (MAE/RMSE, not a betting
+    record -- fantasy points aren't a win/loss market), broken out by
+    whether the projection had live market data at logging time, since the
+    whole point of the market blend is that it should be MORE accurate than
+    the trailing-average-only fallback -- this is the only way to actually
+    check that claim against real outcomes instead of assuming it.
+    """
+    df = bets_with_results.copy()
+    if df.empty:
+        return {"n_available": 0}
+
+    df["error"] = df["proj_fantasy_pts"] - df["actual_fantasy_pts"]
+    out = {
+        "n_available": len(df),
+        "mae": round(float(df["error"].abs().mean()), 3),
+        "rmse": round(float(np.sqrt((df["error"] ** 2).mean())), 3),
+        "bias": round(float(df["error"].mean()), 3),  # positive = over-projecting on average
+    }
+
+    has_market = df[df["has_market_data"] == True]  # noqa: E712 -- explicit bool compare, logged as a real bool not a numpy one
+    no_market = df[df["has_market_data"] == False]  # noqa: E712
+    if len(has_market):
+        out["market_blended"] = {
+            "n": len(has_market),
+            "mae": round(float((has_market["proj_fantasy_pts"] - has_market["actual_fantasy_pts"]).abs().mean()), 3),
+        }
+    if len(no_market):
+        out["trailing_avg_fallback"] = {
+            "n": len(no_market),
+            "mae": round(float((no_market["proj_fantasy_pts"] - no_market["actual_fantasy_pts"]).abs().mean()), 3),
+        }
+    return out
+
+
+def backtest_track_c() -> dict:
+    log = _load_jsonl(TRACK_C_LOG)
+    if log.empty:
+        print("Track C: no fantasy_projections_log.jsonl entries found.")
+        return {}
+
+    bets = _latest_snapshot(log, ["season", "week", "player_id"])
+
+    # Real outcomes come from the same nflverse weekly stats table every
+    # other Track C script already reads -- NOT play-by-play/pbp like Track
+    # A needs (Track A's outcome, "did this player score a TD," isn't a
+    # simple weekly-stats column; Track C's outcome, fantasy points scored,
+    # already IS one -- fetch_player_stats.py already computes it). This is
+    # actually a simpler join than Track A's, not a re-derivation of it.
+    import sys as _sys
+    _repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    if _repo_root not in _sys.path:
+        _sys.path.insert(0, _repo_root)
+    from fetch_player_stats import fetch_player_stats
+
+    seasons = sorted(bets["season"].unique().tolist())
+    all_results = []
+    for s in seasons:
+        try:
+            season_stats = fetch_player_stats(s)
+            all_results.append(season_stats[["player_id", "season", "week", "fantasy_points_ppr"]])
+        except Exception as e:
+            print(f"Track C: couldn't fetch {s} results for backtesting ({e}) -- skipping that season.")
+    if not all_results:
+        return {"n_available": 0}
+    results = pd.concat(all_results, ignore_index=True).rename(columns={"fantasy_points_ppr": "actual_fantasy_pts"})
+
+    df = bets.merge(results, on=["season", "week", "player_id"], how="inner")
+    print(f"Track C: {len(bets)} player-weeks logged, {len(df)} have real outcomes available.")
+    if df.empty:
+        return {"n_available": 0}
+
+    out = evaluate_track_c(df)
+    print(f"\n  MAE: {out['mae']:.3f} fantasy pts")
+    print(f"  RMSE: {out['rmse']:.3f} fantasy pts")
+    print(f"  Bias: {out['bias']:+.3f} (positive = over-projecting on average)")
+    if "market_blended" in out:
+        print(f"  Market-blended projections (n={out['market_blended']['n']}): MAE {out['market_blended']['mae']:.3f}")
+    if "trailing_avg_fallback" in out:
+        print(f"  Trailing-avg-only fallback (n={out['trailing_avg_fallback']['n']}): MAE {out['trailing_avg_fallback']['mae']:.3f}")
+
+    return out
+
+
+def write_results(track_b: dict, track_a: dict, track_c: dict) -> None:
     """
     Writes backtest results to data/backtest_results.json + .js -- same
     OVERWRITTEN-SNAPSHOT pattern as nfl_lines.js / player_td.js (current
@@ -294,26 +384,27 @@ def write_results(track_b: dict, track_a: dict) -> None:
     """
     b_available = bool(track_b) and track_b.get("n_available", 0) > 0
     a_available = bool(track_a) and track_a.get("n_available", 0) > 0
+    c_available = bool(track_c) and track_c.get("n_available", 0) > 0
 
-    if not b_available and not a_available:
+    available_tracks = [name for name, avail in [("Track B", b_available), ("Track A", a_available), ("Track C", c_available)] if avail]
+    if not available_tracks:
         note = (
-            "No completed games with a logged pre-game prediction yet -- both tracks show 0 "
-            "results. Expected until real games finish; predictions_log.jsonl and "
-            "player_td_log.jsonl already accumulate a fresh timestamped snapshot every cron run, "
-            "so results populate automatically as games are played -- no other action needed."
+            "No completed games with a logged pre-game prediction yet -- all three tracks show 0 "
+            "results. Expected until real games finish; predictions_log.jsonl, player_td_log.jsonl, "
+            "and fantasy_projections_log.jsonl already accumulate a fresh timestamped snapshot every "
+            "cron run, so results populate automatically as games are played -- no other action needed."
         )
-    elif b_available and not a_available:
-        note = "Track B has real logged-prediction-vs-outcome results below; Track A does not yet."
-    elif a_available and not b_available:
-        note = "Track A has real logged-prediction-vs-outcome results below; Track B does not yet."
     else:
-        note = "Both tracks have real, logged-prediction-vs-outcome results below."
+        missing = [name for name in ["Track B", "Track A", "Track C"] if name not in available_tracks]
+        note = f"{' and '.join(available_tracks)} {'has' if len(available_tracks)==1 else 'have'} real logged-prediction-vs-outcome results below"
+        note += f"; {' and '.join(missing)} does not yet." if missing else "."
 
     output = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "note": note,
         "track_b": track_b,
         "track_a": track_a,
+        "track_c": track_c,
     }
 
     out_dir = os.path.dirname(os.path.abspath(OUT_JSON))
@@ -338,7 +429,12 @@ def main():
     print("=" * 70)
     track_a = backtest_track_a()
 
-    write_results(track_b, track_a)
+    print("\n" + "=" * 70)
+    print("TRACK C BACKTEST (fantasy projections)")
+    print("=" * 70)
+    track_c = backtest_track_c()
+
+    write_results(track_b, track_a, track_c)
 
 
 if __name__ == "__main__":

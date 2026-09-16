@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "generated_at": "2026-09-15T21:55:44.352041+00:00",
+  "generated_at": "2026-09-16T17:24:46.226557+00:00",
   "method": "market-blended (80% live prop odds + Track A TD prob, 20% own trailing model) when live odds are available; falls back to trailing_L4_avg x opponent_matchup_factor per player otherwise. Not yet validated against held-out data.",
   "players": [
     {
@@ -63440,407 +63440,6 @@
       }
     },
     {
-      "player_id": "00-0040236",
-      "player_name": "Kyle Monangai",
-      "position": "RB",
-      "team": "CHI",
-      "opponent": "MIN",
-      "target_week": 2,
-      "headshot_url": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/bkkk3uuouhcobydqawro",
-      "team_logo_url": "https://a.espncdn.com/i/teamlogos/nfl/500/chi.png",
-      "games_played": 17,
-      "display_season": 2025,
-      "trailing_avg_pts": 11.4,
-      "trailing_games": 1,
-      "proj_fantasy_pts": 3.85,
-      "def_rank": 32,
-      "def_rank_of": 32,
-      "matchup_factor": 1.0,
-      "latest_snap_pct": 0.43,
-      "season_avg": {
-        "targets": 1.76,
-        "receptions": 1.06,
-        "rec_yards": 9.65,
-        "touchdowns": 0.29,
-        "fantasy_pts": 8.39
-      },
-      "percentiles": {
-        "targets": 66,
-        "receptions": 58,
-        "rec_yards": 68,
-        "touchdowns": 70,
-        "fantasy_pts": 72
-      },
-      "peers": {
-        "targets": 151,
-        "receptions": 151,
-        "rec_yards": 151,
-        "touchdowns": 151,
-        "fantasy_pts": 151
-      },
-      "snap_share_by_week": [
-        {
-          "season": 2025,
-          "week": 1,
-          "pct": 0.13
-        },
-        {
-          "season": 2025,
-          "week": 2,
-          "pct": 0.41
-        },
-        {
-          "season": 2025,
-          "week": 3,
-          "pct": 0.29
-        },
-        {
-          "season": 2025,
-          "week": 4,
-          "pct": 0.28
-        },
-        {
-          "season": 2025,
-          "week": 6,
-          "pct": 0.34
-        },
-        {
-          "season": 2025,
-          "week": 7,
-          "pct": 0.45
-        },
-        {
-          "season": 2025,
-          "week": 8,
-          "pct": 0.46
-        },
-        {
-          "season": 2025,
-          "week": 9,
-          "pct": 0.74
-        },
-        {
-          "season": 2025,
-          "week": 10,
-          "pct": 0.38
-        },
-        {
-          "season": 2025,
-          "week": 11,
-          "pct": 0.37
-        },
-        {
-          "season": 2025,
-          "week": 12,
-          "pct": 0.54
-        },
-        {
-          "season": 2025,
-          "week": 13,
-          "pct": 0.45
-        },
-        {
-          "season": 2025,
-          "week": 14,
-          "pct": 0.41
-        },
-        {
-          "season": 2025,
-          "week": 15,
-          "pct": 0.42
-        },
-        {
-          "season": 2025,
-          "week": 16,
-          "pct": 0.45
-        },
-        {
-          "season": 2025,
-          "week": 17,
-          "pct": 0.41
-        },
-        {
-          "season": 2025,
-          "week": 18,
-          "pct": 0.42
-        },
-        {
-          "season": 2025,
-          "week": 19,
-          "pct": 0.46
-        },
-        {
-          "season": 2025,
-          "week": 20,
-          "pct": 0.37
-        },
-        {
-          "season": 2026,
-          "week": 1,
-          "pct": 0.43
-        }
-      ],
-      "game_log": [
-        {
-          "season": 2026,
-          "week": 1,
-          "opponent": "CAR",
-          "week_def_rank": 1,
-          "week_def_rank_of": 32,
-          "targets": 2,
-          "receptions": 2,
-          "receiving_yards": 24,
-          "rushing_yards": 100,
-          "touchdowns": 1,
-          "fantasy_pts": 20.4
-        },
-        {
-          "season": 2025,
-          "week": 18,
-          "opponent": "DET",
-          "week_def_rank": 28,
-          "week_def_rank_of": 32,
-          "targets": 1,
-          "receptions": 1,
-          "receiving_yards": 15,
-          "rushing_yards": 14,
-          "touchdowns": 0,
-          "fantasy_pts": 3.9
-        },
-        {
-          "season": 2025,
-          "week": 17,
-          "opponent": "SF",
-          "week_def_rank": 7,
-          "week_def_rank_of": 32,
-          "targets": 4,
-          "receptions": 3,
-          "receiving_yards": 9,
-          "rushing_yards": 38,
-          "touchdowns": 0,
-          "fantasy_pts": 7.7
-        },
-        {
-          "season": 2025,
-          "week": 16,
-          "opponent": "GB",
-          "week_def_rank": 18,
-          "week_def_rank_of": 32,
-          "targets": 4,
-          "receptions": 3,
-          "receiving_yards": 43,
-          "rushing_yards": 50,
-          "touchdowns": 0,
-          "fantasy_pts": 12.3
-        },
-        {
-          "season": 2025,
-          "week": 15,
-          "opponent": "CLE",
-          "week_def_rank": 11,
-          "week_def_rank_of": 32,
-          "targets": 2,
-          "receptions": 0,
-          "receiving_yards": 0,
-          "rushing_yards": 33,
-          "touchdowns": 0,
-          "fantasy_pts": 3.3
-        },
-        {
-          "season": 2025,
-          "week": 14,
-          "opponent": "GB",
-          "week_def_rank": 19,
-          "week_def_rank_of": 28,
-          "targets": 2,
-          "receptions": 1,
-          "receiving_yards": 0,
-          "rushing_yards": 57,
-          "touchdowns": 0,
-          "fantasy_pts": 6.7
-        },
-        {
-          "season": 2025,
-          "week": 13,
-          "opponent": "PHI",
-          "week_def_rank": 2,
-          "week_def_rank_of": 32,
-          "targets": 1,
-          "receptions": 0,
-          "receiving_yards": 0,
-          "rushing_yards": 130,
-          "touchdowns": 1,
-          "fantasy_pts": 19.0
-        },
-        {
-          "season": 2025,
-          "week": 12,
-          "opponent": "PIT",
-          "week_def_rank": 24,
-          "week_def_rank_of": 28,
-          "targets": 0,
-          "receptions": 0,
-          "receiving_yards": 0,
-          "rushing_yards": 48,
-          "touchdowns": 1,
-          "fantasy_pts": 10.8
-        },
-        {
-          "season": 2025,
-          "week": 11,
-          "opponent": "MIN",
-          "week_def_rank": 15,
-          "week_def_rank_of": 30,
-          "targets": 1,
-          "receptions": 1,
-          "receiving_yards": 14,
-          "rushing_yards": 23,
-          "touchdowns": 1,
-          "fantasy_pts": 10.7
-        },
-        {
-          "season": 2025,
-          "week": 10,
-          "opponent": "NYG",
-          "week_def_rank": 9,
-          "week_def_rank_of": 28,
-          "targets": 1,
-          "receptions": 0,
-          "receiving_yards": 0,
-          "rushing_yards": 28,
-          "touchdowns": 1,
-          "fantasy_pts": 8.8
-        },
-        {
-          "season": 2025,
-          "week": 9,
-          "opponent": "CIN",
-          "week_def_rank": 2,
-          "week_def_rank_of": 28,
-          "targets": 5,
-          "receptions": 3,
-          "receiving_yards": 22,
-          "rushing_yards": 176,
-          "touchdowns": 0,
-          "fantasy_pts": 22.8
-        },
-        {
-          "season": 2025,
-          "week": 8,
-          "opponent": "BAL",
-          "week_def_rank": 17,
-          "week_def_rank_of": 26,
-          "targets": 0,
-          "receptions": 0,
-          "receiving_yards": 0,
-          "rushing_yards": 24,
-          "touchdowns": 0,
-          "fantasy_pts": 2.4
-        },
-        {
-          "season": 2025,
-          "week": 7,
-          "opponent": "NO",
-          "week_def_rank": 3,
-          "week_def_rank_of": 30,
-          "targets": 3,
-          "receptions": 2,
-          "receiving_yards": 13,
-          "rushing_yards": 81,
-          "touchdowns": 1,
-          "fantasy_pts": 17.4
-        },
-        {
-          "season": 2025,
-          "week": 6,
-          "opponent": "WAS",
-          "week_def_rank": 6,
-          "week_def_rank_of": 30,
-          "targets": 1,
-          "receptions": 1,
-          "receiving_yards": 25,
-          "rushing_yards": 19,
-          "touchdowns": 0,
-          "fantasy_pts": 5.4
-        },
-        {
-          "season": 2025,
-          "week": 4,
-          "opponent": "LV",
-          "week_def_rank": 25,
-          "week_def_rank_of": 32,
-          "targets": 0,
-          "receptions": 0,
-          "receiving_yards": 0,
-          "rushing_yards": 18,
-          "touchdowns": 0,
-          "fantasy_pts": 1.8
-        },
-        {
-          "season": 2025,
-          "week": 3,
-          "opponent": "DAL",
-          "week_def_rank": 26,
-          "week_def_rank_of": 32,
-          "targets": 1,
-          "receptions": 1,
-          "receiving_yards": 4,
-          "rushing_yards": 16,
-          "touchdowns": 0,
-          "fantasy_pts": 3.0
-        },
-        {
-          "season": 2025,
-          "week": 2,
-          "opponent": "DET",
-          "week_def_rank": 22,
-          "week_def_rank_of": 32,
-          "targets": 3,
-          "receptions": 1,
-          "receiving_yards": 8,
-          "rushing_yards": 28,
-          "touchdowns": 0,
-          "fantasy_pts": 4.6
-        },
-        {
-          "season": 2025,
-          "week": 1,
-          "opponent": "MIN",
-          "week_def_rank": 27,
-          "week_def_rank_of": 32,
-          "targets": 1,
-          "receptions": 1,
-          "receiving_yards": 11,
-          "rushing_yards": 0,
-          "touchdowns": 0,
-          "fantasy_pts": 2.1
-        }
-      ],
-      "has_market_data": true,
-      "market_based_pts": 1.96,
-      "anytime_td_prob": 0.326,
-      "prop": {
-        "rec_yards": {
-          "line": null,
-          "over_price": null,
-          "under_price": null,
-          "devigged_over_prob": null
-        },
-        "receptions": {
-          "line": null,
-          "over_price": null,
-          "under_price": null,
-          "devigged_over_prob": null
-        },
-        "rush_yards": {
-          "line": null,
-          "over_price": null,
-          "under_price": null,
-          "devigged_over_prob": null
-        }
-      }
-    },
-    {
       "player_id": "00-0036754",
       "player_name": "Brock Wright",
       "position": "TE",
@@ -64369,6 +63968,407 @@
       "has_market_data": false,
       "market_based_pts": 0.0,
       "anytime_td_prob": null,
+      "prop": {
+        "rec_yards": {
+          "line": null,
+          "over_price": null,
+          "under_price": null,
+          "devigged_over_prob": null
+        },
+        "receptions": {
+          "line": null,
+          "over_price": null,
+          "under_price": null,
+          "devigged_over_prob": null
+        },
+        "rush_yards": {
+          "line": null,
+          "over_price": null,
+          "under_price": null,
+          "devigged_over_prob": null
+        }
+      }
+    },
+    {
+      "player_id": "00-0040236",
+      "player_name": "Kyle Monangai",
+      "position": "RB",
+      "team": "CHI",
+      "opponent": "MIN",
+      "target_week": 2,
+      "headshot_url": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/bkkk3uuouhcobydqawro",
+      "team_logo_url": "https://a.espncdn.com/i/teamlogos/nfl/500/chi.png",
+      "games_played": 17,
+      "display_season": 2025,
+      "trailing_avg_pts": 11.4,
+      "trailing_games": 1,
+      "proj_fantasy_pts": 3.82,
+      "def_rank": 32,
+      "def_rank_of": 32,
+      "matchup_factor": 1.0,
+      "latest_snap_pct": 0.43,
+      "season_avg": {
+        "targets": 1.76,
+        "receptions": 1.06,
+        "rec_yards": 9.65,
+        "touchdowns": 0.29,
+        "fantasy_pts": 8.39
+      },
+      "percentiles": {
+        "targets": 66,
+        "receptions": 58,
+        "rec_yards": 68,
+        "touchdowns": 70,
+        "fantasy_pts": 72
+      },
+      "peers": {
+        "targets": 151,
+        "receptions": 151,
+        "rec_yards": 151,
+        "touchdowns": 151,
+        "fantasy_pts": 151
+      },
+      "snap_share_by_week": [
+        {
+          "season": 2025,
+          "week": 1,
+          "pct": 0.13
+        },
+        {
+          "season": 2025,
+          "week": 2,
+          "pct": 0.41
+        },
+        {
+          "season": 2025,
+          "week": 3,
+          "pct": 0.29
+        },
+        {
+          "season": 2025,
+          "week": 4,
+          "pct": 0.28
+        },
+        {
+          "season": 2025,
+          "week": 6,
+          "pct": 0.34
+        },
+        {
+          "season": 2025,
+          "week": 7,
+          "pct": 0.45
+        },
+        {
+          "season": 2025,
+          "week": 8,
+          "pct": 0.46
+        },
+        {
+          "season": 2025,
+          "week": 9,
+          "pct": 0.74
+        },
+        {
+          "season": 2025,
+          "week": 10,
+          "pct": 0.38
+        },
+        {
+          "season": 2025,
+          "week": 11,
+          "pct": 0.37
+        },
+        {
+          "season": 2025,
+          "week": 12,
+          "pct": 0.54
+        },
+        {
+          "season": 2025,
+          "week": 13,
+          "pct": 0.45
+        },
+        {
+          "season": 2025,
+          "week": 14,
+          "pct": 0.41
+        },
+        {
+          "season": 2025,
+          "week": 15,
+          "pct": 0.42
+        },
+        {
+          "season": 2025,
+          "week": 16,
+          "pct": 0.45
+        },
+        {
+          "season": 2025,
+          "week": 17,
+          "pct": 0.41
+        },
+        {
+          "season": 2025,
+          "week": 18,
+          "pct": 0.42
+        },
+        {
+          "season": 2025,
+          "week": 19,
+          "pct": 0.46
+        },
+        {
+          "season": 2025,
+          "week": 20,
+          "pct": 0.37
+        },
+        {
+          "season": 2026,
+          "week": 1,
+          "pct": 0.43
+        }
+      ],
+      "game_log": [
+        {
+          "season": 2026,
+          "week": 1,
+          "opponent": "CAR",
+          "week_def_rank": 1,
+          "week_def_rank_of": 32,
+          "targets": 2,
+          "receptions": 2,
+          "receiving_yards": 24,
+          "rushing_yards": 100,
+          "touchdowns": 1,
+          "fantasy_pts": 20.4
+        },
+        {
+          "season": 2025,
+          "week": 18,
+          "opponent": "DET",
+          "week_def_rank": 28,
+          "week_def_rank_of": 32,
+          "targets": 1,
+          "receptions": 1,
+          "receiving_yards": 15,
+          "rushing_yards": 14,
+          "touchdowns": 0,
+          "fantasy_pts": 3.9
+        },
+        {
+          "season": 2025,
+          "week": 17,
+          "opponent": "SF",
+          "week_def_rank": 7,
+          "week_def_rank_of": 32,
+          "targets": 4,
+          "receptions": 3,
+          "receiving_yards": 9,
+          "rushing_yards": 38,
+          "touchdowns": 0,
+          "fantasy_pts": 7.7
+        },
+        {
+          "season": 2025,
+          "week": 16,
+          "opponent": "GB",
+          "week_def_rank": 18,
+          "week_def_rank_of": 32,
+          "targets": 4,
+          "receptions": 3,
+          "receiving_yards": 43,
+          "rushing_yards": 50,
+          "touchdowns": 0,
+          "fantasy_pts": 12.3
+        },
+        {
+          "season": 2025,
+          "week": 15,
+          "opponent": "CLE",
+          "week_def_rank": 11,
+          "week_def_rank_of": 32,
+          "targets": 2,
+          "receptions": 0,
+          "receiving_yards": 0,
+          "rushing_yards": 33,
+          "touchdowns": 0,
+          "fantasy_pts": 3.3
+        },
+        {
+          "season": 2025,
+          "week": 14,
+          "opponent": "GB",
+          "week_def_rank": 19,
+          "week_def_rank_of": 28,
+          "targets": 2,
+          "receptions": 1,
+          "receiving_yards": 0,
+          "rushing_yards": 57,
+          "touchdowns": 0,
+          "fantasy_pts": 6.7
+        },
+        {
+          "season": 2025,
+          "week": 13,
+          "opponent": "PHI",
+          "week_def_rank": 2,
+          "week_def_rank_of": 32,
+          "targets": 1,
+          "receptions": 0,
+          "receiving_yards": 0,
+          "rushing_yards": 130,
+          "touchdowns": 1,
+          "fantasy_pts": 19.0
+        },
+        {
+          "season": 2025,
+          "week": 12,
+          "opponent": "PIT",
+          "week_def_rank": 24,
+          "week_def_rank_of": 28,
+          "targets": 0,
+          "receptions": 0,
+          "receiving_yards": 0,
+          "rushing_yards": 48,
+          "touchdowns": 1,
+          "fantasy_pts": 10.8
+        },
+        {
+          "season": 2025,
+          "week": 11,
+          "opponent": "MIN",
+          "week_def_rank": 15,
+          "week_def_rank_of": 30,
+          "targets": 1,
+          "receptions": 1,
+          "receiving_yards": 14,
+          "rushing_yards": 23,
+          "touchdowns": 1,
+          "fantasy_pts": 10.7
+        },
+        {
+          "season": 2025,
+          "week": 10,
+          "opponent": "NYG",
+          "week_def_rank": 9,
+          "week_def_rank_of": 28,
+          "targets": 1,
+          "receptions": 0,
+          "receiving_yards": 0,
+          "rushing_yards": 28,
+          "touchdowns": 1,
+          "fantasy_pts": 8.8
+        },
+        {
+          "season": 2025,
+          "week": 9,
+          "opponent": "CIN",
+          "week_def_rank": 2,
+          "week_def_rank_of": 28,
+          "targets": 5,
+          "receptions": 3,
+          "receiving_yards": 22,
+          "rushing_yards": 176,
+          "touchdowns": 0,
+          "fantasy_pts": 22.8
+        },
+        {
+          "season": 2025,
+          "week": 8,
+          "opponent": "BAL",
+          "week_def_rank": 17,
+          "week_def_rank_of": 26,
+          "targets": 0,
+          "receptions": 0,
+          "receiving_yards": 0,
+          "rushing_yards": 24,
+          "touchdowns": 0,
+          "fantasy_pts": 2.4
+        },
+        {
+          "season": 2025,
+          "week": 7,
+          "opponent": "NO",
+          "week_def_rank": 3,
+          "week_def_rank_of": 30,
+          "targets": 3,
+          "receptions": 2,
+          "receiving_yards": 13,
+          "rushing_yards": 81,
+          "touchdowns": 1,
+          "fantasy_pts": 17.4
+        },
+        {
+          "season": 2025,
+          "week": 6,
+          "opponent": "WAS",
+          "week_def_rank": 6,
+          "week_def_rank_of": 30,
+          "targets": 1,
+          "receptions": 1,
+          "receiving_yards": 25,
+          "rushing_yards": 19,
+          "touchdowns": 0,
+          "fantasy_pts": 5.4
+        },
+        {
+          "season": 2025,
+          "week": 4,
+          "opponent": "LV",
+          "week_def_rank": 25,
+          "week_def_rank_of": 32,
+          "targets": 0,
+          "receptions": 0,
+          "receiving_yards": 0,
+          "rushing_yards": 18,
+          "touchdowns": 0,
+          "fantasy_pts": 1.8
+        },
+        {
+          "season": 2025,
+          "week": 3,
+          "opponent": "DAL",
+          "week_def_rank": 26,
+          "week_def_rank_of": 32,
+          "targets": 1,
+          "receptions": 1,
+          "receiving_yards": 4,
+          "rushing_yards": 16,
+          "touchdowns": 0,
+          "fantasy_pts": 3.0
+        },
+        {
+          "season": 2025,
+          "week": 2,
+          "opponent": "DET",
+          "week_def_rank": 22,
+          "week_def_rank_of": 32,
+          "targets": 3,
+          "receptions": 1,
+          "receiving_yards": 8,
+          "rushing_yards": 28,
+          "touchdowns": 0,
+          "fantasy_pts": 4.6
+        },
+        {
+          "season": 2025,
+          "week": 1,
+          "opponent": "MIN",
+          "week_def_rank": 27,
+          "week_def_rank_of": 32,
+          "targets": 1,
+          "receptions": 1,
+          "receiving_yards": 11,
+          "rushing_yards": 0,
+          "touchdowns": 0,
+          "fantasy_pts": 2.1
+        }
+      ],
+      "has_market_data": true,
+      "market_based_pts": 1.92,
+      "anytime_td_prob": 0.32,
       "prop": {
         "rec_yards": {
           "line": null,
@@ -65643,6 +65643,91 @@
       }
     },
     {
+      "player_id": "00-0040894",
+      "player_name": "Malik Benson",
+      "position": "WR",
+      "team": "LV",
+      "opponent": "LAC",
+      "target_week": 2,
+      "headshot_url": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/tndlq4zmq6r9nsvmzih6",
+      "team_logo_url": "https://a.espncdn.com/i/teamlogos/nfl/500/lv.png",
+      "games_played": 1,
+      "display_season": 2026,
+      "trailing_avg_pts": 3.65,
+      "trailing_games": 1,
+      "proj_fantasy_pts": 3.65,
+      "def_rank": 13,
+      "def_rank_of": 32,
+      "matchup_factor": 1.0,
+      "latest_snap_pct": 0.1,
+      "season_avg": {
+        "targets": 2.0,
+        "receptions": 1.0,
+        "rec_yards": 6.0,
+        "touchdowns": 0.0,
+        "fantasy_pts": 0.8
+      },
+      "percentiles": {
+        "targets": 41,
+        "receptions": 39,
+        "rec_yards": 36,
+        "touchdowns": 42,
+        "fantasy_pts": 31
+      },
+      "peers": {
+        "targets": 151,
+        "receptions": 151,
+        "rec_yards": 151,
+        "touchdowns": 151,
+        "fantasy_pts": 151
+      },
+      "snap_share_by_week": [
+        {
+          "season": 2026,
+          "week": 1,
+          "pct": 0.1
+        }
+      ],
+      "game_log": [
+        {
+          "season": 2026,
+          "week": 1,
+          "opponent": "MIA",
+          "week_def_rank": 24,
+          "week_def_rank_of": 32,
+          "targets": 2,
+          "receptions": 1,
+          "receiving_yards": 6,
+          "rushing_yards": -8,
+          "touchdowns": 0,
+          "fantasy_pts": 0.8
+        }
+      ],
+      "has_market_data": false,
+      "market_based_pts": 0.0,
+      "anytime_td_prob": null,
+      "prop": {
+        "rec_yards": {
+          "line": null,
+          "over_price": null,
+          "under_price": null,
+          "devigged_over_prob": null
+        },
+        "receptions": {
+          "line": null,
+          "over_price": null,
+          "under_price": null,
+          "devigged_over_prob": null
+        },
+        "rush_yards": {
+          "line": null,
+          "over_price": null,
+          "under_price": null,
+          "devigged_over_prob": null
+        }
+      }
+    },
+    {
       "player_id": "00-0040242",
       "player_name": "Jacory Croskey-Merritt",
       "position": "RB",
@@ -65655,7 +65740,7 @@
       "display_season": 2025,
       "trailing_avg_pts": 9.34,
       "trailing_games": 1,
-      "proj_fantasy_pts": 3.67,
+      "proj_fantasy_pts": 3.64,
       "def_rank": 9,
       "def_rank_of": 32,
       "matchup_factor": 1.0,
@@ -66010,93 +66095,8 @@
         }
       ],
       "has_market_data": true,
-      "market_based_pts": 2.26,
-      "anytime_td_prob": 0.376,
-      "prop": {
-        "rec_yards": {
-          "line": null,
-          "over_price": null,
-          "under_price": null,
-          "devigged_over_prob": null
-        },
-        "receptions": {
-          "line": null,
-          "over_price": null,
-          "under_price": null,
-          "devigged_over_prob": null
-        },
-        "rush_yards": {
-          "line": null,
-          "over_price": null,
-          "under_price": null,
-          "devigged_over_prob": null
-        }
-      }
-    },
-    {
-      "player_id": "00-0040894",
-      "player_name": "Malik Benson",
-      "position": "WR",
-      "team": "LV",
-      "opponent": "LAC",
-      "target_week": 2,
-      "headshot_url": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/tndlq4zmq6r9nsvmzih6",
-      "team_logo_url": "https://a.espncdn.com/i/teamlogos/nfl/500/lv.png",
-      "games_played": 1,
-      "display_season": 2026,
-      "trailing_avg_pts": 3.65,
-      "trailing_games": 1,
-      "proj_fantasy_pts": 3.65,
-      "def_rank": 13,
-      "def_rank_of": 32,
-      "matchup_factor": 1.0,
-      "latest_snap_pct": 0.1,
-      "season_avg": {
-        "targets": 2.0,
-        "receptions": 1.0,
-        "rec_yards": 6.0,
-        "touchdowns": 0.0,
-        "fantasy_pts": 0.8
-      },
-      "percentiles": {
-        "targets": 41,
-        "receptions": 39,
-        "rec_yards": 36,
-        "touchdowns": 42,
-        "fantasy_pts": 31
-      },
-      "peers": {
-        "targets": 151,
-        "receptions": 151,
-        "rec_yards": 151,
-        "touchdowns": 151,
-        "fantasy_pts": 151
-      },
-      "snap_share_by_week": [
-        {
-          "season": 2026,
-          "week": 1,
-          "pct": 0.1
-        }
-      ],
-      "game_log": [
-        {
-          "season": 2026,
-          "week": 1,
-          "opponent": "MIA",
-          "week_def_rank": 24,
-          "week_def_rank_of": 32,
-          "targets": 2,
-          "receptions": 1,
-          "receiving_yards": 6,
-          "rushing_yards": -8,
-          "touchdowns": 0,
-          "fantasy_pts": 0.8
-        }
-      ],
-      "has_market_data": false,
-      "market_based_pts": 0.0,
-      "anytime_td_prob": null,
+      "market_based_pts": 2.22,
+      "anytime_td_prob": 0.37,
       "prop": {
         "rec_yards": {
           "line": null,
@@ -67684,389 +67684,6 @@
       }
     },
     {
-      "player_id": "00-0040126",
-      "player_name": "Colston Loveland",
-      "position": "TE",
-      "team": "CHI",
-      "opponent": "MIN",
-      "target_week": 2,
-      "headshot_url": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/cnxiyi76jeahgx94nh6d",
-      "team_logo_url": "https://a.espncdn.com/i/teamlogos/nfl/500/chi.png",
-      "games_played": 16,
-      "display_season": 2025,
-      "trailing_avg_pts": 7.74,
-      "trailing_games": 1,
-      "proj_fantasy_pts": 3.47,
-      "def_rank": 10,
-      "def_rank_of": 32,
-      "matchup_factor": 1.0,
-      "latest_snap_pct": 0.87,
-      "season_avg": {
-        "targets": 5.12,
-        "receptions": 3.62,
-        "rec_yards": 44.56,
-        "touchdowns": 0.38,
-        "fantasy_pts": 10.32
-      },
-      "percentiles": {
-        "targets": 88,
-        "receptions": 88,
-        "rec_yards": 90,
-        "touchdowns": 91,
-        "fantasy_pts": 89
-      },
-      "peers": {
-        "targets": 137,
-        "receptions": 137,
-        "rec_yards": 137,
-        "touchdowns": 137,
-        "fantasy_pts": 137
-      },
-      "snap_share_by_week": [
-        {
-          "season": 2025,
-          "week": 1,
-          "pct": 0.57
-        },
-        {
-          "season": 2025,
-          "week": 2,
-          "pct": 0.53
-        },
-        {
-          "season": 2025,
-          "week": 3,
-          "pct": 0.1
-        },
-        {
-          "season": 2025,
-          "week": 6,
-          "pct": 0.42
-        },
-        {
-          "season": 2025,
-          "week": 7,
-          "pct": 0.67
-        },
-        {
-          "season": 2025,
-          "week": 8,
-          "pct": 0.81
-        },
-        {
-          "season": 2025,
-          "week": 9,
-          "pct": 0.81
-        },
-        {
-          "season": 2025,
-          "week": 10,
-          "pct": 0.62
-        },
-        {
-          "season": 2025,
-          "week": 11,
-          "pct": 0.75
-        },
-        {
-          "season": 2025,
-          "week": 12,
-          "pct": 0.65
-        },
-        {
-          "season": 2025,
-          "week": 13,
-          "pct": 0.59
-        },
-        {
-          "season": 2025,
-          "week": 14,
-          "pct": 0.59
-        },
-        {
-          "season": 2025,
-          "week": 15,
-          "pct": 0.65
-        },
-        {
-          "season": 2025,
-          "week": 16,
-          "pct": 0.83
-        },
-        {
-          "season": 2025,
-          "week": 17,
-          "pct": 0.82
-        },
-        {
-          "season": 2025,
-          "week": 18,
-          "pct": 0.91
-        },
-        {
-          "season": 2025,
-          "week": 19,
-          "pct": 0.81
-        },
-        {
-          "season": 2025,
-          "week": 20,
-          "pct": 0.65
-        },
-        {
-          "season": 2026,
-          "week": 1,
-          "pct": 0.87
-        }
-      ],
-      "game_log": [
-        {
-          "season": 2026,
-          "week": 1,
-          "opponent": "CAR",
-          "week_def_rank": 19,
-          "week_def_rank_of": 32,
-          "targets": 2,
-          "receptions": 0,
-          "receiving_yards": 0,
-          "rushing_yards": 0,
-          "touchdowns": 0,
-          "fantasy_pts": 0.0
-        },
-        {
-          "season": 2025,
-          "week": 18,
-          "opponent": "DET",
-          "week_def_rank": 3,
-          "week_def_rank_of": 31,
-          "targets": 13,
-          "receptions": 10,
-          "receiving_yards": 91,
-          "rushing_yards": 0,
-          "touchdowns": 1,
-          "fantasy_pts": 25.1
-        },
-        {
-          "season": 2025,
-          "week": 17,
-          "opponent": "SF",
-          "week_def_rank": 1,
-          "week_def_rank_of": 32,
-          "targets": 10,
-          "receptions": 6,
-          "receiving_yards": 94,
-          "rushing_yards": 0,
-          "touchdowns": 1,
-          "fantasy_pts": 21.4
-        },
-        {
-          "season": 2025,
-          "week": 16,
-          "opponent": "GB",
-          "week_def_rank": 21,
-          "week_def_rank_of": 32,
-          "targets": 5,
-          "receptions": 3,
-          "receiving_yards": 30,
-          "rushing_yards": 0,
-          "touchdowns": 0,
-          "fantasy_pts": 6.0
-        },
-        {
-          "season": 2025,
-          "week": 15,
-          "opponent": "CLE",
-          "week_def_rank": 12,
-          "week_def_rank_of": 32,
-          "targets": 5,
-          "receptions": 4,
-          "receiving_yards": 63,
-          "rushing_yards": -2,
-          "touchdowns": 0,
-          "fantasy_pts": 10.1
-        },
-        {
-          "season": 2025,
-          "week": 14,
-          "opponent": "GB",
-          "week_def_rank": 5,
-          "week_def_rank_of": 28,
-          "targets": 5,
-          "receptions": 4,
-          "receiving_yards": 29,
-          "rushing_yards": 0,
-          "touchdowns": 1,
-          "fantasy_pts": 12.9
-        },
-        {
-          "season": 2025,
-          "week": 13,
-          "opponent": "PHI",
-          "week_def_rank": 6,
-          "week_def_rank_of": 32,
-          "targets": 6,
-          "receptions": 3,
-          "receiving_yards": 28,
-          "rushing_yards": 0,
-          "touchdowns": 0,
-          "fantasy_pts": 5.8
-        },
-        {
-          "season": 2025,
-          "week": 12,
-          "opponent": "PIT",
-          "week_def_rank": 9,
-          "week_def_rank_of": 28,
-          "targets": 5,
-          "receptions": 4,
-          "receiving_yards": 49,
-          "rushing_yards": 0,
-          "touchdowns": 1,
-          "fantasy_pts": 14.9
-        },
-        {
-          "season": 2025,
-          "week": 11,
-          "opponent": "MIN",
-          "week_def_rank": 6,
-          "week_def_rank_of": 30,
-          "targets": 4,
-          "receptions": 3,
-          "receiving_yards": 40,
-          "rushing_yards": 0,
-          "touchdowns": 0,
-          "fantasy_pts": 7.0
-        },
-        {
-          "season": 2025,
-          "week": 10,
-          "opponent": "NYG",
-          "week_def_rank": 13,
-          "week_def_rank_of": 28,
-          "targets": 4,
-          "receptions": 4,
-          "receiving_yards": 55,
-          "rushing_yards": 0,
-          "touchdowns": 0,
-          "fantasy_pts": 9.5
-        },
-        {
-          "season": 2025,
-          "week": 9,
-          "opponent": "CIN",
-          "week_def_rank": 3,
-          "week_def_rank_of": 28,
-          "targets": 7,
-          "receptions": 6,
-          "receiving_yards": 118,
-          "rushing_yards": 0,
-          "touchdowns": 2,
-          "fantasy_pts": 29.8
-        },
-        {
-          "season": 2025,
-          "week": 8,
-          "opponent": "BAL",
-          "week_def_rank": 21,
-          "week_def_rank_of": 26,
-          "targets": 5,
-          "receptions": 3,
-          "receiving_yards": 38,
-          "rushing_yards": 0,
-          "touchdowns": 0,
-          "fantasy_pts": 6.8
-        },
-        {
-          "season": 2025,
-          "week": 7,
-          "opponent": "NO",
-          "week_def_rank": 22,
-          "week_def_rank_of": 30,
-          "targets": 4,
-          "receptions": 3,
-          "receiving_yards": 24,
-          "rushing_yards": 0,
-          "touchdowns": 0,
-          "fantasy_pts": 5.4
-        },
-        {
-          "season": 2025,
-          "week": 6,
-          "opponent": "WAS",
-          "week_def_rank": 29,
-          "week_def_rank_of": 30,
-          "targets": 3,
-          "receptions": 2,
-          "receiving_yards": 11,
-          "rushing_yards": 0,
-          "touchdowns": 0,
-          "fantasy_pts": 3.1
-        },
-        {
-          "season": 2025,
-          "week": 3,
-          "opponent": "DAL",
-          "week_def_rank": 13,
-          "week_def_rank_of": 32,
-          "targets": 3,
-          "receptions": 1,
-          "receiving_yards": 31,
-          "rushing_yards": 0,
-          "touchdowns": 0,
-          "fantasy_pts": 4.1
-        },
-        {
-          "season": 2025,
-          "week": 2,
-          "opponent": "DET",
-          "week_def_rank": 26,
-          "week_def_rank_of": 31,
-          "targets": 1,
-          "receptions": 0,
-          "receiving_yards": 0,
-          "rushing_yards": 0,
-          "touchdowns": 0,
-          "fantasy_pts": 0.0
-        },
-        {
-          "season": 2025,
-          "week": 1,
-          "opponent": "MIN",
-          "week_def_rank": 24,
-          "week_def_rank_of": 32,
-          "targets": 2,
-          "receptions": 2,
-          "receiving_yards": 12,
-          "rushing_yards": 0,
-          "touchdowns": 0,
-          "fantasy_pts": 3.2
-        }
-      ],
-      "has_market_data": true,
-      "market_based_pts": 2.4,
-      "anytime_td_prob": 0.4,
-      "prop": {
-        "rec_yards": {
-          "line": null,
-          "over_price": null,
-          "under_price": null,
-          "devigged_over_prob": null
-        },
-        "receptions": {
-          "line": null,
-          "over_price": null,
-          "under_price": null,
-          "devigged_over_prob": null
-        },
-        "rush_yards": {
-          "line": null,
-          "over_price": null,
-          "under_price": null,
-          "devigged_over_prob": null
-        }
-      }
-    },
-    {
       "player_id": "00-0037834",
       "player_name": "Brock Purdy",
       "position": "QB",
@@ -68800,6 +68417,389 @@
       "has_market_data": false,
       "market_based_pts": 0.0,
       "anytime_td_prob": null,
+      "prop": {
+        "rec_yards": {
+          "line": null,
+          "over_price": null,
+          "under_price": null,
+          "devigged_over_prob": null
+        },
+        "receptions": {
+          "line": null,
+          "over_price": null,
+          "under_price": null,
+          "devigged_over_prob": null
+        },
+        "rush_yards": {
+          "line": null,
+          "over_price": null,
+          "under_price": null,
+          "devigged_over_prob": null
+        }
+      }
+    },
+    {
+      "player_id": "00-0040126",
+      "player_name": "Colston Loveland",
+      "position": "TE",
+      "team": "CHI",
+      "opponent": "MIN",
+      "target_week": 2,
+      "headshot_url": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/cnxiyi76jeahgx94nh6d",
+      "team_logo_url": "https://a.espncdn.com/i/teamlogos/nfl/500/chi.png",
+      "games_played": 16,
+      "display_season": 2025,
+      "trailing_avg_pts": 7.74,
+      "trailing_games": 1,
+      "proj_fantasy_pts": 3.44,
+      "def_rank": 10,
+      "def_rank_of": 32,
+      "matchup_factor": 1.0,
+      "latest_snap_pct": 0.87,
+      "season_avg": {
+        "targets": 5.12,
+        "receptions": 3.62,
+        "rec_yards": 44.56,
+        "touchdowns": 0.38,
+        "fantasy_pts": 10.32
+      },
+      "percentiles": {
+        "targets": 88,
+        "receptions": 88,
+        "rec_yards": 90,
+        "touchdowns": 91,
+        "fantasy_pts": 89
+      },
+      "peers": {
+        "targets": 137,
+        "receptions": 137,
+        "rec_yards": 137,
+        "touchdowns": 137,
+        "fantasy_pts": 137
+      },
+      "snap_share_by_week": [
+        {
+          "season": 2025,
+          "week": 1,
+          "pct": 0.57
+        },
+        {
+          "season": 2025,
+          "week": 2,
+          "pct": 0.53
+        },
+        {
+          "season": 2025,
+          "week": 3,
+          "pct": 0.1
+        },
+        {
+          "season": 2025,
+          "week": 6,
+          "pct": 0.42
+        },
+        {
+          "season": 2025,
+          "week": 7,
+          "pct": 0.67
+        },
+        {
+          "season": 2025,
+          "week": 8,
+          "pct": 0.81
+        },
+        {
+          "season": 2025,
+          "week": 9,
+          "pct": 0.81
+        },
+        {
+          "season": 2025,
+          "week": 10,
+          "pct": 0.62
+        },
+        {
+          "season": 2025,
+          "week": 11,
+          "pct": 0.75
+        },
+        {
+          "season": 2025,
+          "week": 12,
+          "pct": 0.65
+        },
+        {
+          "season": 2025,
+          "week": 13,
+          "pct": 0.59
+        },
+        {
+          "season": 2025,
+          "week": 14,
+          "pct": 0.59
+        },
+        {
+          "season": 2025,
+          "week": 15,
+          "pct": 0.65
+        },
+        {
+          "season": 2025,
+          "week": 16,
+          "pct": 0.83
+        },
+        {
+          "season": 2025,
+          "week": 17,
+          "pct": 0.82
+        },
+        {
+          "season": 2025,
+          "week": 18,
+          "pct": 0.91
+        },
+        {
+          "season": 2025,
+          "week": 19,
+          "pct": 0.81
+        },
+        {
+          "season": 2025,
+          "week": 20,
+          "pct": 0.65
+        },
+        {
+          "season": 2026,
+          "week": 1,
+          "pct": 0.87
+        }
+      ],
+      "game_log": [
+        {
+          "season": 2026,
+          "week": 1,
+          "opponent": "CAR",
+          "week_def_rank": 19,
+          "week_def_rank_of": 32,
+          "targets": 2,
+          "receptions": 0,
+          "receiving_yards": 0,
+          "rushing_yards": 0,
+          "touchdowns": 0,
+          "fantasy_pts": 0.0
+        },
+        {
+          "season": 2025,
+          "week": 18,
+          "opponent": "DET",
+          "week_def_rank": 3,
+          "week_def_rank_of": 31,
+          "targets": 13,
+          "receptions": 10,
+          "receiving_yards": 91,
+          "rushing_yards": 0,
+          "touchdowns": 1,
+          "fantasy_pts": 25.1
+        },
+        {
+          "season": 2025,
+          "week": 17,
+          "opponent": "SF",
+          "week_def_rank": 1,
+          "week_def_rank_of": 32,
+          "targets": 10,
+          "receptions": 6,
+          "receiving_yards": 94,
+          "rushing_yards": 0,
+          "touchdowns": 1,
+          "fantasy_pts": 21.4
+        },
+        {
+          "season": 2025,
+          "week": 16,
+          "opponent": "GB",
+          "week_def_rank": 21,
+          "week_def_rank_of": 32,
+          "targets": 5,
+          "receptions": 3,
+          "receiving_yards": 30,
+          "rushing_yards": 0,
+          "touchdowns": 0,
+          "fantasy_pts": 6.0
+        },
+        {
+          "season": 2025,
+          "week": 15,
+          "opponent": "CLE",
+          "week_def_rank": 12,
+          "week_def_rank_of": 32,
+          "targets": 5,
+          "receptions": 4,
+          "receiving_yards": 63,
+          "rushing_yards": -2,
+          "touchdowns": 0,
+          "fantasy_pts": 10.1
+        },
+        {
+          "season": 2025,
+          "week": 14,
+          "opponent": "GB",
+          "week_def_rank": 5,
+          "week_def_rank_of": 28,
+          "targets": 5,
+          "receptions": 4,
+          "receiving_yards": 29,
+          "rushing_yards": 0,
+          "touchdowns": 1,
+          "fantasy_pts": 12.9
+        },
+        {
+          "season": 2025,
+          "week": 13,
+          "opponent": "PHI",
+          "week_def_rank": 6,
+          "week_def_rank_of": 32,
+          "targets": 6,
+          "receptions": 3,
+          "receiving_yards": 28,
+          "rushing_yards": 0,
+          "touchdowns": 0,
+          "fantasy_pts": 5.8
+        },
+        {
+          "season": 2025,
+          "week": 12,
+          "opponent": "PIT",
+          "week_def_rank": 9,
+          "week_def_rank_of": 28,
+          "targets": 5,
+          "receptions": 4,
+          "receiving_yards": 49,
+          "rushing_yards": 0,
+          "touchdowns": 1,
+          "fantasy_pts": 14.9
+        },
+        {
+          "season": 2025,
+          "week": 11,
+          "opponent": "MIN",
+          "week_def_rank": 6,
+          "week_def_rank_of": 30,
+          "targets": 4,
+          "receptions": 3,
+          "receiving_yards": 40,
+          "rushing_yards": 0,
+          "touchdowns": 0,
+          "fantasy_pts": 7.0
+        },
+        {
+          "season": 2025,
+          "week": 10,
+          "opponent": "NYG",
+          "week_def_rank": 13,
+          "week_def_rank_of": 28,
+          "targets": 4,
+          "receptions": 4,
+          "receiving_yards": 55,
+          "rushing_yards": 0,
+          "touchdowns": 0,
+          "fantasy_pts": 9.5
+        },
+        {
+          "season": 2025,
+          "week": 9,
+          "opponent": "CIN",
+          "week_def_rank": 3,
+          "week_def_rank_of": 28,
+          "targets": 7,
+          "receptions": 6,
+          "receiving_yards": 118,
+          "rushing_yards": 0,
+          "touchdowns": 2,
+          "fantasy_pts": 29.8
+        },
+        {
+          "season": 2025,
+          "week": 8,
+          "opponent": "BAL",
+          "week_def_rank": 21,
+          "week_def_rank_of": 26,
+          "targets": 5,
+          "receptions": 3,
+          "receiving_yards": 38,
+          "rushing_yards": 0,
+          "touchdowns": 0,
+          "fantasy_pts": 6.8
+        },
+        {
+          "season": 2025,
+          "week": 7,
+          "opponent": "NO",
+          "week_def_rank": 22,
+          "week_def_rank_of": 30,
+          "targets": 4,
+          "receptions": 3,
+          "receiving_yards": 24,
+          "rushing_yards": 0,
+          "touchdowns": 0,
+          "fantasy_pts": 5.4
+        },
+        {
+          "season": 2025,
+          "week": 6,
+          "opponent": "WAS",
+          "week_def_rank": 29,
+          "week_def_rank_of": 30,
+          "targets": 3,
+          "receptions": 2,
+          "receiving_yards": 11,
+          "rushing_yards": 0,
+          "touchdowns": 0,
+          "fantasy_pts": 3.1
+        },
+        {
+          "season": 2025,
+          "week": 3,
+          "opponent": "DAL",
+          "week_def_rank": 13,
+          "week_def_rank_of": 32,
+          "targets": 3,
+          "receptions": 1,
+          "receiving_yards": 31,
+          "rushing_yards": 0,
+          "touchdowns": 0,
+          "fantasy_pts": 4.1
+        },
+        {
+          "season": 2025,
+          "week": 2,
+          "opponent": "DET",
+          "week_def_rank": 26,
+          "week_def_rank_of": 31,
+          "targets": 1,
+          "receptions": 0,
+          "receiving_yards": 0,
+          "rushing_yards": 0,
+          "touchdowns": 0,
+          "fantasy_pts": 0.0
+        },
+        {
+          "season": 2025,
+          "week": 1,
+          "opponent": "MIN",
+          "week_def_rank": 24,
+          "week_def_rank_of": 32,
+          "targets": 2,
+          "receptions": 2,
+          "receiving_yards": 12,
+          "rushing_yards": 0,
+          "touchdowns": 0,
+          "fantasy_pts": 3.2
+        }
+      ],
+      "has_market_data": true,
+      "market_based_pts": 2.36,
+      "anytime_td_prob": 0.394,
       "prop": {
         "rec_yards": {
           "line": null,
@@ -70048,6 +70048,96 @@
       }
     },
     {
+      "player_id": "00-0038489",
+      "player_name": "Ben VanSumeren",
+      "position": "RB",
+      "team": "KC",
+      "opponent": "IND",
+      "target_week": 2,
+      "headshot_url": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/ncnb1nwr2b1usus557xy",
+      "team_logo_url": "https://a.espncdn.com/i/teamlogos/nfl/500/kc.png",
+      "games_played": 1,
+      "display_season": 2026,
+      "trailing_avg_pts": 3.3,
+      "trailing_games": 1,
+      "proj_fantasy_pts": 3.3,
+      "def_rank": 3,
+      "def_rank_of": 32,
+      "matchup_factor": 1.0,
+      "latest_snap_pct": 0.04,
+      "season_avg": {
+        "targets": 0.0,
+        "receptions": 0.0,
+        "rec_yards": 0.0,
+        "touchdowns": 0.0,
+        "fantasy_pts": 0.0
+      },
+      "percentiles": {
+        "targets": 19,
+        "receptions": 22,
+        "rec_yards": 29,
+        "touchdowns": 38,
+        "fantasy_pts": 10
+      },
+      "peers": {
+        "targets": 89,
+        "receptions": 89,
+        "rec_yards": 89,
+        "touchdowns": 89,
+        "fantasy_pts": 89
+      },
+      "snap_share_by_week": [
+        {
+          "season": 2025,
+          "week": 1,
+          "pct": 0.0
+        },
+        {
+          "season": 2026,
+          "week": 1,
+          "pct": 0.04
+        }
+      ],
+      "game_log": [
+        {
+          "season": 2026,
+          "week": 1,
+          "opponent": "DEN",
+          "week_def_rank": 2,
+          "week_def_rank_of": 32,
+          "targets": 0,
+          "receptions": 0,
+          "receiving_yards": 0,
+          "rushing_yards": 0,
+          "touchdowns": 0,
+          "fantasy_pts": 0.0
+        }
+      ],
+      "has_market_data": false,
+      "market_based_pts": 0.0,
+      "anytime_td_prob": null,
+      "prop": {
+        "rec_yards": {
+          "line": null,
+          "over_price": null,
+          "under_price": null,
+          "devigged_over_prob": null
+        },
+        "receptions": {
+          "line": null,
+          "over_price": null,
+          "under_price": null,
+          "devigged_over_prob": null
+        },
+        "rush_yards": {
+          "line": null,
+          "over_price": null,
+          "under_price": null,
+          "devigged_over_prob": null
+        }
+      }
+    },
+    {
       "player_id": "00-0040128",
       "player_name": "Tyler Warren",
       "position": "TE",
@@ -70060,7 +70150,7 @@
       "display_season": 2025,
       "trailing_avg_pts": 10.89,
       "trailing_games": 1,
-      "proj_fantasy_pts": 3.32,
+      "proj_fantasy_pts": 3.3,
       "def_rank": 9,
       "def_rank_of": 32,
       "matchup_factor": 1.0,
@@ -70415,98 +70505,8 @@
         }
       ],
       "has_market_data": true,
-      "market_based_pts": 1.43,
-      "anytime_td_prob": 0.239,
-      "prop": {
-        "rec_yards": {
-          "line": null,
-          "over_price": null,
-          "under_price": null,
-          "devigged_over_prob": null
-        },
-        "receptions": {
-          "line": null,
-          "over_price": null,
-          "under_price": null,
-          "devigged_over_prob": null
-        },
-        "rush_yards": {
-          "line": null,
-          "over_price": null,
-          "under_price": null,
-          "devigged_over_prob": null
-        }
-      }
-    },
-    {
-      "player_id": "00-0038489",
-      "player_name": "Ben VanSumeren",
-      "position": "RB",
-      "team": "KC",
-      "opponent": "IND",
-      "target_week": 2,
-      "headshot_url": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/ncnb1nwr2b1usus557xy",
-      "team_logo_url": "https://a.espncdn.com/i/teamlogos/nfl/500/kc.png",
-      "games_played": 1,
-      "display_season": 2026,
-      "trailing_avg_pts": 3.3,
-      "trailing_games": 1,
-      "proj_fantasy_pts": 3.3,
-      "def_rank": 3,
-      "def_rank_of": 32,
-      "matchup_factor": 1.0,
-      "latest_snap_pct": 0.04,
-      "season_avg": {
-        "targets": 0.0,
-        "receptions": 0.0,
-        "rec_yards": 0.0,
-        "touchdowns": 0.0,
-        "fantasy_pts": 0.0
-      },
-      "percentiles": {
-        "targets": 19,
-        "receptions": 22,
-        "rec_yards": 29,
-        "touchdowns": 38,
-        "fantasy_pts": 10
-      },
-      "peers": {
-        "targets": 89,
-        "receptions": 89,
-        "rec_yards": 89,
-        "touchdowns": 89,
-        "fantasy_pts": 89
-      },
-      "snap_share_by_week": [
-        {
-          "season": 2025,
-          "week": 1,
-          "pct": 0.0
-        },
-        {
-          "season": 2026,
-          "week": 1,
-          "pct": 0.04
-        }
-      ],
-      "game_log": [
-        {
-          "season": 2026,
-          "week": 1,
-          "opponent": "DEN",
-          "week_def_rank": 2,
-          "week_def_rank_of": 32,
-          "targets": 0,
-          "receptions": 0,
-          "receiving_yards": 0,
-          "rushing_yards": 0,
-          "touchdowns": 0,
-          "fantasy_pts": 0.0
-        }
-      ],
-      "has_market_data": false,
-      "market_based_pts": 0.0,
-      "anytime_td_prob": null,
+      "market_based_pts": 1.4,
+      "anytime_td_prob": 0.234,
       "prop": {
         "rec_yards": {
           "line": null,
@@ -71726,7 +71726,7 @@
       "display_season": 2025,
       "trailing_avg_pts": 8.05,
       "trailing_games": 1,
-      "proj_fantasy_pts": 3.16,
+      "proj_fantasy_pts": 3.17,
       "def_rank": 16,
       "def_rank_of": 32,
       "matchup_factor": 1.0,
@@ -72073,8 +72073,8 @@
         }
       ],
       "has_market_data": true,
-      "market_based_pts": 1.93,
-      "anytime_td_prob": 0.322,
+      "market_based_pts": 1.95,
+      "anytime_td_prob": 0.325,
       "prop": {
         "rec_yards": {
           "line": null,
@@ -74539,7 +74539,7 @@
       "display_season": 2025,
       "trailing_avg_pts": 8.77,
       "trailing_games": 1,
-      "proj_fantasy_pts": 2.84,
+      "proj_fantasy_pts": 2.82,
       "def_rank": 2,
       "def_rank_of": 32,
       "matchup_factor": 1.0,
@@ -74777,8 +74777,8 @@
         }
       ],
       "has_market_data": true,
-      "market_based_pts": 1.36,
-      "anytime_td_prob": 0.226,
+      "market_based_pts": 1.33,
+      "anytime_td_prob": 0.222,
       "prop": {
         "rec_yards": {
           "line": null,
@@ -77544,7 +77544,7 @@
       "display_season": 2025,
       "trailing_avg_pts": 6.88,
       "trailing_games": 1,
-      "proj_fantasy_pts": 2.46,
+      "proj_fantasy_pts": 2.48,
       "def_rank": 2,
       "def_rank_of": 32,
       "matchup_factor": 1.0,
@@ -77868,8 +77868,8 @@
         }
       ],
       "has_market_data": true,
-      "market_based_pts": 1.35,
-      "anytime_td_prob": 0.225,
+      "market_based_pts": 1.38,
+      "anytime_td_prob": 0.23,
       "prop": {
         "rec_yards": {
           "line": null,
@@ -78691,7 +78691,7 @@
       "display_season": 2025,
       "trailing_avg_pts": 6.74,
       "trailing_games": 1,
-      "proj_fantasy_pts": 2.38,
+      "proj_fantasy_pts": 2.36,
       "def_rank": 13,
       "def_rank_of": 32,
       "matchup_factor": 1.0,
@@ -78992,8 +78992,8 @@
         }
       ],
       "has_market_data": true,
-      "market_based_pts": 1.29,
-      "anytime_td_prob": 0.215,
+      "market_based_pts": 1.26,
+      "anytime_td_prob": 0.211,
       "prop": {
         "rec_yards": {
           "line": null,
@@ -82292,214 +82292,6 @@
       }
     },
     {
-      "player_id": "00-0040277",
-      "player_name": "Jahdae Walker",
-      "position": "WR",
-      "team": "CHI",
-      "opponent": "MIN",
-      "target_week": 2,
-      "headshot_url": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/cr13mo2xrpdkksy8fveq",
-      "team_logo_url": "https://a.espncdn.com/i/teamlogos/nfl/500/chi.png",
-      "games_played": 6,
-      "display_season": 2025,
-      "trailing_avg_pts": 5.11,
-      "trailing_games": 1,
-      "proj_fantasy_pts": 1.99,
-      "def_rank": 2,
-      "def_rank_of": 32,
-      "matchup_factor": 1.0,
-      "latest_snap_pct": 0.45,
-      "season_avg": {
-        "targets": 1.67,
-        "receptions": 1.0,
-        "rec_yards": 14.5,
-        "touchdowns": 0.33,
-        "fantasy_pts": 4.45
-      },
-      "percentiles": {
-        "targets": 34,
-        "receptions": 34,
-        "rec_yards": 40,
-        "touchdowns": 82,
-        "fantasy_pts": 55
-      },
-      "peers": {
-        "targets": 241,
-        "receptions": 241,
-        "rec_yards": 241,
-        "touchdowns": 241,
-        "fantasy_pts": 241
-      },
-      "snap_share_by_week": [
-        {
-          "season": 2025,
-          "week": 1,
-          "pct": 0.0
-        },
-        {
-          "season": 2025,
-          "week": 3,
-          "pct": 0.0
-        },
-        {
-          "season": 2025,
-          "week": 4,
-          "pct": 0.01
-        },
-        {
-          "season": 2025,
-          "week": 8,
-          "pct": 0.03
-        },
-        {
-          "season": 2025,
-          "week": 9,
-          "pct": 0.04
-        },
-        {
-          "season": 2025,
-          "week": 14,
-          "pct": 0.03
-        },
-        {
-          "season": 2025,
-          "week": 16,
-          "pct": 0.27
-        },
-        {
-          "season": 2025,
-          "week": 17,
-          "pct": 0.62
-        },
-        {
-          "season": 2025,
-          "week": 18,
-          "pct": 0.36
-        },
-        {
-          "season": 2026,
-          "week": 1,
-          "pct": 0.45
-        }
-      ],
-      "game_log": [
-        {
-          "season": 2026,
-          "week": 1,
-          "opponent": "CAR",
-          "week_def_rank": 7,
-          "week_def_rank_of": 32,
-          "targets": 1,
-          "receptions": 1,
-          "receiving_yards": 1,
-          "rushing_yards": 0,
-          "touchdowns": 1,
-          "fantasy_pts": 7.1
-        },
-        {
-          "season": 2025,
-          "week": 18,
-          "opponent": "DET",
-          "week_def_rank": 19,
-          "week_def_rank_of": 32,
-          "targets": 3,
-          "receptions": 2,
-          "receiving_yards": 36,
-          "rushing_yards": 0,
-          "touchdowns": 1,
-          "fantasy_pts": 11.6
-        },
-        {
-          "season": 2025,
-          "week": 17,
-          "opponent": "SF",
-          "week_def_rank": 12,
-          "week_def_rank_of": 32,
-          "targets": 4,
-          "receptions": 2,
-          "receiving_yards": 30,
-          "rushing_yards": 0,
-          "touchdowns": 0,
-          "fantasy_pts": 5.0
-        },
-        {
-          "season": 2025,
-          "week": 16,
-          "opponent": "GB",
-          "week_def_rank": 13,
-          "week_def_rank_of": 32,
-          "targets": 3,
-          "receptions": 2,
-          "receiving_yards": 21,
-          "rushing_yards": 0,
-          "touchdowns": 1,
-          "fantasy_pts": 10.1
-        },
-        {
-          "season": 2025,
-          "week": 9,
-          "opponent": "CIN",
-          "week_def_rank": 7,
-          "week_def_rank_of": 28,
-          "targets": 0,
-          "receptions": 0,
-          "receiving_yards": 0,
-          "rushing_yards": 0,
-          "touchdowns": 0,
-          "fantasy_pts": 0.0
-        },
-        {
-          "season": 2025,
-          "week": 8,
-          "opponent": "BAL",
-          "week_def_rank": 7,
-          "week_def_rank_of": 26,
-          "targets": 0,
-          "receptions": 0,
-          "receiving_yards": 0,
-          "rushing_yards": 0,
-          "touchdowns": 0,
-          "fantasy_pts": 0.0
-        },
-        {
-          "season": 2025,
-          "week": 4,
-          "opponent": "LV",
-          "week_def_rank": 8,
-          "week_def_rank_of": 32,
-          "targets": 0,
-          "receptions": 0,
-          "receiving_yards": 0,
-          "rushing_yards": 0,
-          "touchdowns": 0,
-          "fantasy_pts": 0.0
-        }
-      ],
-      "has_market_data": true,
-      "market_based_pts": 1.21,
-      "anytime_td_prob": 0.202,
-      "prop": {
-        "rec_yards": {
-          "line": null,
-          "over_price": null,
-          "under_price": null,
-          "devigged_over_prob": null
-        },
-        "receptions": {
-          "line": null,
-          "over_price": null,
-          "under_price": null,
-          "devigged_over_prob": null
-        },
-        "rush_yards": {
-          "line": null,
-          "over_price": null,
-          "under_price": null,
-          "devigged_over_prob": null
-        }
-      }
-    },
-    {
       "player_id": "00-0039530",
       "player_name": "Brevyn Spann-Ford",
       "position": "TE",
@@ -83162,6 +82954,214 @@
       "has_market_data": false,
       "market_based_pts": 0.0,
       "anytime_td_prob": null,
+      "prop": {
+        "rec_yards": {
+          "line": null,
+          "over_price": null,
+          "under_price": null,
+          "devigged_over_prob": null
+        },
+        "receptions": {
+          "line": null,
+          "over_price": null,
+          "under_price": null,
+          "devigged_over_prob": null
+        },
+        "rush_yards": {
+          "line": null,
+          "over_price": null,
+          "under_price": null,
+          "devigged_over_prob": null
+        }
+      }
+    },
+    {
+      "player_id": "00-0040277",
+      "player_name": "Jahdae Walker",
+      "position": "WR",
+      "team": "CHI",
+      "opponent": "MIN",
+      "target_week": 2,
+      "headshot_url": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/cr13mo2xrpdkksy8fveq",
+      "team_logo_url": "https://a.espncdn.com/i/teamlogos/nfl/500/chi.png",
+      "games_played": 6,
+      "display_season": 2025,
+      "trailing_avg_pts": 5.11,
+      "trailing_games": 1,
+      "proj_fantasy_pts": 1.97,
+      "def_rank": 2,
+      "def_rank_of": 32,
+      "matchup_factor": 1.0,
+      "latest_snap_pct": 0.45,
+      "season_avg": {
+        "targets": 1.67,
+        "receptions": 1.0,
+        "rec_yards": 14.5,
+        "touchdowns": 0.33,
+        "fantasy_pts": 4.45
+      },
+      "percentiles": {
+        "targets": 34,
+        "receptions": 34,
+        "rec_yards": 40,
+        "touchdowns": 82,
+        "fantasy_pts": 55
+      },
+      "peers": {
+        "targets": 241,
+        "receptions": 241,
+        "rec_yards": 241,
+        "touchdowns": 241,
+        "fantasy_pts": 241
+      },
+      "snap_share_by_week": [
+        {
+          "season": 2025,
+          "week": 1,
+          "pct": 0.0
+        },
+        {
+          "season": 2025,
+          "week": 3,
+          "pct": 0.0
+        },
+        {
+          "season": 2025,
+          "week": 4,
+          "pct": 0.01
+        },
+        {
+          "season": 2025,
+          "week": 8,
+          "pct": 0.03
+        },
+        {
+          "season": 2025,
+          "week": 9,
+          "pct": 0.04
+        },
+        {
+          "season": 2025,
+          "week": 14,
+          "pct": 0.03
+        },
+        {
+          "season": 2025,
+          "week": 16,
+          "pct": 0.27
+        },
+        {
+          "season": 2025,
+          "week": 17,
+          "pct": 0.62
+        },
+        {
+          "season": 2025,
+          "week": 18,
+          "pct": 0.36
+        },
+        {
+          "season": 2026,
+          "week": 1,
+          "pct": 0.45
+        }
+      ],
+      "game_log": [
+        {
+          "season": 2026,
+          "week": 1,
+          "opponent": "CAR",
+          "week_def_rank": 7,
+          "week_def_rank_of": 32,
+          "targets": 1,
+          "receptions": 1,
+          "receiving_yards": 1,
+          "rushing_yards": 0,
+          "touchdowns": 1,
+          "fantasy_pts": 7.1
+        },
+        {
+          "season": 2025,
+          "week": 18,
+          "opponent": "DET",
+          "week_def_rank": 19,
+          "week_def_rank_of": 32,
+          "targets": 3,
+          "receptions": 2,
+          "receiving_yards": 36,
+          "rushing_yards": 0,
+          "touchdowns": 1,
+          "fantasy_pts": 11.6
+        },
+        {
+          "season": 2025,
+          "week": 17,
+          "opponent": "SF",
+          "week_def_rank": 12,
+          "week_def_rank_of": 32,
+          "targets": 4,
+          "receptions": 2,
+          "receiving_yards": 30,
+          "rushing_yards": 0,
+          "touchdowns": 0,
+          "fantasy_pts": 5.0
+        },
+        {
+          "season": 2025,
+          "week": 16,
+          "opponent": "GB",
+          "week_def_rank": 13,
+          "week_def_rank_of": 32,
+          "targets": 3,
+          "receptions": 2,
+          "receiving_yards": 21,
+          "rushing_yards": 0,
+          "touchdowns": 1,
+          "fantasy_pts": 10.1
+        },
+        {
+          "season": 2025,
+          "week": 9,
+          "opponent": "CIN",
+          "week_def_rank": 7,
+          "week_def_rank_of": 28,
+          "targets": 0,
+          "receptions": 0,
+          "receiving_yards": 0,
+          "rushing_yards": 0,
+          "touchdowns": 0,
+          "fantasy_pts": 0.0
+        },
+        {
+          "season": 2025,
+          "week": 8,
+          "opponent": "BAL",
+          "week_def_rank": 7,
+          "week_def_rank_of": 26,
+          "targets": 0,
+          "receptions": 0,
+          "receiving_yards": 0,
+          "rushing_yards": 0,
+          "touchdowns": 0,
+          "fantasy_pts": 0.0
+        },
+        {
+          "season": 2025,
+          "week": 4,
+          "opponent": "LV",
+          "week_def_rank": 8,
+          "week_def_rank_of": 32,
+          "targets": 0,
+          "receptions": 0,
+          "receiving_yards": 0,
+          "rushing_yards": 0,
+          "touchdowns": 0,
+          "fantasy_pts": 0.0
+        }
+      ],
+      "has_market_data": true,
+      "market_based_pts": 1.19,
+      "anytime_td_prob": 0.198,
       "prop": {
         "rec_yards": {
           "line": null,
@@ -84832,7 +84832,7 @@
       "display_season": 2025,
       "trailing_avg_pts": 4.07,
       "trailing_games": 1,
-      "proj_fantasy_pts": 1.78,
+      "proj_fantasy_pts": 1.8,
       "def_rank": 8,
       "def_rank_of": 32,
       "matchup_factor": 1.0,
@@ -85148,8 +85148,8 @@
         }
       ],
       "has_market_data": true,
-      "market_based_pts": 1.2,
-      "anytime_td_prob": 0.2,
+      "market_based_pts": 1.23,
+      "anytime_td_prob": 0.205,
       "prop": {
         "rec_yards": {
           "line": null,
@@ -88092,8 +88092,8 @@
         }
       ],
       "has_market_data": true,
-      "market_based_pts": 0.66,
-      "anytime_td_prob": 0.11,
+      "market_based_pts": 0.67,
+      "anytime_td_prob": 0.112,
       "prop": {
         "rec_yards": {
           "line": null,
@@ -89676,6 +89676,155 @@
       }
     },
     {
+      "player_id": "00-0040363",
+      "player_name": "Keleki Latu",
+      "position": "TE",
+      "team": "BUF",
+      "opponent": "DET",
+      "target_week": 2,
+      "headshot_url": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/vebjjfyrrrbwaqjlyvun",
+      "team_logo_url": "https://a.espncdn.com/i/teamlogos/nfl/500/buf.png",
+      "games_played": 3,
+      "display_season": 2025,
+      "trailing_avg_pts": 1.88,
+      "trailing_games": 1,
+      "proj_fantasy_pts": 1.16,
+      "def_rank": 2,
+      "def_rank_of": 32,
+      "matchup_factor": 1.0,
+      "latest_snap_pct": 0.07,
+      "season_avg": {
+        "targets": 1.33,
+        "receptions": 1.33,
+        "rec_yards": 11.67,
+        "touchdowns": 0.0,
+        "fantasy_pts": 2.5
+      },
+      "percentiles": {
+        "targets": 35,
+        "receptions": 52,
+        "rec_yards": 48,
+        "touchdowns": 23,
+        "fantasy_pts": 42
+      },
+      "peers": {
+        "targets": 137,
+        "receptions": 137,
+        "rec_yards": 137,
+        "touchdowns": 137,
+        "fantasy_pts": 137
+      },
+      "snap_share_by_week": [
+        {
+          "season": 2025,
+          "week": 11,
+          "pct": 0.11
+        },
+        {
+          "season": 2025,
+          "week": 12,
+          "pct": 0.12
+        },
+        {
+          "season": 2025,
+          "week": 13,
+          "pct": 0.05
+        },
+        {
+          "season": 2025,
+          "week": 17,
+          "pct": 0.21
+        },
+        {
+          "season": 2025,
+          "week": 18,
+          "pct": 0.68
+        },
+        {
+          "season": 2026,
+          "week": 1,
+          "pct": 0.07
+        }
+      ],
+      "game_log": [
+        {
+          "season": 2026,
+          "week": 1,
+          "opponent": "HOU",
+          "week_def_rank": 6,
+          "week_def_rank_of": 32,
+          "targets": 0,
+          "receptions": 0,
+          "receiving_yards": 0,
+          "rushing_yards": 0,
+          "touchdowns": 0,
+          "fantasy_pts": 0.0
+        },
+        {
+          "season": 2025,
+          "week": 18,
+          "opponent": "NYJ",
+          "week_def_rank": 5,
+          "week_def_rank_of": 31,
+          "targets": 3,
+          "receptions": 3,
+          "receiving_yards": 31,
+          "rushing_yards": 0,
+          "touchdowns": 0,
+          "fantasy_pts": 6.1
+        },
+        {
+          "season": 2025,
+          "week": 17,
+          "opponent": "PHI",
+          "week_def_rank": 22,
+          "week_def_rank_of": 32,
+          "targets": 0,
+          "receptions": 0,
+          "receiving_yards": 0,
+          "rushing_yards": 0,
+          "touchdowns": 0,
+          "fantasy_pts": 0.0
+        },
+        {
+          "season": 2025,
+          "week": 11,
+          "opponent": "TB",
+          "week_def_rank": 28,
+          "week_def_rank_of": 30,
+          "targets": 1,
+          "receptions": 1,
+          "receiving_yards": 4,
+          "rushing_yards": 0,
+          "touchdowns": 0,
+          "fantasy_pts": 1.4
+        }
+      ],
+      "has_market_data": true,
+      "market_based_pts": 0.98,
+      "anytime_td_prob": 0.163,
+      "prop": {
+        "rec_yards": {
+          "line": null,
+          "over_price": null,
+          "under_price": null,
+          "devigged_over_prob": null
+        },
+        "receptions": {
+          "line": null,
+          "over_price": null,
+          "under_price": null,
+          "devigged_over_prob": null
+        },
+        "rush_yards": {
+          "line": null,
+          "over_price": null,
+          "under_price": null,
+          "devigged_over_prob": null
+        }
+      }
+    },
+    {
       "player_id": "00-0040187",
       "player_name": "Mitchell Evans",
       "position": "TE",
@@ -90011,155 +90160,6 @@
       "has_market_data": true,
       "market_based_pts": 0.67,
       "anytime_td_prob": 0.112,
-      "prop": {
-        "rec_yards": {
-          "line": null,
-          "over_price": null,
-          "under_price": null,
-          "devigged_over_prob": null
-        },
-        "receptions": {
-          "line": null,
-          "over_price": null,
-          "under_price": null,
-          "devigged_over_prob": null
-        },
-        "rush_yards": {
-          "line": null,
-          "over_price": null,
-          "under_price": null,
-          "devigged_over_prob": null
-        }
-      }
-    },
-    {
-      "player_id": "00-0040363",
-      "player_name": "Keleki Latu",
-      "position": "TE",
-      "team": "BUF",
-      "opponent": "DET",
-      "target_week": 2,
-      "headshot_url": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/vebjjfyrrrbwaqjlyvun",
-      "team_logo_url": "https://a.espncdn.com/i/teamlogos/nfl/500/buf.png",
-      "games_played": 3,
-      "display_season": 2025,
-      "trailing_avg_pts": 1.88,
-      "trailing_games": 1,
-      "proj_fantasy_pts": 1.14,
-      "def_rank": 2,
-      "def_rank_of": 32,
-      "matchup_factor": 1.0,
-      "latest_snap_pct": 0.07,
-      "season_avg": {
-        "targets": 1.33,
-        "receptions": 1.33,
-        "rec_yards": 11.67,
-        "touchdowns": 0.0,
-        "fantasy_pts": 2.5
-      },
-      "percentiles": {
-        "targets": 35,
-        "receptions": 52,
-        "rec_yards": 48,
-        "touchdowns": 23,
-        "fantasy_pts": 42
-      },
-      "peers": {
-        "targets": 137,
-        "receptions": 137,
-        "rec_yards": 137,
-        "touchdowns": 137,
-        "fantasy_pts": 137
-      },
-      "snap_share_by_week": [
-        {
-          "season": 2025,
-          "week": 11,
-          "pct": 0.11
-        },
-        {
-          "season": 2025,
-          "week": 12,
-          "pct": 0.12
-        },
-        {
-          "season": 2025,
-          "week": 13,
-          "pct": 0.05
-        },
-        {
-          "season": 2025,
-          "week": 17,
-          "pct": 0.21
-        },
-        {
-          "season": 2025,
-          "week": 18,
-          "pct": 0.68
-        },
-        {
-          "season": 2026,
-          "week": 1,
-          "pct": 0.07
-        }
-      ],
-      "game_log": [
-        {
-          "season": 2026,
-          "week": 1,
-          "opponent": "HOU",
-          "week_def_rank": 6,
-          "week_def_rank_of": 32,
-          "targets": 0,
-          "receptions": 0,
-          "receiving_yards": 0,
-          "rushing_yards": 0,
-          "touchdowns": 0,
-          "fantasy_pts": 0.0
-        },
-        {
-          "season": 2025,
-          "week": 18,
-          "opponent": "NYJ",
-          "week_def_rank": 5,
-          "week_def_rank_of": 31,
-          "targets": 3,
-          "receptions": 3,
-          "receiving_yards": 31,
-          "rushing_yards": 0,
-          "touchdowns": 0,
-          "fantasy_pts": 6.1
-        },
-        {
-          "season": 2025,
-          "week": 17,
-          "opponent": "PHI",
-          "week_def_rank": 22,
-          "week_def_rank_of": 32,
-          "targets": 0,
-          "receptions": 0,
-          "receiving_yards": 0,
-          "rushing_yards": 0,
-          "touchdowns": 0,
-          "fantasy_pts": 0.0
-        },
-        {
-          "season": 2025,
-          "week": 11,
-          "opponent": "TB",
-          "week_def_rank": 28,
-          "week_def_rank_of": 30,
-          "targets": 1,
-          "receptions": 1,
-          "receiving_yards": 4,
-          "rushing_yards": 0,
-          "touchdowns": 0,
-          "fantasy_pts": 1.4
-        }
-      ],
-      "has_market_data": true,
-      "market_based_pts": 0.96,
-      "anytime_td_prob": 0.159,
       "prop": {
         "rec_yards": {
           "line": null,
@@ -91541,6 +91541,215 @@
       }
     },
     {
+      "player_id": "00-0040218",
+      "player_name": "Jimmy Horn Jr.",
+      "position": "WR",
+      "team": "CAR",
+      "opponent": "ATL",
+      "target_week": 2,
+      "headshot_url": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/gggcgfbghcft0xwxtrhk",
+      "team_logo_url": "https://a.espncdn.com/i/teamlogos/nfl/500-dark/car.png",
+      "games_played": 10,
+      "display_season": 2025,
+      "trailing_avg_pts": 2.15,
+      "trailing_games": 1,
+      "proj_fantasy_pts": 0.99,
+      "def_rank": 25,
+      "def_rank_of": 32,
+      "matchup_factor": 1.0,
+      "latest_snap_pct": null,
+      "season_avg": {
+        "targets": 1.5,
+        "receptions": 1.1,
+        "rec_yards": 10.8,
+        "touchdowns": 0.0,
+        "fantasy_pts": 2.87
+      },
+      "percentiles": {
+        "targets": 31,
+        "receptions": 38,
+        "rec_yards": 32,
+        "touchdowns": 21,
+        "fantasy_pts": 38
+      },
+      "peers": {
+        "targets": 241,
+        "receptions": 241,
+        "rec_yards": 241,
+        "touchdowns": 241,
+        "fantasy_pts": 241
+      },
+      "snap_share_by_week": [],
+      "game_log": [
+        {
+          "season": 2026,
+          "week": 1,
+          "opponent": "CHI",
+          "week_def_rank": 5,
+          "week_def_rank_of": 32,
+          "targets": 1,
+          "receptions": 0,
+          "receiving_yards": 0,
+          "rushing_yards": 0,
+          "touchdowns": 0,
+          "fantasy_pts": 0.0
+        },
+        {
+          "season": 2025,
+          "week": 18,
+          "opponent": "TB",
+          "week_def_rank": 5,
+          "week_def_rank_of": 32,
+          "targets": 1,
+          "receptions": 1,
+          "receiving_yards": 15,
+          "rushing_yards": 0,
+          "touchdowns": 0,
+          "fantasy_pts": 2.5
+        },
+        {
+          "season": 2025,
+          "week": 17,
+          "opponent": "SEA",
+          "week_def_rank": 30,
+          "week_def_rank_of": 32,
+          "targets": 2,
+          "receptions": 2,
+          "receiving_yards": 9,
+          "rushing_yards": 0,
+          "touchdowns": 0,
+          "fantasy_pts": 2.9
+        },
+        {
+          "season": 2025,
+          "week": 16,
+          "opponent": "TB",
+          "week_def_rank": 15,
+          "week_def_rank_of": 32,
+          "targets": 0,
+          "receptions": 0,
+          "receiving_yards": 0,
+          "rushing_yards": 25,
+          "touchdowns": 0,
+          "fantasy_pts": 2.5
+        },
+        {
+          "season": 2025,
+          "week": 15,
+          "opponent": "NO",
+          "week_def_rank": 18,
+          "week_def_rank_of": 32,
+          "targets": 1,
+          "receptions": 1,
+          "receiving_yards": 7,
+          "rushing_yards": 0,
+          "touchdowns": 0,
+          "fantasy_pts": 1.7
+        },
+        {
+          "season": 2025,
+          "week": 12,
+          "opponent": "SF",
+          "week_def_rank": 20,
+          "week_def_rank_of": 28,
+          "targets": 1,
+          "receptions": 1,
+          "receiving_yards": 11,
+          "rushing_yards": 0,
+          "touchdowns": 0,
+          "fantasy_pts": 2.1
+        },
+        {
+          "season": 2025,
+          "week": 9,
+          "opponent": "GB",
+          "week_def_rank": 25,
+          "week_def_rank_of": 28,
+          "targets": 2,
+          "receptions": 1,
+          "receiving_yards": 1,
+          "rushing_yards": 7,
+          "touchdowns": 0,
+          "fantasy_pts": 1.8
+        },
+        {
+          "season": 2025,
+          "week": 8,
+          "opponent": "BUF",
+          "week_def_rank": 16,
+          "week_def_rank_of": 26,
+          "targets": 1,
+          "receptions": 0,
+          "receiving_yards": 0,
+          "rushing_yards": 9,
+          "touchdowns": 0,
+          "fantasy_pts": 0.9
+        },
+        {
+          "season": 2025,
+          "week": 7,
+          "opponent": "NYJ",
+          "week_def_rank": 14,
+          "week_def_rank_of": 30,
+          "targets": 2,
+          "receptions": 1,
+          "receiving_yards": 8,
+          "rushing_yards": 7,
+          "touchdowns": 0,
+          "fantasy_pts": 2.5
+        },
+        {
+          "season": 2025,
+          "week": 6,
+          "opponent": "DAL",
+          "week_def_rank": 15,
+          "week_def_rank_of": 30,
+          "targets": 2,
+          "receptions": 2,
+          "receiving_yards": 36,
+          "rushing_yards": 11,
+          "touchdowns": 0,
+          "fantasy_pts": 6.7
+        },
+        {
+          "season": 2025,
+          "week": 5,
+          "opponent": "MIA",
+          "week_def_rank": 13,
+          "week_def_rank_of": 28,
+          "targets": 3,
+          "receptions": 2,
+          "receiving_yards": 21,
+          "rushing_yards": 10,
+          "touchdowns": 0,
+          "fantasy_pts": 5.1
+        }
+      ],
+      "has_market_data": true,
+      "market_based_pts": 0.71,
+      "anytime_td_prob": 0.118,
+      "prop": {
+        "rec_yards": {
+          "line": null,
+          "over_price": null,
+          "under_price": null,
+          "devigged_over_prob": null
+        },
+        "receptions": {
+          "line": null,
+          "over_price": null,
+          "under_price": null,
+          "devigged_over_prob": null
+        },
+        "rush_yards": {
+          "line": null,
+          "over_price": null,
+          "under_price": null,
+          "devigged_over_prob": null
+        }
+      }
+    },
+    {
       "player_id": "00-0040164",
       "player_name": "Jaylin Lane",
       "position": "WR",
@@ -91553,7 +91762,7 @@
       "display_season": 2025,
       "trailing_avg_pts": 2.31,
       "trailing_games": 1,
-      "proj_fantasy_pts": 1.0,
+      "proj_fantasy_pts": 0.98,
       "def_rank": 26,
       "def_rank_of": 32,
       "matchup_factor": 1.0,
@@ -91872,8 +92081,8 @@
         }
       ],
       "has_market_data": true,
-      "market_based_pts": 0.67,
-      "anytime_td_prob": 0.111,
+      "market_based_pts": 0.65,
+      "anytime_td_prob": 0.109,
       "prop": {
         "rec_yards": {
           "line": null,
@@ -91908,7 +92117,7 @@
       "display_season": 2025,
       "trailing_avg_pts": 0.9,
       "trailing_games": 1,
-      "proj_fantasy_pts": 1.0,
+      "proj_fantasy_pts": 0.98,
       "def_rank": 9,
       "def_rank_of": 32,
       "matchup_factor": 1.0,
@@ -92018,217 +92227,8 @@
         }
       ],
       "has_market_data": true,
-      "market_based_pts": 1.03,
-      "anytime_td_prob": 0.171,
-      "prop": {
-        "rec_yards": {
-          "line": null,
-          "over_price": null,
-          "under_price": null,
-          "devigged_over_prob": null
-        },
-        "receptions": {
-          "line": null,
-          "over_price": null,
-          "under_price": null,
-          "devigged_over_prob": null
-        },
-        "rush_yards": {
-          "line": null,
-          "over_price": null,
-          "under_price": null,
-          "devigged_over_prob": null
-        }
-      }
-    },
-    {
-      "player_id": "00-0040218",
-      "player_name": "Jimmy Horn Jr.",
-      "position": "WR",
-      "team": "CAR",
-      "opponent": "ATL",
-      "target_week": 2,
-      "headshot_url": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/gggcgfbghcft0xwxtrhk",
-      "team_logo_url": "https://a.espncdn.com/i/teamlogos/nfl/500-dark/car.png",
-      "games_played": 10,
-      "display_season": 2025,
-      "trailing_avg_pts": 2.15,
-      "trailing_games": 1,
-      "proj_fantasy_pts": 0.99,
-      "def_rank": 25,
-      "def_rank_of": 32,
-      "matchup_factor": 1.0,
-      "latest_snap_pct": null,
-      "season_avg": {
-        "targets": 1.5,
-        "receptions": 1.1,
-        "rec_yards": 10.8,
-        "touchdowns": 0.0,
-        "fantasy_pts": 2.87
-      },
-      "percentiles": {
-        "targets": 31,
-        "receptions": 38,
-        "rec_yards": 32,
-        "touchdowns": 21,
-        "fantasy_pts": 38
-      },
-      "peers": {
-        "targets": 241,
-        "receptions": 241,
-        "rec_yards": 241,
-        "touchdowns": 241,
-        "fantasy_pts": 241
-      },
-      "snap_share_by_week": [],
-      "game_log": [
-        {
-          "season": 2026,
-          "week": 1,
-          "opponent": "CHI",
-          "week_def_rank": 5,
-          "week_def_rank_of": 32,
-          "targets": 1,
-          "receptions": 0,
-          "receiving_yards": 0,
-          "rushing_yards": 0,
-          "touchdowns": 0,
-          "fantasy_pts": 0.0
-        },
-        {
-          "season": 2025,
-          "week": 18,
-          "opponent": "TB",
-          "week_def_rank": 5,
-          "week_def_rank_of": 32,
-          "targets": 1,
-          "receptions": 1,
-          "receiving_yards": 15,
-          "rushing_yards": 0,
-          "touchdowns": 0,
-          "fantasy_pts": 2.5
-        },
-        {
-          "season": 2025,
-          "week": 17,
-          "opponent": "SEA",
-          "week_def_rank": 30,
-          "week_def_rank_of": 32,
-          "targets": 2,
-          "receptions": 2,
-          "receiving_yards": 9,
-          "rushing_yards": 0,
-          "touchdowns": 0,
-          "fantasy_pts": 2.9
-        },
-        {
-          "season": 2025,
-          "week": 16,
-          "opponent": "TB",
-          "week_def_rank": 15,
-          "week_def_rank_of": 32,
-          "targets": 0,
-          "receptions": 0,
-          "receiving_yards": 0,
-          "rushing_yards": 25,
-          "touchdowns": 0,
-          "fantasy_pts": 2.5
-        },
-        {
-          "season": 2025,
-          "week": 15,
-          "opponent": "NO",
-          "week_def_rank": 18,
-          "week_def_rank_of": 32,
-          "targets": 1,
-          "receptions": 1,
-          "receiving_yards": 7,
-          "rushing_yards": 0,
-          "touchdowns": 0,
-          "fantasy_pts": 1.7
-        },
-        {
-          "season": 2025,
-          "week": 12,
-          "opponent": "SF",
-          "week_def_rank": 20,
-          "week_def_rank_of": 28,
-          "targets": 1,
-          "receptions": 1,
-          "receiving_yards": 11,
-          "rushing_yards": 0,
-          "touchdowns": 0,
-          "fantasy_pts": 2.1
-        },
-        {
-          "season": 2025,
-          "week": 9,
-          "opponent": "GB",
-          "week_def_rank": 25,
-          "week_def_rank_of": 28,
-          "targets": 2,
-          "receptions": 1,
-          "receiving_yards": 1,
-          "rushing_yards": 7,
-          "touchdowns": 0,
-          "fantasy_pts": 1.8
-        },
-        {
-          "season": 2025,
-          "week": 8,
-          "opponent": "BUF",
-          "week_def_rank": 16,
-          "week_def_rank_of": 26,
-          "targets": 1,
-          "receptions": 0,
-          "receiving_yards": 0,
-          "rushing_yards": 9,
-          "touchdowns": 0,
-          "fantasy_pts": 0.9
-        },
-        {
-          "season": 2025,
-          "week": 7,
-          "opponent": "NYJ",
-          "week_def_rank": 14,
-          "week_def_rank_of": 30,
-          "targets": 2,
-          "receptions": 1,
-          "receiving_yards": 8,
-          "rushing_yards": 7,
-          "touchdowns": 0,
-          "fantasy_pts": 2.5
-        },
-        {
-          "season": 2025,
-          "week": 6,
-          "opponent": "DAL",
-          "week_def_rank": 15,
-          "week_def_rank_of": 30,
-          "targets": 2,
-          "receptions": 2,
-          "receiving_yards": 36,
-          "rushing_yards": 11,
-          "touchdowns": 0,
-          "fantasy_pts": 6.7
-        },
-        {
-          "season": 2025,
-          "week": 5,
-          "opponent": "MIA",
-          "week_def_rank": 13,
-          "week_def_rank_of": 28,
-          "targets": 3,
-          "receptions": 2,
-          "receiving_yards": 21,
-          "rushing_yards": 10,
-          "touchdowns": 0,
-          "fantasy_pts": 5.1
-        }
-      ],
-      "has_market_data": true,
-      "market_based_pts": 0.71,
-      "anytime_td_prob": 0.118,
+      "market_based_pts": 1.0,
+      "anytime_td_prob": 0.167,
       "prop": {
         "rec_yards": {
           "line": null,
@@ -96680,7 +96680,7 @@
       "team": "SF",
       "opponent": "MIA",
       "target_week": 2,
-      "headshot_url": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/r6vyxamrbb62lcccap2r",
+      "headshot_url": "https://static.www.nfl.com/image/upload/f_auto,q_auto/league/mozew14dow474cun5eqp",
       "team_logo_url": "https://a.espncdn.com/i/teamlogos/nfl/500/sf.png",
       "games_played": 8,
       "display_season": 2025,
@@ -96935,7 +96935,7 @@
       "display_season": 2025,
       "trailing_avg_pts": 0.4,
       "trailing_games": 1,
-      "proj_fantasy_pts": 0.56,
+      "proj_fantasy_pts": 0.55,
       "def_rank": 28,
       "def_rank_of": 32,
       "matchup_factor": 1.0,
@@ -97220,8 +97220,8 @@
         }
       ],
       "has_market_data": true,
-      "market_based_pts": 0.6,
-      "anytime_td_prob": 0.099,
+      "market_based_pts": 0.59,
+      "anytime_td_prob": 0.098,
       "prop": {
         "rec_yards": {
           "line": null,

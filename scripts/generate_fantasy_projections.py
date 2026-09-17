@@ -449,29 +449,53 @@ def fetch_fantasy_prop_odds_for_upcoming(upcoming: pd.DataFrame) -> pd.DataFrame
     fetch pattern generate_player_predictions.py already uses for Track A,
     reused here rather than reinvented. Returns empty DataFrame (not None)
     on any failure/no-key so callers can treat "no market data" uniformly
-    without a None-check at every call site."""
+    without a None-check at every call site.
+
+    Prints diagnostics at each step -- added after a real live case where
+    `has_market_data` was True for 28 players (correctly, from Track A's own
+    TD probability) but ZERO of them actually had a posted rec/receptions/
+    rush line, and the old logging couldn't distinguish "no props fetched"
+    from "props fetched but no edge cleared the threshold." This makes that
+    directly visible in the Action log instead of requiring a guess."""
     try:
         import odds_api
     except ImportError:
+        print("  Prop odds: odds_api import failed -- no props this run.")
         return pd.DataFrame()
 
     if upcoming.empty:
+        print("  Prop odds: no upcoming games to match against -- skipping.")
         return pd.DataFrame()
 
     live_games = odds_api.fetch_game_odds()
     if live_games is None or live_games.empty:
+        print("  Prop odds: fetch_game_odds() returned nothing (key/budget/network issue) -- no props this run.")
         return pd.DataFrame()
+    print(f"  Prop odds: fetch_game_odds() returned {len(live_games)} live events.")
 
     this_week_pairs = set(zip(upcoming["team"], upcoming["opponent"]))
     relevant_events = live_games[
         live_games.apply(lambda r: (r["home_team"], r["away_team"]) in this_week_pairs
                           or (r["away_team"], r["home_team"]) in this_week_pairs, axis=1)
     ]
+    print(f"  Prop odds: {len(relevant_events)} of those match this week's schedule.")
     if relevant_events.empty:
+        print("  Prop odds: no matching events -- check team-code matching (upcoming['team']/['opponent'] vs live_games['home_team']/['away_team']).")
         return pd.DataFrame()
 
     props = odds_api.fetch_fantasy_prop_odds(relevant_events)
-    return props if props is not None else pd.DataFrame()
+    n_rows = 0 if props is None else len(props)
+    n_players = 0 if props is None else props["player_name_norm"].nunique()
+    print(f"  Prop odds: fetch_fantasy_prop_odds() returned {n_rows} rows across {n_players} distinct players.")
+    if props is None or props.empty:
+        print("  Prop odds: EMPTY -- either the book(s) haven't posted these markets yet for this week, "
+              "or the paid tier/key doesn't actually include player_rush_yds/player_reception_yds/"
+              "player_receptions. Worth checking your Odds API account's plan page for which markets "
+              "are actually included, and re-running later in the week once books post player props "
+              "(these typically go up later than game lines/moneylines).")
+        return pd.DataFrame()
+
+    return props
 
 
 def load_track_a_td_probs() -> pd.DataFrame:

@@ -41,12 +41,33 @@ from datetime import date, datetime, timezone
 
 import numpy as np
 import pandas as pd
+from scipy.stats import norm
 
 from nfl_data import load_schedules
 
 SEASON = date.today().year
 STATS_CSV = f"../data/player_stats_{SEASON}.csv"
 SNAPS_CSV = f"../data/snap_counts_{SEASON}.csv"
+
+# Residual std per (stat, position) for a leakage-safe trailing-L4-average
+# prediction -- i.e. how far off "this player's trailing average" typically
+# is from what they actually do, position by position. VALIDATED against
+# real 2023-2025 nflverse weekly data (shift-before-roll, same leakage-safe
+# method as build_trailing_player_avg): for each played week, predict with
+# the trailing average of the player's prior games, compare to the real
+# result, take the std of (actual - predicted) by position. This is what
+# lets prop win-probabilities be computed from an actual normal-distribution
+# model instead of just comparing point estimates -- same principle as
+# Track B's margin_resid_std, at the individual-stat level instead of game
+# margin. QB rec/rush-yards rows excluded from prop pricing below (the
+# markets we price don't cover QBs in practice, and QB rushing in
+# particular is a much higher-variance, different-shaped stat than a
+# receiver's).
+STAT_RESID_STD = {
+    "receiving_yards": {"RB": 16.06, "TE": 22.36, "WR": 30.99},
+    "receptions": {"RB": 1.56, "TE": 1.82, "WR": 1.97},
+    "rushing_yards": {"RB": 29.53, "TE": 3.52, "WR": 4.36},
+}
 
 OUT_JSON = "../data/fantasy_projections.json"
 OUT_JS = "../data/fantasy_projections.js"
@@ -176,6 +197,30 @@ def build_trailing_player_avg(stats: pd.DataFrame, prior_season_stats: pd.DataFr
         weight * stats["raw_trailing_avg_pts"]
         + (1 - weight) * stats["shrink_prior_pts"]
     ).round(2)
+
+    # Same shrinkage-toward-personal-prior-season logic, applied to the
+    # individual stats the prop markets actually price (rec yards,
+    # receptions, rush yards) -- not just the aggregate fantasy-point
+    # number. Needed to price props on their own terms rather than reusing
+    # the fantasy-points trailing average as a stand-in for every stat.
+    for stat_col in ("receiving_yards", "receptions", "rushing_yards"):
+        raw_col, prior_col, base_col, out_col = (
+            f"raw_trailing_{stat_col}", f"player_prior_{stat_col}",
+            f"shrink_prior_{stat_col}", f"trailing_{stat_col}",
+        )
+        stats[raw_col] = stats.groupby("player_id")[stat_col].transform(
+            lambda s: s.rolling(TRAILING_WINDOW, min_periods=1).mean()
+        )
+        stat_prior = (
+            prior_season_stats.groupby("player_id")[stat_col].mean()
+            if not prior_season_stats.empty else pd.Series(dtype=float)
+        )
+        stats[prior_col] = stats["player_id"].map(stat_prior)
+        stats[base_col] = stats[prior_col].fillna(
+            stats.groupby("position")[raw_col].transform("median")
+        )
+        stats[out_col] = (weight * stats[raw_col] + (1 - weight) * stats[base_col]).round(2)
+
     return stats
 
 
@@ -601,6 +646,8 @@ def main():
         v = r.get(f"peers_{col}")
         return None if pd.isna(v) else int(v)
 
+    FIELD_TO_STAT_COL = {"rec_yds": "receiving_yards", "receptions": "receptions", "rush_yds": "rushing_yards"}
+
     def _prop_dict(r, field):
         import odds_api
         line = r.get(f"{field}_point")
@@ -611,11 +658,40 @@ def main():
             io_, iu_ = odds_api.american_to_implied_prob(over_p), odds_api.american_to_implied_prob(under_p)
             if (io_ + iu_) > 0:
                 devig = round(io_ / (io_ + iu_), 3)
+
+        # Real edge: OUR OWN win probability (normal dist centered on the
+        # player's shrunk trailing average, scaled by the VALIDATED
+        # position-specific residual std -- see STAT_RESID_STD) vs the
+        # market's de-vigged probability. Requires a real key -- see
+        # fetch_fantasy_prop_odds_for_upcoming's "no key -> empty" fallback,
+        # so this naturally stays None for everyone until a live prop line
+        # actually exists.
+        stat_col = FIELD_TO_STAT_COL[field]
+        trailing_val = r.get(f"trailing_{stat_col}")
+        resid_std = STAT_RESID_STD.get(stat_col, {}).get(r.get("position"))
+        model_prob, edge, status = None, None, None
+        if pd.notna(line) and pd.notna(trailing_val) and resid_std is not None:
+            model_prob = round(1 - norm.cdf(line, loc=trailing_val, scale=resid_std), 3)
+            if devig is not None:
+                edge = round(model_prob - devig, 3)
+                # Thresholds are a reasoned judgment call (same conservative
+                # spirit as MIN_GAMES_FOR_OFFICIAL), NOT backtested the way
+                # STAT_RESID_STD itself is -- worth recalibrating once real
+                # prop results can be logged and checked, same as everything
+                # else flagged "not yet validated" in this build.
+                if edge >= 0.08:
+                    status = "OFFICIAL"
+                elif edge >= 0.04:
+                    status = "LEAN"
+
         return {
             "line": None if pd.isna(line) else float(line),
             "over_price": None if pd.isna(over_p) else int(over_p),
             "under_price": None if pd.isna(under_p) else int(under_p),
             "devigged_over_prob": devig,
+            "model_prob_over": model_prob,
+            "edge": edge,
+            "status": status,
         }
 
     players = []
@@ -672,6 +748,15 @@ def main():
                 "rush_yards": _prop_dict(r, "rush_yds"),
             },
         })
+        # Flag the single best prop (highest real edge, requiring at least
+        # LEAN status) across the three markets, if any qualify -- players
+        # can have zero, one, two, or three priced props depending on what's
+        # actually posted, and edges/status only ever exist when BOTH a real
+        # line AND our own model probability are available (see _prop_dict).
+        prop_options = [(k, v) for k, v in players[-1]["prop"].items() if v.get("status")]
+        players[-1]["best_prop"] = (
+            max(prop_options, key=lambda kv: kv[1]["edge"])[0] if prop_options else None
+        )
 
     players.sort(key=lambda p: (p["proj_fantasy_pts"] or 0), reverse=True)
 

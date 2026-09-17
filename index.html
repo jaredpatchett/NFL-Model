@@ -1183,9 +1183,12 @@
       document.getElementById('fantasy-body').innerHTML = rows.map(p => {
         const rank = p.def_rank!=null ? `${p.def_rank}/${p.def_rank_of}` : '\u2014';
         const rankColor = p.def_rank==null ? 'var(--text-faint)' : (p.def_rank<=10 ? 'var(--green)' : p.def_rank>=23 ? 'var(--red)' : 'var(--text-dim)');
+        const propLabels = {rec_yards:'REC YDS', receptions:'REC', rush_yards:'RUSH YDS'};
+        const bp = p.best_prop ? p.prop[p.best_prop] : null;
+        const propBadge = bp ? `<span class="status-pill ${bp.status==='OFFICIAL'?'status-official':'status-lean'}" style="margin-left:6px;font-size:9px;padding:1px 5px;" title="${propLabels[p.best_prop]} O/U ${bp.line}, edge ${bp.edge>=0?'+':''}${(bp.edge*100).toFixed(1)}pp">${propLabels[p.best_prop]}</span>` : '';
         return `<div class="board-row grid-fantasy" data-player-id="${p.player_id}">
           <div class="row-inner"><span class="team-bar" style="background:${teamColor(p.team)}"></span>
-            <div class="matchup-block"><div class="matchup-main">${p.player_name}</div>
+            <div class="matchup-block"><div class="matchup-main">${p.player_name}${propBadge}</div>
             <div class="matchup-sub">${p.team} vs ${p.opponent}</div></div></div>
           <div class="cell-num col-r">${p.position}</div>
           <div class="cell-num col-hide">${p.team} @ ${p.opponent}</div>
@@ -1283,13 +1286,20 @@
       }
       const rows = stats.map(([label, v]) => {
         const chance = v.devigged_over_prob!=null ? (v.devigged_over_prob*100).toFixed(0)+'%' : '\u2014';
-        return `<div style="display:flex;justify-content:space-between;gap:10px;padding:4px 0;border-top:1px solid var(--line);font-size:11px;">
-          <span style="color:var(--text-dim)">${label} O/U ${v.line}</span>
-          <span>Over ${fmtOdds(v.over_price)} <span style="color:var(--text-faint2)">(${chance} to hit)</span></span>
+        const ourChance = v.model_prob_over!=null ? (v.model_prob_over*100).toFixed(0)+'%' : null;
+        const pillClass = v.status === 'OFFICIAL' ? 'status-pill status-official' : v.status === 'LEAN' ? 'status-pill status-lean' : '';
+        const pill = v.status ? `<span class="${pillClass}" style="margin-right:8px">${v.status}</span>` : '';
+        const edgeText = v.edge!=null ? ` \u00B7 edge ${v.edge>=0?'+':''}${(v.edge*100).toFixed(1)}pp` : '';
+        return `<div style="padding:6px 0;border-top:1px solid var(--line);font-size:11px;">
+          <div style="display:flex;justify-content:space-between;gap:10px;">
+            <span style="color:var(--text-dim)">${pill}${label} O/U ${v.line}</span>
+            <span>Over ${fmtOdds(v.over_price)} <span style="color:var(--text-faint2)">(mkt ${chance}${ourChance?', ours '+ourChance:''}${edgeText})</span></span>
+          </div>
         </div>`;
       }).join('');
       return header + `<div>${rows}</div><div style="font-size:9px;color:var(--text-faint2);margin-top:8px">` +
-        `Live sportsbook lines, best price across bookmakers. Not yet backtested for this market -- ` +
+        `Live sportsbook lines, best price across bookmakers. OURS = our own model probability (trailing average vs a validated ` +
+        `position-specific variance, not just the market comparison). OFFICIAL/LEAN status not yet backtested for this market -- ` +
         `same "not yet smoke-tested against a live key" caveat as the rest of this integration.</div>`;
     }
 

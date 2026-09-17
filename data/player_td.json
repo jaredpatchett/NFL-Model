@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-17T17:23:33.321161+00:00",
+  "generated_at": "2026-09-17T18:24:32.008250+00:00",
   "season": 2026,
   "week": 2,
   "model_notes": {
@@ -45,7 +45,7 @@
       "team": "BAL",
       "opponent": "NO",
       "matchup": "BAL vs NO",
-      "team_implied_total": 27.0,
+      "team_implied_total": 27.5,
       "usage": {
         "snap_share": 0.58,
         "rz_target_share": 0.0,
@@ -54,8 +54,8 @@
         "matchup_rating": 0.564
       },
       "model": {
-        "anytime_td_prob": 0.7479,
-        "fair_moneyline": -296.7,
+        "anytime_td_prob": 0.7529,
+        "fair_moneyline": -304.7,
         "tier": "A"
       },
       "market": null,
@@ -269,7 +269,7 @@
       "team": "BAL",
       "opponent": "NO",
       "matchup": "BAL vs NO",
-      "team_implied_total": 27.0,
+      "team_implied_total": 27.5,
       "usage": {
         "snap_share": 0.71,
         "rz_target_share": 0.167,
@@ -278,8 +278,8 @@
         "matchup_rating": 0.722
       },
       "model": {
-        "anytime_td_prob": 0.5032,
-        "fair_moneyline": -101.3,
+        "anytime_td_prob": 0.5099,
+        "fair_moneyline": -104.0,
         "tier": "A"
       },
       "market": null,
@@ -1082,7 +1082,7 @@
       "team": "NO",
       "opponent": "BAL",
       "matchup": "NO @ BAL",
-      "team_implied_total": 19.5,
+      "team_implied_total": 19.0,
       "usage": {
         "snap_share": 0.597,
         "rz_target_share": 0.25,
@@ -1091,8 +1091,8 @@
         "matchup_rating": 2.568
       },
       "model": {
-        "anytime_td_prob": 0.3347,
-        "fair_moneyline": 198.8,
+        "anytime_td_prob": 0.3288,
+        "fair_moneyline": 204.2,
         "tier": "B"
       },
       "market": null,
@@ -1104,38 +1104,6 @@
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 0.545
-      }
-    },
-    {
-      "player_id": "00-0037239",
-      "player_name": "C.Olave",
-      "position": "WR",
-      "team": "NO",
-      "opponent": "BAL",
-      "matchup": "NO @ BAL",
-      "team_implied_total": 19.5,
-      "usage": {
-        "snap_share": 0.848,
-        "rz_target_share": 0.417,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.99,
-        "matchup_rating": 0.74
-      },
-      "model": {
-        "anytime_td_prob": 0.3293,
-        "fair_moneyline": 203.7,
-        "tier": "B"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Recent TDs outpacing opportunity (regression risk)",
-          "Matchup rating 0.74 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 4.04
       }
     },
     {
@@ -1168,6 +1136,38 @@
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 2.222
+      }
+    },
+    {
+      "player_id": "00-0037239",
+      "player_name": "C.Olave",
+      "position": "WR",
+      "team": "NO",
+      "opponent": "BAL",
+      "matchup": "NO @ BAL",
+      "team_implied_total": 19.0,
+      "usage": {
+        "snap_share": 0.848,
+        "rz_target_share": 0.417,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.99,
+        "matchup_rating": 0.74
+      },
+      "model": {
+        "anytime_td_prob": 0.3235,
+        "fair_moneyline": 209.1,
+        "tier": "B"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Recent TDs outpacing opportunity (regression risk)",
+          "Matchup rating 0.74 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 4.04
       }
     },
     {
@@ -1489,38 +1489,6 @@
       }
     },
     {
-      "player_id": "00-0039373",
-      "player_name": "A.Estime",
-      "position": "RB",
-      "team": "NO",
-      "opponent": "BAL",
-      "matchup": "NO @ BAL",
-      "team_implied_total": 19.5,
-      "usage": {
-        "snap_share": 0.635,
-        "rz_target_share": 0.0,
-        "inside5_carry_share": 0.75,
-        "xtd_per_game": 1.686,
-        "matchup_rating": 2.568
-      },
-      "model": {
-        "anytime_td_prob": 0.296,
-        "fair_moneyline": 237.8,
-        "tier": "B"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Snap share below 70% threshold",
-          "TD projection below 30% threshold",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 0.593
-      }
-    },
-    {
       "player_id": "00-0035659",
       "player_name": "T.McLaurin",
       "position": "WR",
@@ -1617,6 +1585,38 @@
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 3.39
+      }
+    },
+    {
+      "player_id": "00-0039373",
+      "player_name": "A.Estime",
+      "position": "RB",
+      "team": "NO",
+      "opponent": "BAL",
+      "matchup": "NO @ BAL",
+      "team_implied_total": 19.0,
+      "usage": {
+        "snap_share": 0.635,
+        "rz_target_share": 0.0,
+        "inside5_carry_share": 0.75,
+        "xtd_per_game": 1.686,
+        "matchup_rating": 2.568
+      },
+      "model": {
+        "anytime_td_prob": 0.2906,
+        "fair_moneyline": 244.2,
+        "tier": "B"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 0.593
       }
     },
     {
@@ -2207,39 +2207,6 @@
       }
     },
     {
-      "player_id": "00-0039424",
-      "player_name": "D.Vele",
-      "position": "WR",
-      "team": "NO",
-      "opponent": "BAL",
-      "matchup": "NO @ BAL",
-      "team_implied_total": 19.5,
-      "usage": {
-        "snap_share": 0.818,
-        "rz_target_share": 0.083,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.82,
-        "matchup_rating": 0.74
-      },
-      "model": {
-        "anytime_td_prob": 0.2443,
-        "fair_moneyline": 309.2,
-        "tier": "C"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "TD projection below 30% threshold",
-          "Recent TDs outpacing opportunity (regression risk)",
-          "Matchup rating 0.74 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 2.439
-      }
-    },
-    {
       "player_id": "00-0038935",
       "player_name": "B.Strange",
       "position": "TE",
@@ -2402,6 +2369,39 @@
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 6.061
+      }
+    },
+    {
+      "player_id": "00-0039424",
+      "player_name": "D.Vele",
+      "position": "WR",
+      "team": "NO",
+      "opponent": "BAL",
+      "matchup": "NO @ BAL",
+      "team_implied_total": 19.0,
+      "usage": {
+        "snap_share": 0.818,
+        "rz_target_share": 0.083,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.82,
+        "matchup_rating": 0.74
+      },
+      "model": {
+        "anytime_td_prob": 0.2395,
+        "fair_moneyline": 317.6,
+        "tier": "C"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "TD projection below 30% threshold",
+          "Recent TDs outpacing opportunity (regression risk)",
+          "Matchup rating 0.74 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 2.439
       }
     },
     {
@@ -2993,38 +2993,6 @@
       }
     },
     {
-      "player_id": "00-0040202",
-      "player_name": "Devin Neal",
-      "position": "RB",
-      "team": "NO",
-      "opponent": "BAL",
-      "matchup": "NO @ BAL",
-      "team_implied_total": 19.5,
-      "usage": {
-        "snap_share": 0.647,
-        "rz_target_share": 0.0,
-        "inside5_carry_share": 0.5,
-        "xtd_per_game": 1.281,
-        "matchup_rating": 2.568
-      },
-      "model": {
-        "anytime_td_prob": 0.2154,
-        "fair_moneyline": 364.2,
-        "tier": "C"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Snap share below 70% threshold",
-          "TD projection below 30% threshold",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 1.561
-      }
-    },
-    {
       "player_id": "00-0040691",
       "player_name": "Jaxson Dart",
       "position": "QB",
@@ -3154,6 +3122,39 @@
       }
     },
     {
+      "player_id": "00-0032398",
+      "player_name": "C.Moore",
+      "position": "WR",
+      "team": "BAL",
+      "opponent": "NO",
+      "matchup": "BAL vs NO",
+      "team_implied_total": 27.5,
+      "usage": {
+        "snap_share": 0.54,
+        "rz_target_share": 0.167,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.23,
+        "matchup_rating": 0.722
+      },
+      "model": {
+        "anytime_td_prob": 0.212,
+        "fair_moneyline": 371.7,
+        "tier": "C"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "Matchup rating 0.72 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 0.0
+      }
+    },
+    {
       "player_id": "00-0037838",
       "player_name": "I.Likely",
       "position": "TE",
@@ -3184,6 +3185,38 @@
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 2.439
+      }
+    },
+    {
+      "player_id": "00-0040202",
+      "player_name": "Devin Neal",
+      "position": "RB",
+      "team": "NO",
+      "opponent": "BAL",
+      "matchup": "NO @ BAL",
+      "team_implied_total": 19.0,
+      "usage": {
+        "snap_share": 0.647,
+        "rz_target_share": 0.0,
+        "inside5_carry_share": 0.5,
+        "xtd_per_game": 1.281,
+        "matchup_rating": 2.568
+      },
+      "model": {
+        "anytime_td_prob": 0.211,
+        "fair_moneyline": 374.0,
+        "tier": "C"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 1.561
       }
     },
     {
@@ -3220,6 +3253,39 @@
       }
     },
     {
+      "player_id": "00-0034753",
+      "player_name": "M.Andrews",
+      "position": "TE",
+      "team": "BAL",
+      "opponent": "NO",
+      "matchup": "BAL vs NO",
+      "team_implied_total": 27.5,
+      "usage": {
+        "snap_share": 0.54,
+        "rz_target_share": 0.333,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.367,
+        "matchup_rating": 0.722
+      },
+      "model": {
+        "anytime_td_prob": 0.2086,
+        "fair_moneyline": 379.5,
+        "tier": "C"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "Matchup rating 0.72 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 0.0
+      }
+    },
+    {
       "player_id": "00-0034960",
       "player_name": "J.Meyers",
       "position": "WR",
@@ -3249,39 +3315,6 @@
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 2.398
-      }
-    },
-    {
-      "player_id": "00-0032398",
-      "player_name": "C.Moore",
-      "position": "WR",
-      "team": "BAL",
-      "opponent": "NO",
-      "matchup": "BAL vs NO",
-      "team_implied_total": 27.0,
-      "usage": {
-        "snap_share": 0.54,
-        "rz_target_share": 0.167,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.23,
-        "matchup_rating": 0.722
-      },
-      "model": {
-        "anytime_td_prob": 0.2076,
-        "fair_moneyline": 381.7,
-        "tier": "C"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Snap share below 70% threshold",
-          "TD projection below 30% threshold",
-          "Matchup rating 0.72 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 0.0
       }
     },
     {
@@ -3443,39 +3476,6 @@
         "reason_codes": [
           "TD projection below 30% threshold",
           "Matchup rating 0.75 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 0.0
-      }
-    },
-    {
-      "player_id": "00-0034753",
-      "player_name": "M.Andrews",
-      "position": "TE",
-      "team": "BAL",
-      "opponent": "NO",
-      "matchup": "BAL vs NO",
-      "team_implied_total": 27.0,
-      "usage": {
-        "snap_share": 0.54,
-        "rz_target_share": 0.333,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.367,
-        "matchup_rating": 0.722
-      },
-      "model": {
-        "anytime_td_prob": 0.2042,
-        "fair_moneyline": 389.7,
-        "tier": "C"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Snap share below 70% threshold",
-          "TD projection below 30% threshold",
-          "Matchup rating 0.72 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 0.0
@@ -4010,6 +4010,38 @@
       }
     },
     {
+      "player_id": "00-0034796",
+      "player_name": "L.Jackson",
+      "position": "QB",
+      "team": "BAL",
+      "opponent": "NO",
+      "matchup": "BAL vs NO",
+      "team_implied_total": 27.5,
+      "usage": {
+        "snap_share": 0.837,
+        "rz_target_share": 0.0,
+        "inside5_carry_share": 0.125,
+        "xtd_per_game": 0.41,
+        "matchup_rating": 0.722
+      },
+      "model": {
+        "anytime_td_prob": 0.1866,
+        "fair_moneyline": 435.8,
+        "tier": "C"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "TD projection below 30% threshold",
+          "Matchup rating 0.72 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 2.439
+      }
+    },
+    {
       "player_id": "00-0039150",
       "player_name": "B.Young",
       "position": "QB",
@@ -4041,6 +4073,40 @@
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 5.093
+      }
+    },
+    {
+      "player_id": "00-0039792",
+      "player_name": "D.Walker",
+      "position": "WR",
+      "team": "BAL",
+      "opponent": "NO",
+      "matchup": "BAL vs NO",
+      "team_implied_total": 27.5,
+      "usage": {
+        "snap_share": 0.383,
+        "rz_target_share": 0.0,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.06,
+        "matchup_rating": 0.722
+      },
+      "model": {
+        "anytime_td_prob": 0.1851,
+        "fair_moneyline": 440.2,
+        "tier": "C"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "No meaningful red-zone role",
+          "Matchup rating 0.72 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 16.667
       }
     },
     {
@@ -4078,38 +4144,6 @@
       }
     },
     {
-      "player_id": "00-0034796",
-      "player_name": "L.Jackson",
-      "position": "QB",
-      "team": "BAL",
-      "opponent": "NO",
-      "matchup": "BAL vs NO",
-      "team_implied_total": 27.0,
-      "usage": {
-        "snap_share": 0.837,
-        "rz_target_share": 0.0,
-        "inside5_carry_share": 0.125,
-        "xtd_per_game": 0.41,
-        "matchup_rating": 0.722
-      },
-      "model": {
-        "anytime_td_prob": 0.1826,
-        "fair_moneyline": 447.5,
-        "tier": "C"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "TD projection below 30% threshold",
-          "Matchup rating 0.72 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 2.439
-      }
-    },
-    {
       "player_id": "00-0036971",
       "player_name": "T.Lawrence",
       "position": "QB",
@@ -4139,72 +4173,6 @@
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 1.435
-      }
-    },
-    {
-      "player_id": "00-0036040",
-      "player_name": "J.Johnson",
-      "position": "TE",
-      "team": "NO",
-      "opponent": "BAL",
-      "matchup": "NO @ BAL",
-      "team_implied_total": 19.5,
-      "usage": {
-        "snap_share": 0.74,
-        "rz_target_share": 0.083,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.67,
-        "matchup_rating": 0.74
-      },
-      "model": {
-        "anytime_td_prob": 0.1813,
-        "fair_moneyline": 451.6,
-        "tier": "C"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "TD projection below 30% threshold",
-          "Matchup rating 0.74 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 1.493
-      }
-    },
-    {
-      "player_id": "00-0039792",
-      "player_name": "D.Walker",
-      "position": "WR",
-      "team": "BAL",
-      "opponent": "NO",
-      "matchup": "BAL vs NO",
-      "team_implied_total": 27.0,
-      "usage": {
-        "snap_share": 0.383,
-        "rz_target_share": 0.0,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.06,
-        "matchup_rating": 0.722
-      },
-      "model": {
-        "anytime_td_prob": 0.1811,
-        "fair_moneyline": 452.1,
-        "tier": "C"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Snap share below 70% threshold",
-          "TD projection below 30% threshold",
-          "No meaningful red-zone role",
-          "Matchup rating 0.72 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 16.667
       }
     },
     {
@@ -4275,23 +4243,56 @@
       }
     },
     {
-      "player_id": "00-0037231",
-      "player_name": "K.Austin",
-      "position": "WR",
+      "player_id": "00-0035993",
+      "player_name": "T.Huntley",
+      "position": "QB",
+      "team": "BAL",
+      "opponent": "NO",
+      "matchup": "BAL vs NO",
+      "team_implied_total": 27.5,
+      "usage": {
+        "snap_share": 0.712,
+        "rz_target_share": 0.0,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.804,
+        "matchup_rating": 0.722
+      },
+      "model": {
+        "anytime_td_prob": 0.1779,
+        "fair_moneyline": 462.0,
+        "tier": "C"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "TD projection below 30% threshold",
+          "No meaningful red-zone role",
+          "Matchup rating 0.72 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 0.0
+      }
+    },
+    {
+      "player_id": "00-0036040",
+      "player_name": "J.Johnson",
+      "position": "TE",
       "team": "NO",
       "opponent": "BAL",
       "matchup": "NO @ BAL",
-      "team_implied_total": 19.5,
+      "team_implied_total": 19.0,
       "usage": {
-        "snap_share": 0.755,
+        "snap_share": 0.74,
         "rz_target_share": 0.083,
         "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.48,
+        "xtd_per_game": 0.67,
         "matchup_rating": 0.74
       },
       "model": {
-        "anytime_td_prob": 0.1775,
-        "fair_moneyline": 463.4,
+        "anytime_td_prob": 0.1774,
+        "fair_moneyline": 463.8,
         "tier": "C"
       },
       "market": null,
@@ -4303,7 +4304,7 @@
           "Matchup rating 0.74 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
         ],
-        "regression_ratio": 2.083
+        "regression_ratio": 1.493
       }
     },
     {
@@ -4406,23 +4407,23 @@
       }
     },
     {
-      "player_id": "00-0035993",
-      "player_name": "T.Huntley",
-      "position": "QB",
-      "team": "BAL",
-      "opponent": "NO",
-      "matchup": "BAL vs NO",
-      "team_implied_total": 27.0,
+      "player_id": "00-0037231",
+      "player_name": "K.Austin",
+      "position": "WR",
+      "team": "NO",
+      "opponent": "BAL",
+      "matchup": "NO @ BAL",
+      "team_implied_total": 19.0,
       "usage": {
-        "snap_share": 0.712,
-        "rz_target_share": 0.0,
+        "snap_share": 0.755,
+        "rz_target_share": 0.083,
         "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.804,
-        "matchup_rating": 0.722
+        "xtd_per_game": 0.48,
+        "matchup_rating": 0.74
       },
       "model": {
-        "anytime_td_prob": 0.1741,
-        "fair_moneyline": 474.4,
+        "anytime_td_prob": 0.1737,
+        "fair_moneyline": 475.8,
         "tier": "C"
       },
       "market": null,
@@ -4431,11 +4432,10 @@
         "tier": "D",
         "reason_codes": [
           "TD projection below 30% threshold",
-          "No meaningful red-zone role",
-          "Matchup rating 0.72 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "Matchup rating 0.74 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
         ],
-        "regression_ratio": 0.0
+        "regression_ratio": 2.083
       }
     },
     {
@@ -5161,38 +5161,6 @@
       }
     },
     {
-      "player_id": "00-0040743",
-      "player_name": "Tyler Shough",
-      "position": "QB",
-      "team": "NO",
-      "opponent": "BAL",
-      "matchup": "NO @ BAL",
-      "team_implied_total": 19.5,
-      "usage": {
-        "snap_share": 0.988,
-        "rz_target_share": 0.0,
-        "inside5_carry_share": 0.25,
-        "xtd_per_game": 0.673,
-        "matchup_rating": 0.74
-      },
-      "model": {
-        "anytime_td_prob": 0.1617,
-        "fair_moneyline": 518.5,
-        "tier": "C"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "TD projection below 30% threshold",
-          "Matchup rating 0.74 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 1.486
-      }
-    },
-    {
       "player_id": "00-0035645",
       "player_name": "G.Olszewski",
       "position": "WR",
@@ -5289,6 +5257,39 @@
       }
     },
     {
+      "player_id": "00-0030564",
+      "player_name": "D.Hopkins",
+      "position": "WR",
+      "team": "BAL",
+      "opponent": "NO",
+      "matchup": "BAL vs NO",
+      "team_implied_total": 27.5,
+      "usage": {
+        "snap_share": 0.295,
+        "rz_target_share": 0.167,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.19,
+        "matchup_rating": 0.722
+      },
+      "model": {
+        "anytime_td_prob": 0.159,
+        "fair_moneyline": 529.0,
+        "tier": "C"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "Matchup rating 0.72 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 0.0
+      }
+    },
+    {
       "player_id": "00-0036898",
       "player_name": "D.Mills",
       "position": "QB",
@@ -5352,6 +5353,38 @@
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 0.0
+      }
+    },
+    {
+      "player_id": "00-0040743",
+      "player_name": "Tyler Shough",
+      "position": "QB",
+      "team": "NO",
+      "opponent": "BAL",
+      "matchup": "NO @ BAL",
+      "team_implied_total": 19.0,
+      "usage": {
+        "snap_share": 0.988,
+        "rz_target_share": 0.0,
+        "inside5_carry_share": 0.25,
+        "xtd_per_game": 0.673,
+        "matchup_rating": 0.74
+      },
+      "model": {
+        "anytime_td_prob": 0.1581,
+        "fair_moneyline": 532.5,
+        "tier": "C"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "TD projection below 30% threshold",
+          "Matchup rating 0.74 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 1.486
       }
     },
     {
@@ -5515,39 +5548,6 @@
       }
     },
     {
-      "player_id": "00-0030564",
-      "player_name": "D.Hopkins",
-      "position": "WR",
-      "team": "BAL",
-      "opponent": "NO",
-      "matchup": "BAL vs NO",
-      "team_implied_total": 27.0,
-      "usage": {
-        "snap_share": 0.295,
-        "rz_target_share": 0.167,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.19,
-        "matchup_rating": 0.722
-      },
-      "model": {
-        "anytime_td_prob": 0.1555,
-        "fair_moneyline": 543.2,
-        "tier": "C"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Snap share below 70% threshold",
-          "TD projection below 30% threshold",
-          "Matchup rating 0.72 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 0.0
-      }
-    },
-    {
       "player_id": "00-0036442",
       "player_name": "J.Burrow",
       "position": "QB",
@@ -5573,6 +5573,40 @@
         "tier": "D",
         "reason_codes": [
           "TD projection below 30% threshold",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 0.0
+      }
+    },
+    {
+      "player_id": "00-0034798",
+      "player_name": "D.Smythe",
+      "position": "TE",
+      "team": "BAL",
+      "opponent": "NO",
+      "matchup": "BAL vs NO",
+      "team_implied_total": 27.5,
+      "usage": {
+        "snap_share": 0.338,
+        "rz_target_share": 0.0,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.21,
+        "matchup_rating": 0.722
+      },
+      "model": {
+        "anytime_td_prob": 0.1539,
+        "fair_moneyline": 549.8,
+        "tier": "C"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "No meaningful red-zone role",
+          "Matchup rating 0.72 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 0.0
@@ -5776,40 +5810,6 @@
       }
     },
     {
-      "player_id": "00-0034798",
-      "player_name": "D.Smythe",
-      "position": "TE",
-      "team": "BAL",
-      "opponent": "NO",
-      "matchup": "BAL vs NO",
-      "team_implied_total": 27.0,
-      "usage": {
-        "snap_share": 0.338,
-        "rz_target_share": 0.0,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.21,
-        "matchup_rating": 0.722
-      },
-      "model": {
-        "anytime_td_prob": 0.1505,
-        "fair_moneyline": 564.6,
-        "tier": "C"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Snap share below 70% threshold",
-          "TD projection below 30% threshold",
-          "No meaningful red-zone role",
-          "Matchup rating 0.72 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 0.0
-      }
-    },
-    {
       "player_id": "00-0036165",
       "player_name": "I.Hodgins",
       "position": "WR",
@@ -5847,7 +5847,7 @@
       "team": "BAL",
       "opponent": "NO",
       "matchup": "BAL vs NO",
-      "team_implied_total": 27.0,
+      "team_implied_total": 27.5,
       "usage": {
         "snap_share": 0.715,
         "rz_target_share": 0.333,
@@ -5856,9 +5856,9 @@
         "matchup_rating": 0.722
       },
       "model": {
-        "anytime_td_prob": 0.1467,
-        "fair_moneyline": 581.8,
-        "tier": "D"
+        "anytime_td_prob": 0.15,
+        "fair_moneyline": 566.6,
+        "tier": "C"
       },
       "market": null,
       "qualification": {
@@ -5870,6 +5870,40 @@
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 0.0
+      }
+    },
+    {
+      "player_id": "00-0039796",
+      "player_name": "R.Ali",
+      "position": "RB",
+      "team": "BAL",
+      "opponent": "NO",
+      "matchup": "BAL vs NO",
+      "team_implied_total": 27.5,
+      "usage": {
+        "snap_share": 0.212,
+        "rz_target_share": 0.0,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.077,
+        "matchup_rating": 0.564
+      },
+      "model": {
+        "anytime_td_prob": 0.1482,
+        "fair_moneyline": 574.5,
+        "tier": "D"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "No meaningful red-zone role",
+          "Matchup rating 0.56 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 12.987
       }
     },
     {
@@ -5934,40 +5968,6 @@
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 0.0
-      }
-    },
-    {
-      "player_id": "00-0039796",
-      "player_name": "R.Ali",
-      "position": "RB",
-      "team": "BAL",
-      "opponent": "NO",
-      "matchup": "BAL vs NO",
-      "team_implied_total": 27.0,
-      "usage": {
-        "snap_share": 0.212,
-        "rz_target_share": 0.0,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.077,
-        "matchup_rating": 0.564
-      },
-      "model": {
-        "anytime_td_prob": 0.1449,
-        "fair_moneyline": 590.0,
-        "tier": "D"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Snap share below 70% threshold",
-          "TD projection below 30% threshold",
-          "No meaningful red-zone role",
-          "Matchup rating 0.56 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 12.987
       }
     },
     {
@@ -6666,40 +6666,6 @@
       }
     },
     {
-      "player_id": "00-0035644",
-      "player_name": "N.Fant",
-      "position": "TE",
-      "team": "NO",
-      "opponent": "BAL",
-      "matchup": "NO @ BAL",
-      "team_implied_total": 19.5,
-      "usage": {
-        "snap_share": 0.318,
-        "rz_target_share": 0.0,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.55,
-        "matchup_rating": 0.74
-      },
-      "model": {
-        "anytime_td_prob": 0.134,
-        "fair_moneyline": 646.2,
-        "tier": "D"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Snap share below 70% threshold",
-          "TD projection below 30% threshold",
-          "No meaningful red-zone role",
-          "Matchup rating 0.74 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 1.818
-      }
-    },
-    {
       "player_id": "00-0037306",
       "player_name": "J.FitzPatrick",
       "position": "TE",
@@ -6863,23 +6829,23 @@
       }
     },
     {
-      "player_id": "00-0039623",
-      "player_name": "M.Tipton",
-      "position": "WR",
+      "player_id": "00-0035644",
+      "player_name": "N.Fant",
+      "position": "TE",
       "team": "NO",
       "opponent": "BAL",
       "matchup": "NO @ BAL",
-      "team_implied_total": 19.5,
+      "team_implied_total": 19.0,
       "usage": {
-        "snap_share": 0.712,
-        "rz_target_share": 0.083,
+        "snap_share": 0.318,
+        "rz_target_share": 0.0,
         "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.278,
+        "xtd_per_game": 0.55,
         "matchup_rating": 0.74
       },
       "model": {
-        "anytime_td_prob": 0.1298,
-        "fair_moneyline": 670.3,
+        "anytime_td_prob": 0.131,
+        "fair_moneyline": 663.6,
         "tier": "D"
       },
       "market": null,
@@ -6887,11 +6853,13 @@
         "qualifies": false,
         "tier": "D",
         "reason_codes": [
+          "Snap share below 70% threshold",
           "TD projection below 30% threshold",
+          "No meaningful red-zone role",
           "Matchup rating 0.74 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
         ],
-        "regression_ratio": 0.0
+        "regression_ratio": 1.818
       }
     },
     {
@@ -7120,6 +7088,38 @@
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
           "Matchup rating 1.02 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 0.0
+      }
+    },
+    {
+      "player_id": "00-0039623",
+      "player_name": "M.Tipton",
+      "position": "WR",
+      "team": "NO",
+      "opponent": "BAL",
+      "matchup": "NO @ BAL",
+      "team_implied_total": 19.0,
+      "usage": {
+        "snap_share": 0.712,
+        "rz_target_share": 0.083,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.278,
+        "matchup_rating": 0.74
+      },
+      "model": {
+        "anytime_td_prob": 0.1269,
+        "fair_moneyline": 688.3,
+        "tier": "D"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "TD projection below 30% threshold",
+          "Matchup rating 0.74 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 0.0
@@ -7552,38 +7552,6 @@
       }
     },
     {
-      "player_id": "00-0037276",
-      "player_name": "T.Chandler",
-      "position": "RB",
-      "team": "NO",
-      "opponent": "BAL",
-      "matchup": "NO @ BAL",
-      "team_implied_total": 19.5,
-      "usage": {
-        "snap_share": 0.195,
-        "rz_target_share": 0.083,
-        "inside5_carry_share": 0.25,
-        "xtd_per_game": 0.877,
-        "matchup_rating": 2.568
-      },
-      "model": {
-        "anytime_td_prob": 0.1154,
-        "fair_moneyline": 766.8,
-        "tier": "D"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Snap share below 70% threshold",
-          "TD projection below 30% threshold",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 0.0
-      }
-    },
-    {
       "player_id": "00-0038573",
       "player_name": "D.Davis",
       "position": "WR",
@@ -7818,23 +7786,23 @@
       }
     },
     {
-      "player_id": "00-0034860",
-      "player_name": "D.Pettis",
-      "position": "WR",
+      "player_id": "00-0037276",
+      "player_name": "T.Chandler",
+      "position": "RB",
       "team": "NO",
       "opponent": "BAL",
       "matchup": "NO @ BAL",
-      "team_implied_total": 19.5,
+      "team_implied_total": 19.0,
       "usage": {
-        "snap_share": 0.42,
-        "rz_target_share": 0.0,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.11,
-        "matchup_rating": 0.74
+        "snap_share": 0.195,
+        "rz_target_share": 0.083,
+        "inside5_carry_share": 0.25,
+        "xtd_per_game": 0.877,
+        "matchup_rating": 2.568
       },
       "model": {
-        "anytime_td_prob": 0.1124,
-        "fair_moneyline": 789.6,
+        "anytime_td_prob": 0.1127,
+        "fair_moneyline": 787.4,
         "tier": "D"
       },
       "market": null,
@@ -7844,8 +7812,6 @@
         "reason_codes": [
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
-          "No meaningful red-zone role",
-          "Matchup rating 0.74 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 0.0
@@ -8218,6 +8184,40 @@
       }
     },
     {
+      "player_id": "00-0034860",
+      "player_name": "D.Pettis",
+      "position": "WR",
+      "team": "NO",
+      "opponent": "BAL",
+      "matchup": "NO @ BAL",
+      "team_implied_total": 19.0,
+      "usage": {
+        "snap_share": 0.42,
+        "rz_target_share": 0.0,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.11,
+        "matchup_rating": 0.74
+      },
+      "model": {
+        "anytime_td_prob": 0.1098,
+        "fair_moneyline": 810.9,
+        "tier": "D"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "No meaningful red-zone role",
+          "Matchup rating 0.74 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 0.0
+      }
+    },
+    {
       "player_id": "00-0040164",
       "player_name": "Jaylin Lane",
       "position": "WR",
@@ -8245,40 +8245,6 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 0.0
-      }
-    },
-    {
-      "player_id": "00-0038979",
-      "player_name": "C.Tillman",
-      "position": "WR",
-      "team": "NO",
-      "opponent": "BAL",
-      "matchup": "NO @ BAL",
-      "team_implied_total": 19.5,
-      "usage": {
-        "snap_share": 0.615,
-        "rz_target_share": 0.0,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.07,
-        "matchup_rating": 0.74
-      },
-      "model": {
-        "anytime_td_prob": 0.1078,
-        "fair_moneyline": 827.6,
-        "tier": "D"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Snap share below 70% threshold",
-          "TD projection below 30% threshold",
-          "No meaningful red-zone role",
-          "Matchup rating 0.74 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 0.0
@@ -8412,6 +8378,40 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 0.0
+      }
+    },
+    {
+      "player_id": "00-0038979",
+      "player_name": "C.Tillman",
+      "position": "WR",
+      "team": "NO",
+      "opponent": "BAL",
+      "matchup": "NO @ BAL",
+      "team_implied_total": 19.0,
+      "usage": {
+        "snap_share": 0.615,
+        "rz_target_share": 0.0,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.07,
+        "matchup_rating": 0.74
+      },
+      "model": {
+        "anytime_td_prob": 0.1053,
+        "fair_moneyline": 849.9,
+        "tier": "D"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "No meaningful red-zone role",
+          "Matchup rating 0.74 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 0.0
@@ -8683,40 +8683,6 @@
       }
     },
     {
-      "player_id": "00-0033357",
-      "player_name": "T.Hill",
-      "position": "TE",
-      "team": "NO",
-      "opponent": "BAL",
-      "matchup": "NO @ BAL",
-      "team_implied_total": 19.5,
-      "usage": {
-        "snap_share": 0.283,
-        "rz_target_share": 0.0,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.382,
-        "matchup_rating": 0.74
-      },
-      "model": {
-        "anytime_td_prob": 0.1,
-        "fair_moneyline": 900.3,
-        "tier": "D"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Snap share below 70% threshold",
-          "TD projection below 30% threshold",
-          "No meaningful red-zone role",
-          "Matchup rating 0.74 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 0.0
-      }
-    },
-    {
       "player_id": "00-0038102",
       "player_name": "K.Pickett",
       "position": "QB",
@@ -8886,23 +8852,23 @@
       }
     },
     {
-      "player_id": "00-0040244",
-      "player_name": "Moliki Matavao",
+      "player_id": "00-0033357",
+      "player_name": "T.Hill",
       "position": "TE",
       "team": "NO",
       "opponent": "BAL",
       "matchup": "NO @ BAL",
-      "team_implied_total": 19.5,
+      "team_implied_total": 19.0,
       "usage": {
-        "snap_share": 0.5,
+        "snap_share": 0.283,
         "rz_target_share": 0.0,
         "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.02,
+        "xtd_per_game": 0.382,
         "matchup_rating": 0.74
       },
       "model": {
-        "anytime_td_prob": 0.0978,
-        "fair_moneyline": 922.8,
+        "anytime_td_prob": 0.0976,
+        "fair_moneyline": 924.4,
         "tier": "D"
       },
       "market": null,
@@ -9022,23 +8988,23 @@
       }
     },
     {
-      "player_id": "00-0038040",
-      "player_name": "Z.White",
-      "position": "RB",
+      "player_id": "00-0040244",
+      "player_name": "Moliki Matavao",
+      "position": "TE",
       "team": "NO",
       "opponent": "BAL",
       "matchup": "NO @ BAL",
-      "team_implied_total": 19.5,
+      "team_implied_total": 19.0,
       "usage": {
-        "snap_share": 0.203,
+        "snap_share": 0.5,
         "rz_target_share": 0.0,
         "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.123,
-        "matchup_rating": 2.568
+        "xtd_per_game": 0.02,
+        "matchup_rating": 0.74
       },
       "model": {
-        "anytime_td_prob": 0.0956,
-        "fair_moneyline": 946.5,
+        "anytime_td_prob": 0.0955,
+        "fair_moneyline": 947.6,
         "tier": "D"
       },
       "market": null,
@@ -9049,6 +9015,7 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
+          "Matchup rating 0.74 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 0.0
@@ -9289,6 +9256,39 @@
       }
     },
     {
+      "player_id": "00-0038040",
+      "player_name": "Z.White",
+      "position": "RB",
+      "team": "NO",
+      "opponent": "BAL",
+      "matchup": "NO @ BAL",
+      "team_implied_total": 19.0,
+      "usage": {
+        "snap_share": 0.203,
+        "rz_target_share": 0.0,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.123,
+        "matchup_rating": 2.568
+      },
+      "model": {
+        "anytime_td_prob": 0.0933,
+        "fair_moneyline": 972.0,
+        "tier": "D"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "No meaningful red-zone role",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 0.0
+      }
+    },
+    {
       "player_id": "00-0036332",
       "player_name": "J.Deguara",
       "position": "TE",
@@ -9320,40 +9320,6 @@
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 4.762
-      }
-    },
-    {
-      "player_id": "00-0037475",
-      "player_name": "S.Smartt",
-      "position": "TE",
-      "team": "NO",
-      "opponent": "BAL",
-      "matchup": "NO @ BAL",
-      "team_implied_total": 19.5,
-      "usage": {
-        "snap_share": 0.235,
-        "rz_target_share": 0.0,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.11,
-        "matchup_rating": 0.74
-      },
-      "model": {
-        "anytime_td_prob": 0.0903,
-        "fair_moneyline": 1007.4,
-        "tier": "D"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Snap share below 70% threshold",
-          "TD projection below 30% threshold",
-          "No meaningful red-zone role",
-          "Matchup rating 0.74 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 0.0
       }
     },
     {
@@ -9391,23 +9357,23 @@
       }
     },
     {
-      "player_id": "00-0036741",
-      "player_name": "J.Stoll",
+      "player_id": "00-0037475",
+      "player_name": "S.Smartt",
       "position": "TE",
       "team": "NO",
       "opponent": "BAL",
       "matchup": "NO @ BAL",
-      "team_implied_total": 19.5,
+      "team_implied_total": 19.0,
       "usage": {
-        "snap_share": 0.19,
+        "snap_share": 0.235,
         "rz_target_share": 0.0,
         "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.05,
+        "xtd_per_game": 0.11,
         "matchup_rating": 0.74
       },
       "model": {
-        "anytime_td_prob": 0.0865,
-        "fair_moneyline": 1055.7,
+        "anytime_td_prob": 0.0881,
+        "fair_moneyline": 1034.5,
         "tier": "D"
       },
       "market": null,
@@ -9455,6 +9421,40 @@
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 4.545
+      }
+    },
+    {
+      "player_id": "00-0036741",
+      "player_name": "J.Stoll",
+      "position": "TE",
+      "team": "NO",
+      "opponent": "BAL",
+      "matchup": "NO @ BAL",
+      "team_implied_total": 19.0,
+      "usage": {
+        "snap_share": 0.19,
+        "rz_target_share": 0.0,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.05,
+        "matchup_rating": 0.74
+      },
+      "model": {
+        "anytime_td_prob": 0.0845,
+        "fair_moneyline": 1084.1,
+        "tier": "D"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "No meaningful red-zone role",
+          "Matchup rating 0.74 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 0.0
       }
     },
     {
@@ -9624,39 +9624,6 @@
       }
     },
     {
-      "player_id": "00-0037098",
-      "player_name": "S.Toure",
-      "position": "WR",
-      "team": "NO",
-      "opponent": "BAL",
-      "matchup": "NO @ BAL",
-      "team_implied_total": 19.5,
-      "usage": {
-        "snap_share": 0.16,
-        "rz_target_share": 0.25,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.4,
-        "matchup_rating": 0.74
-      },
-      "model": {
-        "anytime_td_prob": 0.0816,
-        "fair_moneyline": 1125.0,
-        "tier": "D"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Snap share below 70% threshold",
-          "TD projection below 30% threshold",
-          "Matchup rating 0.74 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 0.0
-      }
-    },
-    {
       "player_id": "00-0038394",
       "player_name": "W.Mallory",
       "position": "TE",
@@ -9685,6 +9652,39 @@
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
           "Matchup rating 0.72 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 0.0
+      }
+    },
+    {
+      "player_id": "00-0037098",
+      "player_name": "S.Toure",
+      "position": "WR",
+      "team": "NO",
+      "opponent": "BAL",
+      "matchup": "NO @ BAL",
+      "team_implied_total": 19.0,
+      "usage": {
+        "snap_share": 0.16,
+        "rz_target_share": 0.25,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.4,
+        "matchup_rating": 0.74
+      },
+      "model": {
+        "anytime_td_prob": 0.0797,
+        "fair_moneyline": 1155.2,
+        "tier": "D"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "Matchup rating 0.74 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 0.0

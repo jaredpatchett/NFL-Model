@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-17T17:23:40.431800+00:00",
+  "generated_at": "2026-09-17T18:24:39.099747+00:00",
   "note": "Track B and Track A have real logged-prediction-vs-outcome results below; Track C does not yet.",
   "track_b": {
     "n_available": 16,

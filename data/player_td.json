@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-17T18:24:32.008250+00:00",
+  "generated_at": "2026-09-17T20:04:16.951214+00:00",
   "season": 2026,
   "week": 2,
   "model_notes": {
@@ -301,7 +301,7 @@
       "team": "CHI",
       "opponent": "MIN",
       "matchup": "CHI vs MIN",
-      "team_implied_total": 26.0,
+      "team_implied_total": 26.5,
       "usage": {
         "snap_share": 0.568,
         "rz_target_share": 0.0,
@@ -310,8 +310,8 @@
         "matchup_rating": 0.0
       },
       "model": {
-        "anytime_td_prob": 0.487,
-        "fair_moneyline": 105.4,
+        "anytime_td_prob": 0.4936,
+        "fair_moneyline": 102.6,
         "tier": "A"
       },
       "market": null,
@@ -394,7 +394,7 @@
       "team": "MIN",
       "opponent": "CHI",
       "matchup": "MIN @ CHI",
-      "team_implied_total": 21.5,
+      "team_implied_total": 22.0,
       "usage": {
         "snap_share": 0.903,
         "rz_target_share": 0.111,
@@ -403,8 +403,8 @@
         "matchup_rating": 1.052
       },
       "model": {
-        "anytime_td_prob": 0.4532,
-        "fair_moneyline": 120.7,
+        "anytime_td_prob": 0.4598,
+        "fair_moneyline": 117.5,
         "tier": "A"
       },
       "market": null,
@@ -547,6 +547,37 @@
       }
     },
     {
+      "player_id": "00-0033293",
+      "player_name": "A.Jones",
+      "position": "RB",
+      "team": "MIN",
+      "opponent": "CHI",
+      "matchup": "MIN @ CHI",
+      "team_implied_total": 22.0,
+      "usage": {
+        "snap_share": 0.583,
+        "rz_target_share": 0.222,
+        "inside5_carry_share": 0.5,
+        "xtd_per_game": 2.76,
+        "matchup_rating": 1.151
+      },
+      "model": {
+        "anytime_td_prob": 0.4164,
+        "fair_moneyline": 140.1,
+        "tier": "A"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 0.725
+      }
+    },
+    {
       "player_id": "00-0035685",
       "player_name": "D.Montgomery",
       "position": "RB",
@@ -575,37 +606,6 @@
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 0.966
-      }
-    },
-    {
-      "player_id": "00-0033293",
-      "player_name": "A.Jones",
-      "position": "RB",
-      "team": "MIN",
-      "opponent": "CHI",
-      "matchup": "MIN @ CHI",
-      "team_implied_total": 21.5,
-      "usage": {
-        "snap_share": 0.583,
-        "rz_target_share": 0.222,
-        "inside5_carry_share": 0.5,
-        "xtd_per_game": 2.76,
-        "matchup_rating": 1.151
-      },
-      "model": {
-        "anytime_td_prob": 0.41,
-        "fair_moneyline": 143.9,
-        "tier": "A"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Snap share below 70% threshold",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 0.725
       }
     },
     {
@@ -639,6 +639,37 @@
       }
     },
     {
+      "player_id": "00-0040126",
+      "player_name": "Colston Loveland",
+      "position": "TE",
+      "team": "CHI",
+      "opponent": "MIN",
+      "matchup": "CHI vs MIN",
+      "team_implied_total": 26.5,
+      "usage": {
+        "snap_share": 0.81,
+        "rz_target_share": 0.455,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 1.45,
+        "matchup_rating": 0.621
+      },
+      "model": {
+        "anytime_td_prob": 0.3936,
+        "fair_moneyline": 154.1,
+        "tier": "B"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "U",
+        "reason_codes": [
+          "Matchup rating 0.62 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 0.69
+      }
+    },
+    {
       "player_id": "00-0036997",
       "player_name": "J.Williams",
       "position": "RB",
@@ -668,37 +699,6 @@
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 1.173
-      }
-    },
-    {
-      "player_id": "00-0040126",
-      "player_name": "Colston Loveland",
-      "position": "TE",
-      "team": "CHI",
-      "opponent": "MIN",
-      "matchup": "CHI vs MIN",
-      "team_implied_total": 26.0,
-      "usage": {
-        "snap_share": 0.81,
-        "rz_target_share": 0.455,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 1.45,
-        "matchup_rating": 0.621
-      },
-      "model": {
-        "anytime_td_prob": 0.3873,
-        "fair_moneyline": 158.2,
-        "tier": "B"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "U",
-        "reason_codes": [
-          "Matchup rating 0.62 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 0.69
       }
     },
     {
@@ -1240,7 +1240,7 @@
       "team": "CHI",
       "opponent": "MIN",
       "matchup": "CHI vs MIN",
-      "team_implied_total": 26.0,
+      "team_implied_total": 26.5,
       "usage": {
         "snap_share": 0.42,
         "rz_target_share": 0.0,
@@ -1249,8 +1249,8 @@
         "matchup_rating": 0.0
       },
       "model": {
-        "anytime_td_prob": 0.3146,
-        "fair_moneyline": 217.9,
+        "anytime_td_prob": 0.3203,
+        "fair_moneyline": 212.2,
         "tier": "B"
       },
       "market": null,
@@ -1943,6 +1943,39 @@
       }
     },
     {
+      "player_id": "00-0039919",
+      "player_name": "R.Odunze",
+      "position": "WR",
+      "team": "CHI",
+      "opponent": "MIN",
+      "matchup": "CHI vs MIN",
+      "team_implied_total": 26.5,
+      "usage": {
+        "snap_share": 0.685,
+        "rz_target_share": 0.182,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.41,
+        "matchup_rating": 0.621
+      },
+      "model": {
+        "anytime_td_prob": 0.2567,
+        "fair_moneyline": 289.5,
+        "tier": "B"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "Matchup rating 0.62 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 0.0
+      }
+    },
+    {
       "player_id": "00-0036554",
       "player_name": "N.Collins",
       "position": "WR",
@@ -2042,39 +2075,6 @@
       }
     },
     {
-      "player_id": "00-0039919",
-      "player_name": "R.Odunze",
-      "position": "WR",
-      "team": "CHI",
-      "opponent": "MIN",
-      "matchup": "CHI vs MIN",
-      "team_implied_total": 26.0,
-      "usage": {
-        "snap_share": 0.685,
-        "rz_target_share": 0.182,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.41,
-        "matchup_rating": 0.621
-      },
-      "model": {
-        "anytime_td_prob": 0.2517,
-        "fair_moneyline": 297.3,
-        "tier": "B"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Snap share below 70% threshold",
-          "TD projection below 30% threshold",
-          "Matchup rating 0.62 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 0.0
-      }
-    },
-    {
       "player_id": "00-0040078",
       "player_name": "Brashard Smith",
       "position": "RB",
@@ -2141,6 +2141,39 @@
       }
     },
     {
+      "player_id": "00-0036259",
+      "player_name": "J.Jennings",
+      "position": "WR",
+      "team": "MIN",
+      "opponent": "CHI",
+      "matchup": "MIN @ CHI",
+      "team_implied_total": 22.0,
+      "usage": {
+        "snap_share": 0.777,
+        "rz_target_share": 0.0,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.42,
+        "matchup_rating": 1.052
+      },
+      "model": {
+        "anytime_td_prob": 0.2493,
+        "fair_moneyline": 301.1,
+        "tier": "C"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "TD projection below 30% threshold",
+          "No meaningful red-zone role",
+          "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 0.0
+      }
+    },
+    {
       "player_id": "00-0039901",
       "player_name": "K.Coleman",
       "position": "WR",
@@ -2174,23 +2207,23 @@
       }
     },
     {
-      "player_id": "00-0036259",
-      "player_name": "J.Jennings",
-      "position": "WR",
-      "team": "MIN",
-      "opponent": "CHI",
-      "matchup": "MIN @ CHI",
-      "team_implied_total": 21.5,
+      "player_id": "00-0039918",
+      "player_name": "C.Williams",
+      "position": "QB",
+      "team": "CHI",
+      "opponent": "MIN",
+      "matchup": "CHI vs MIN",
+      "team_implied_total": 26.5,
       "usage": {
-        "snap_share": 0.777,
+        "snap_share": 1.0,
         "rz_target_share": 0.0,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.42,
-        "matchup_rating": 1.052
+        "inside5_carry_share": 0.1,
+        "xtd_per_game": 0.985,
+        "matchup_rating": 0.621
       },
       "model": {
-        "anytime_td_prob": 0.2444,
-        "fair_moneyline": 309.2,
+        "anytime_td_prob": 0.2466,
+        "fair_moneyline": 305.5,
         "tier": "C"
       },
       "market": null,
@@ -2199,11 +2232,11 @@
         "tier": "D",
         "reason_codes": [
           "TD projection below 30% threshold",
-          "No meaningful red-zone role",
-          "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "Recent TDs outpacing opportunity (regression risk)",
+          "Matchup rating 0.62 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
         ],
-        "regression_ratio": 0.0
+        "regression_ratio": 2.03
       }
     },
     {
@@ -2237,39 +2270,6 @@
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 2.439
-      }
-    },
-    {
-      "player_id": "00-0039918",
-      "player_name": "C.Williams",
-      "position": "QB",
-      "team": "CHI",
-      "opponent": "MIN",
-      "matchup": "CHI vs MIN",
-      "team_implied_total": 26.0,
-      "usage": {
-        "snap_share": 1.0,
-        "rz_target_share": 0.0,
-        "inside5_carry_share": 0.1,
-        "xtd_per_game": 0.985,
-        "matchup_rating": 0.621
-      },
-      "model": {
-        "anytime_td_prob": 0.2417,
-        "fair_moneyline": 313.7,
-        "tier": "C"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "TD projection below 30% threshold",
-          "Recent TDs outpacing opportunity (regression risk)",
-          "Matchup rating 0.62 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 2.03
       }
     },
     {
@@ -2405,6 +2405,38 @@
       }
     },
     {
+      "player_id": "00-0037525",
+      "player_name": "J.Mason",
+      "position": "RB",
+      "team": "MIN",
+      "opponent": "CHI",
+      "matchup": "MIN @ CHI",
+      "team_implied_total": 22.0,
+      "usage": {
+        "snap_share": 0.32,
+        "rz_target_share": 0.0,
+        "inside5_carry_share": 0.333,
+        "xtd_per_game": 1.468,
+        "matchup_rating": 1.151
+      },
+      "model": {
+        "anytime_td_prob": 0.2382,
+        "fair_moneyline": 319.7,
+        "tier": "C"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 0.681
+      }
+    },
+    {
       "player_id": "00-0039880",
       "player_name": "M.Washington",
       "position": "WR",
@@ -2499,38 +2531,6 @@
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 1.266
-      }
-    },
-    {
-      "player_id": "00-0037525",
-      "player_name": "J.Mason",
-      "position": "RB",
-      "team": "MIN",
-      "opponent": "CHI",
-      "matchup": "MIN @ CHI",
-      "team_implied_total": 21.5,
-      "usage": {
-        "snap_share": 0.32,
-        "rz_target_share": 0.0,
-        "inside5_carry_share": 0.333,
-        "xtd_per_game": 1.468,
-        "matchup_rating": 1.151
-      },
-      "model": {
-        "anytime_td_prob": 0.2335,
-        "fair_moneyline": 328.3,
-        "tier": "C"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Snap share below 70% threshold",
-          "TD projection below 30% threshold",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 0.681
       }
     },
     {
@@ -2799,6 +2799,39 @@
       }
     },
     {
+      "player_id": "00-0040735",
+      "player_name": "Luther Burden",
+      "position": "WR",
+      "team": "CHI",
+      "opponent": "MIN",
+      "matchup": "CHI vs MIN",
+      "team_implied_total": 26.5,
+      "usage": {
+        "snap_share": 0.627,
+        "rz_target_share": 0.182,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.728,
+        "matchup_rating": 0.621
+      },
+      "model": {
+        "anytime_td_prob": 0.2218,
+        "fair_moneyline": 350.9,
+        "tier": "C"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "Matchup rating 0.62 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 0.0
+      }
+    },
+    {
       "player_id": "00-0039066",
       "player_name": "M.Mayer",
       "position": "TE",
@@ -2895,23 +2928,23 @@
       }
     },
     {
-      "player_id": "00-0040735",
-      "player_name": "Luther Burden",
-      "position": "WR",
+      "player_id": "00-0036290",
+      "player_name": "C.Kmet",
+      "position": "TE",
       "team": "CHI",
       "opponent": "MIN",
       "matchup": "CHI vs MIN",
-      "team_implied_total": 26.0,
+      "team_implied_total": 26.5,
       "usage": {
-        "snap_share": 0.627,
-        "rz_target_share": 0.182,
+        "snap_share": 0.695,
+        "rz_target_share": 0.091,
         "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.728,
+        "xtd_per_game": 0.657,
         "matchup_rating": 0.621
       },
       "model": {
-        "anytime_td_prob": 0.2173,
-        "fair_moneyline": 360.3,
+        "anytime_td_prob": 0.2182,
+        "fair_moneyline": 358.3,
         "tier": "C"
       },
       "market": null,
@@ -2921,10 +2954,11 @@
         "reason_codes": [
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
+          "Recent TDs outpacing opportunity (regression risk)",
           "Matchup rating 0.62 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
         ],
-        "regression_ratio": 0.0
+        "regression_ratio": 3.044
       }
     },
     {
@@ -3053,40 +3087,6 @@
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 0.0
-      }
-    },
-    {
-      "player_id": "00-0036290",
-      "player_name": "C.Kmet",
-      "position": "TE",
-      "team": "CHI",
-      "opponent": "MIN",
-      "matchup": "CHI vs MIN",
-      "team_implied_total": 26.0,
-      "usage": {
-        "snap_share": 0.695,
-        "rz_target_share": 0.091,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.657,
-        "matchup_rating": 0.621
-      },
-      "model": {
-        "anytime_td_prob": 0.2137,
-        "fair_moneyline": 367.9,
-        "tier": "C"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Snap share below 70% threshold",
-          "TD projection below 30% threshold",
-          "Recent TDs outpacing opportunity (regression risk)",
-          "Matchup rating 0.62 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 3.044
       }
     },
     {
@@ -3613,6 +3613,41 @@
       }
     },
     {
+      "player_id": "00-0040277",
+      "player_name": "Jahdae Walker",
+      "position": "WR",
+      "team": "CHI",
+      "opponent": "MIN",
+      "matchup": "CHI vs MIN",
+      "team_implied_total": 26.5,
+      "usage": {
+        "snap_share": 0.425,
+        "rz_target_share": 0.0,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.81,
+        "matchup_rating": 0.621
+      },
+      "model": {
+        "anytime_td_prob": 0.1975,
+        "fair_moneyline": 406.3,
+        "tier": "C"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "No meaningful red-zone role",
+          "Recent TDs outpacing opportunity (regression risk)",
+          "Matchup rating 0.62 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 3.704
+      }
+    },
+    {
       "player_id": "00-0039451",
       "player_name": "I.Williams",
       "position": "WR",
@@ -3709,41 +3744,6 @@
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 0.0
-      }
-    },
-    {
-      "player_id": "00-0040277",
-      "player_name": "Jahdae Walker",
-      "position": "WR",
-      "team": "CHI",
-      "opponent": "MIN",
-      "matchup": "CHI vs MIN",
-      "team_implied_total": 26.0,
-      "usage": {
-        "snap_share": 0.425,
-        "rz_target_share": 0.0,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.81,
-        "matchup_rating": 0.621
-      },
-      "model": {
-        "anytime_td_prob": 0.1933,
-        "fair_moneyline": 417.2,
-        "tier": "C"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Snap share below 70% threshold",
-          "TD projection below 30% threshold",
-          "No meaningful red-zone role",
-          "Recent TDs outpacing opportunity (regression risk)",
-          "Matchup rating 0.62 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 3.704
       }
     },
     {
@@ -4010,6 +4010,40 @@
       }
     },
     {
+      "player_id": "00-0035229",
+      "player_name": "T.Hockenson",
+      "position": "TE",
+      "team": "MIN",
+      "opponent": "CHI",
+      "matchup": "MIN @ CHI",
+      "team_implied_total": 22.0,
+      "usage": {
+        "snap_share": 0.693,
+        "rz_target_share": 0.333,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.71,
+        "matchup_rating": 1.052
+      },
+      "model": {
+        "anytime_td_prob": 0.1869,
+        "fair_moneyline": 435.0,
+        "tier": "C"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "Recent TDs outpacing opportunity (regression risk)",
+          "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 2.817
+      }
+    },
+    {
       "player_id": "00-0034796",
       "player_name": "L.Jackson",
       "position": "QB",
@@ -4110,23 +4144,23 @@
       }
     },
     {
-      "player_id": "00-0035229",
-      "player_name": "T.Hockenson",
-      "position": "TE",
-      "team": "MIN",
-      "opponent": "CHI",
-      "matchup": "MIN @ CHI",
-      "team_implied_total": 21.5,
+      "player_id": "00-0032464",
+      "player_name": "K.Raymond",
+      "position": "WR",
+      "team": "CHI",
+      "opponent": "MIN",
+      "matchup": "CHI vs MIN",
+      "team_implied_total": 26.5,
       "usage": {
-        "snap_share": 0.693,
-        "rz_target_share": 0.333,
+        "snap_share": 0.285,
+        "rz_target_share": 0.091,
         "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.71,
-        "matchup_rating": 1.052
+        "xtd_per_game": 0.29,
+        "matchup_rating": 0.621
       },
       "model": {
-        "anytime_td_prob": 0.1829,
-        "fair_moneyline": 446.7,
+        "anytime_td_prob": 0.1847,
+        "fair_moneyline": 441.5,
         "tier": "C"
       },
       "market": null,
@@ -4136,11 +4170,44 @@
         "reason_codes": [
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
-          "Recent TDs outpacing opportunity (regression risk)",
+          "Matchup rating 0.62 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 3.448
+      }
+    },
+    {
+      "player_id": "00-0035249",
+      "player_name": "J.Oliver",
+      "position": "TE",
+      "team": "MIN",
+      "opponent": "CHI",
+      "matchup": "MIN @ CHI",
+      "team_implied_total": 22.0,
+      "usage": {
+        "snap_share": 0.64,
+        "rz_target_share": 0.0,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.11,
+        "matchup_rating": 1.052
+      },
+      "model": {
+        "anytime_td_prob": 0.1846,
+        "fair_moneyline": 441.6,
+        "tier": "C"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "No meaningful red-zone role",
           "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
         ],
-        "regression_ratio": 2.817
+        "regression_ratio": 0.0
       }
     },
     {
@@ -4173,73 +4240,6 @@
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 1.435
-      }
-    },
-    {
-      "player_id": "00-0032464",
-      "player_name": "K.Raymond",
-      "position": "WR",
-      "team": "CHI",
-      "opponent": "MIN",
-      "matchup": "CHI vs MIN",
-      "team_implied_total": 26.0,
-      "usage": {
-        "snap_share": 0.285,
-        "rz_target_share": 0.091,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.29,
-        "matchup_rating": 0.621
-      },
-      "model": {
-        "anytime_td_prob": 0.1807,
-        "fair_moneyline": 453.4,
-        "tier": "C"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Snap share below 70% threshold",
-          "TD projection below 30% threshold",
-          "Matchup rating 0.62 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 3.448
-      }
-    },
-    {
-      "player_id": "00-0035249",
-      "player_name": "J.Oliver",
-      "position": "TE",
-      "team": "MIN",
-      "opponent": "CHI",
-      "matchup": "MIN @ CHI",
-      "team_implied_total": 21.5,
-      "usage": {
-        "snap_share": 0.64,
-        "rz_target_share": 0.0,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.11,
-        "matchup_rating": 1.052
-      },
-      "model": {
-        "anytime_td_prob": 0.1807,
-        "fair_moneyline": 453.5,
-        "tier": "C"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Snap share below 70% threshold",
-          "TD projection below 30% threshold",
-          "No meaningful red-zone role",
-          "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 0.0
       }
     },
     {
@@ -4534,6 +4534,38 @@
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 0.0
+      }
+    },
+    {
+      "player_id": "00-0038994",
+      "player_name": "J.Addison",
+      "position": "WR",
+      "team": "MIN",
+      "opponent": "CHI",
+      "matchup": "MIN @ CHI",
+      "team_implied_total": 22.0,
+      "usage": {
+        "snap_share": 0.802,
+        "rz_target_share": 0.111,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.357,
+        "matchup_rating": 1.052
+      },
+      "model": {
+        "anytime_td_prob": 0.1682,
+        "fair_moneyline": 494.5,
+        "tier": "C"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "TD projection below 30% threshold",
+          "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 2.801
       }
     },
     {
@@ -4897,38 +4929,6 @@
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 0.858
-      }
-    },
-    {
-      "player_id": "00-0038994",
-      "player_name": "J.Addison",
-      "position": "WR",
-      "team": "MIN",
-      "opponent": "CHI",
-      "matchup": "MIN @ CHI",
-      "team_implied_total": 21.5,
-      "usage": {
-        "snap_share": 0.802,
-        "rz_target_share": 0.111,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.357,
-        "matchup_rating": 1.052
-      },
-      "model": {
-        "anytime_td_prob": 0.1645,
-        "fair_moneyline": 507.8,
-        "tier": "C"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "TD projection below 30% threshold",
-          "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 2.801
       }
     },
     {
@@ -6068,6 +6068,39 @@
       }
     },
     {
+      "player_id": "00-0039923",
+      "player_name": "J.J. McCarthy",
+      "position": "QB",
+      "team": "MIN",
+      "opponent": "CHI",
+      "matchup": "MIN @ CHI",
+      "team_implied_total": 22.0,
+      "usage": {
+        "snap_share": 0.79,
+        "rz_target_share": 0.0,
+        "inside5_carry_share": 0.167,
+        "xtd_per_game": 0.652,
+        "matchup_rating": 1.052
+      },
+      "model": {
+        "anytime_td_prob": 0.1398,
+        "fair_moneyline": 615.3,
+        "tier": "D"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "TD projection below 30% threshold",
+          "Recent TDs outpacing opportunity (regression risk)",
+          "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 3.067
+      }
+    },
+    {
       "player_id": "00-0033949",
       "player_name": "J.Dobbs",
       "position": "QB",
@@ -6329,39 +6362,6 @@
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 0.0
-      }
-    },
-    {
-      "player_id": "00-0039923",
-      "player_name": "J.J. McCarthy",
-      "position": "QB",
-      "team": "MIN",
-      "opponent": "CHI",
-      "matchup": "MIN @ CHI",
-      "team_implied_total": 21.5,
-      "usage": {
-        "snap_share": 0.79,
-        "rz_target_share": 0.0,
-        "inside5_carry_share": 0.167,
-        "xtd_per_game": 0.652,
-        "matchup_rating": 1.052
-      },
-      "model": {
-        "anytime_td_prob": 0.1366,
-        "fair_moneyline": 631.9,
-        "tier": "D"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "TD projection below 30% threshold",
-          "Recent TDs outpacing opportunity (regression risk)",
-          "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 3.067
       }
     },
     {
@@ -6995,6 +6995,39 @@
       }
     },
     {
+      "player_id": "00-0040494",
+      "player_name": "Max Brosmer",
+      "position": "QB",
+      "team": "MIN",
+      "opponent": "CHI",
+      "matchup": "MIN @ CHI",
+      "team_implied_total": 22.0,
+      "usage": {
+        "snap_share": 1.0,
+        "rz_target_share": 0.0,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.014,
+        "matchup_rating": 1.052
+      },
+      "model": {
+        "anytime_td_prob": 0.1283,
+        "fair_moneyline": 679.6,
+        "tier": "D"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "TD projection below 30% threshold",
+          "No meaningful red-zone role",
+          "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 0.0
+      }
+    },
+    {
       "player_id": "00-0033307",
       "player_name": "K.Bourne",
       "position": "WR",
@@ -7158,39 +7191,6 @@
       }
     },
     {
-      "player_id": "00-0040494",
-      "player_name": "Max Brosmer",
-      "position": "QB",
-      "team": "MIN",
-      "opponent": "CHI",
-      "matchup": "MIN @ CHI",
-      "team_implied_total": 21.5,
-      "usage": {
-        "snap_share": 1.0,
-        "rz_target_share": 0.0,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.014,
-        "matchup_rating": 1.052
-      },
-      "model": {
-        "anytime_td_prob": 0.1253,
-        "fair_moneyline": 697.9,
-        "tier": "D"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "TD projection below 30% threshold",
-          "No meaningful red-zone role",
-          "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 0.0
-      }
-    },
-    {
       "player_id": "00-0036842",
       "player_name": "K.Nwangwu",
       "position": "RB",
@@ -7217,6 +7217,39 @@
         "reason_codes": [
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 0.0
+      }
+    },
+    {
+      "player_id": "00-0038440",
+      "player_name": "Zavier Scott",
+      "position": "RB",
+      "team": "CHI",
+      "opponent": "MIN",
+      "matchup": "CHI vs MIN",
+      "team_implied_total": 26.5,
+      "usage": {
+        "snap_share": 0.125,
+        "rz_target_share": 0.091,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.3,
+        "matchup_rating": 0.0
+      },
+      "model": {
+        "anytime_td_prob": 0.1229,
+        "fair_moneyline": 713.8,
+        "tier": "D"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "Matchup rating 0.00 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 0.0
@@ -7250,39 +7283,6 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "Matchup rating 0.75 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 0.0
-      }
-    },
-    {
-      "player_id": "00-0038440",
-      "player_name": "Zavier Scott",
-      "position": "RB",
-      "team": "CHI",
-      "opponent": "MIN",
-      "matchup": "CHI vs MIN",
-      "team_implied_total": 26.0,
-      "usage": {
-        "snap_share": 0.125,
-        "rz_target_share": 0.091,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.3,
-        "matchup_rating": 0.0
-      },
-      "model": {
-        "anytime_td_prob": 0.1201,
-        "fair_moneyline": 733.0,
-        "tier": "D"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Snap share below 70% threshold",
-          "TD projection below 30% threshold",
-          "Matchup rating 0.00 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 0.0
@@ -8418,6 +8418,39 @@
       }
     },
     {
+      "player_id": "00-0036425",
+      "player_name": "D.Dallas",
+      "position": "RB",
+      "team": "MIN",
+      "opponent": "CHI",
+      "matchup": "MIN @ CHI",
+      "team_implied_total": 22.0,
+      "usage": {
+        "snap_share": 0.11,
+        "rz_target_share": 0.0,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.141,
+        "matchup_rating": 1.151
+      },
+      "model": {
+        "anytime_td_prob": 0.1052,
+        "fair_moneyline": 850.4,
+        "tier": "D"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "No meaningful red-zone role",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 0.0
+      }
+    },
+    {
       "player_id": "00-0038614",
       "player_name": "S.Matlock",
       "position": "FB",
@@ -8517,39 +8550,6 @@
       }
     },
     {
-      "player_id": "00-0036425",
-      "player_name": "D.Dallas",
-      "position": "RB",
-      "team": "MIN",
-      "opponent": "CHI",
-      "matchup": "MIN @ CHI",
-      "team_implied_total": 21.5,
-      "usage": {
-        "snap_share": 0.11,
-        "rz_target_share": 0.0,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.141,
-        "matchup_rating": 1.151
-      },
-      "model": {
-        "anytime_td_prob": 0.1027,
-        "fair_moneyline": 873.3,
-        "tier": "D"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Snap share below 70% threshold",
-          "TD projection below 30% threshold",
-          "No meaningful red-zone role",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 0.0
-      }
-    },
-    {
       "player_id": "00-0035956",
       "player_name": "G.Ricci",
       "position": "TE",
@@ -8644,6 +8644,40 @@
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
           "Matchup rating 1.06 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 0.0
+      }
+    },
+    {
+      "player_id": "00-0040509",
+      "player_name": "Ben Yurosek",
+      "position": "TE",
+      "team": "MIN",
+      "opponent": "CHI",
+      "matchup": "MIN @ CHI",
+      "team_implied_total": 22.0,
+      "usage": {
+        "snap_share": 0.35,
+        "rz_target_share": 0.0,
+        "inside5_carry_share": 0.0,
+        "xtd_per_game": 0.03,
+        "matchup_rating": 1.052
+      },
+      "model": {
+        "anytime_td_prob": 0.1007,
+        "fair_moneyline": 893.4,
+        "tier": "D"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "No meaningful red-zone role",
+          "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 0.0
@@ -8812,40 +8846,6 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 0.0
-      }
-    },
-    {
-      "player_id": "00-0040509",
-      "player_name": "Ben Yurosek",
-      "position": "TE",
-      "team": "MIN",
-      "opponent": "CHI",
-      "matchup": "MIN @ CHI",
-      "team_implied_total": 21.5,
-      "usage": {
-        "snap_share": 0.35,
-        "rz_target_share": 0.0,
-        "inside5_carry_share": 0.0,
-        "xtd_per_game": 0.03,
-        "matchup_rating": 1.052
-      },
-      "model": {
-        "anytime_td_prob": 0.0983,
-        "fair_moneyline": 917.4,
-        "tier": "D"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Snap share below 70% threshold",
-          "TD projection below 30% threshold",
-          "No meaningful red-zone role",
-          "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)",
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 0.0
@@ -9424,6 +9424,40 @@
       }
     },
     {
+      "player_id": "00-0032918",
+      "player_name": "C.Ham",
+      "position": "FB",
+      "team": "MIN",
+      "opponent": "CHI",
+      "matchup": "MIN @ CHI",
+      "team_implied_total": 22.0,
+      "usage": {
+        "snap_share": 0.275,
+        "rz_target_share": 0.0,
+        "inside5_carry_share": 0.333,
+        "xtd_per_game": 0.707,
+        "matchup_rating": 1.052
+      },
+      "model": {
+        "anytime_td_prob": 0.0845,
+        "fair_moneyline": 1084.1,
+        "tier": "D"
+      },
+      "market": null,
+      "qualification": {
+        "qualifies": false,
+        "tier": "D",
+        "reason_codes": [
+          "Snap share below 70% threshold",
+          "TD projection below 30% threshold",
+          "Recent TDs outpacing opportunity (regression risk)",
+          "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "No live price -- edge/EV not evaluated"
+        ],
+        "regression_ratio": 2.829
+      }
+    },
+    {
       "player_id": "00-0036741",
       "player_name": "J.Stoll",
       "position": "TE",
@@ -9521,40 +9555,6 @@
           "No live price -- edge/EV not evaluated"
         ],
         "regression_ratio": 0.0
-      }
-    },
-    {
-      "player_id": "00-0032918",
-      "player_name": "C.Ham",
-      "position": "FB",
-      "team": "MIN",
-      "opponent": "CHI",
-      "matchup": "MIN @ CHI",
-      "team_implied_total": 21.5,
-      "usage": {
-        "snap_share": 0.275,
-        "rz_target_share": 0.0,
-        "inside5_carry_share": 0.333,
-        "xtd_per_game": 0.707,
-        "matchup_rating": 1.052
-      },
-      "model": {
-        "anytime_td_prob": 0.0824,
-        "fair_moneyline": 1113.2,
-        "tier": "D"
-      },
-      "market": null,
-      "qualification": {
-        "qualifies": false,
-        "tier": "D",
-        "reason_codes": [
-          "Snap share below 70% threshold",
-          "TD projection below 30% threshold",
-          "Recent TDs outpacing opportunity (regression risk)",
-          "Matchup rating 1.05 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "No live price -- edge/EV not evaluated"
-        ],
-        "regression_ratio": 2.829
       }
     },
     {

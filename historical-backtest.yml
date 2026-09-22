@@ -1,0 +1,66 @@
+---
+# ONE-OFF, MANUAL-ONLY workflow for the real profitability backtest
+# (fetch_historical_odds.py + backtest_profitability.py). Deliberately NOT
+# added to update-predictions.yml's Tue-Fri cron: the historical-odds fetch
+# costs real, non-refundable API credits every time it runs (~1,080 for the
+# 2024+2025 sweep this is scoped for), so it must only run when someone
+# explicitly clicks "Run workflow" -- never on a schedule, never by accident.
+#
+# Usage: Actions tab -> "Historical Profitability Backtest" -> Run workflow.
+# Commits data/historical_odds_2024_2025.jsonl once fetched, so re-running
+# just this workflow again later reuses that file instead of re-fetching
+# (re-fetching would burn the credits again for no reason) -- delete that
+# file manually first if you actually want a fresh pull.
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  historical-backtest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip setuptools
+          pip install --no-deps nfl_data_py
+          pip install pandas numpy pyarrow scikit-learn scipy requests appdirs
+
+      - name: Fetch historical odds (2024+2025, Tuesday-of-week snapshots)
+        working-directory: scripts
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        # Skips the fetch entirely if the file already exists (see cost
+        # note above) -- only fetches fresh if it's genuinely missing.
+        run: |
+          if [ -f ../data/historical_odds_2024_2025.jsonl ]; then
+            echo "data/historical_odds_2024_2025.jsonl already exists -- skipping re-fetch to avoid burning credits again."
+            echo "Delete that file first (via GitHub's web UI) if you actually want a fresh pull."
+          else
+            python fetch_historical_odds.py
+          fi
+
+      - name: Run profitability backtest against real point-in-time odds
+        working-directory: scripts
+        run: python backtest_profitability.py | tee ../data/profitability_backtest_output.txt
+
+      - name: Commit and push results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/historical_odds_2024_2025.jsonl data/profitability_backtest_output.txt
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Historical profitability backtest run [skip ci]"
+            git push
+          fi

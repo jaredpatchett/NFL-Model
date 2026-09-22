@@ -87,14 +87,24 @@ def fetch_snapshot(snapshot_iso: str, api_key: str) -> list[dict] | None:
         return None
 
 
+def load_schedule() -> pd.DataFrame:
+    """Fetches the real nflverse schedule (with final scores) directly --
+    this repo doesn't already have a local copy of this file; earlier
+    testing of this script used one that existed only in the sandbox it was
+    built in, which would have failed the first time this actually ran here."""
+    resp = requests.get("https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv", timeout=30)
+    resp.raise_for_status()
+    import io
+    return pd.read_csv(io.StringIO(resp.text), low_memory=False)
+
+
 def main():
     api_key = os.environ.get("ODDS_API_KEY")
     if not api_key:
         print("ODDS_API_KEY not set -- nothing to do.")
         sys.exit(1)
 
-    df = pd.read_csv("games_full.csv", low_memory=False) if os.path.exists("games_full.csv") \
-        else pd.read_csv("../games_full.csv", low_memory=False)
+    df = load_schedule()
     schedule = df[(df["season"].isin(SEASONS)) & (df["game_type"] == "REG")]
     snapshots = week_snapshot_dates(schedule)
 

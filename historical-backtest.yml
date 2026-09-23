@@ -1,4 +1,5 @@
 ---
+name: Historical Profitability Backtest
 # ONE-OFF, MANUAL-ONLY workflow for the real profitability backtest
 # (fetch_historical_odds.py + backtest_profitability.py). Deliberately NOT
 # added to update-predictions.yml's Tue-Fri cron: the historical-odds fetch

@@ -653,14 +653,32 @@
   function fmtOdds(x){ return x==null ? '\u2014' : (x>0?'+':'')+x; }
   function edgeClass(v){ if(v==null) return 'edge-flat'; return v>0 ? 'edge-pos' : v<0 ? 'edge-neg' : 'edge-flat'; }
 
-  // OFFICIAL/LEAN status pills for the Edge Board, same visual language as
-  // the TD Props tab's STATUS column. Spread and total reuse the EXACT
-  // thresholds already established and tested in the Matchup Projector
-  // modal's spreadVerdict()/totalVerdict() (3pt / 1.5pt) -- not new numbers
-  // invented for this table. Moneyline didn't have a verdict system before
-  // this; its thresholds reuse the old playBadge() unit-sizing boundaries
-  // (5% / 1.5% EV) that were already live here, just relabeled instead of
-  // introducing fresh, uncalibrated numbers.
+  // OFFICIAL/LEAN thresholds -- UPDATED with real, validated numbers from
+  // the profitability backtest (438 real games, 2024+2025, real
+  // point-in-time Tuesday odds -- not closing lines, not a guess). Each
+  // threshold sits where the real win-rate/ROI sweep showed a genuine,
+  // monotonic step up in performance, not a round number picked by feel.
+  // See scripts/backtest_profitability.py for the sweep itself.
+  //   Spread:    OFFICIAL >=5.0pts (72%+ in the sweep, n=105) -- up from
+  //              3.0pts, which the sweep showed was leaving real value
+  //              sitting in the 3-5pt band unflagged.
+  //   Total:     NEW OFFICIAL tier >=3.0pts (68% in the sweep, n=156) --
+  //              total previously had no OFFICIAL tier at all. Real
+  //              signal against early-week lines specifically; the
+  //              original closing-line finding (market wins) still holds
+  //              at kickoff -- this edge is real but it's an early-week
+  //              phenomenon, not a contradiction of that finding.
+  //   Moneyline: OFFICIAL >=10% EV (61%+ in the sweep, n=103) -- up from 5%.
+  // LEAN floors (1.5pts / 1.5pts / 1.5% EV) are unchanged -- the sweep
+  // showed that whole lower band is already real, positive signal, just a
+  // weaker one than the new OFFICIAL bar.
+  //
+  // IMPORTANT CAVEAT, stated plainly per the user's own instruction: these
+  // are labeling thresholds only. OFFICIAL means "this backtested well,"
+  // not "place a real wager" -- no live money is being sized or
+  // recommended off these tags yet. Live 2026 tracking is still only one
+  // real week deep; treat OFFICIAL as a stronger claim than LEAN, not as
+  // betting advice, until a real live track record accumulates behind it.
   //
   // MIN_GAMES_FOR_OFFICIAL (added after a real Week 2 case: four home-
   // underdog moneylines all showing huge EV off power ratings barely
@@ -672,32 +690,36 @@
   // of OFFICIAL, regardless of how large the raw number looks. 48 games is
   // roughly 3 weeks of a full slate -- a judgment call for "give the model
   // a few real weeks first," NOT an empirically-tuned cutoff the way the
-  // carryover fix itself was validated against real 2023-2025 data.
+  // threshold VALUES above were.
   const MIN_GAMES_FOR_OFFICIAL = 48;
 
   function spreadStatus(edge, gamesUsed){
     if(edge == null) return '<span class="status-none">\u2014</span>';
     const abs = Math.abs(edge);
     const thinData = gamesUsed != null && gamesUsed < MIN_GAMES_FOR_OFFICIAL;
-    if(abs >= 3) return thinData
+    if(abs >= 5.0) return thinData
       ? '<span class="status-pill status-lean" title="Edge clears our OFFICIAL threshold, but only '+gamesUsed+' real games back this rating -- capped at LEAN until more of the season has been played.">LEAN</span>'
       : '<span class="status-pill status-official">OFFICIAL</span>';
     if(abs >= 1.5) return '<span class="status-pill status-lean">LEAN</span>';
     return '<span class="status-none">\u2014</span>';
   }
-  function totalStatus(edge){
-    // Total is explicitly market-anchored and low-confidence (see the
-    // caveat banner) -- never OFFICIAL, only ever a soft LEAN at most, so
-    // the games-used gate is irrelevant here (there's no OFFICIAL tier to
-    // cap in the first place).
+  function totalStatus(edge, gamesUsed){
+    // Total now has a real OFFICIAL tier (see threshold note above) --
+    // previously capped at LEAN only. Same games-used gate as the other
+    // two markets now applies, since it can reach OFFICIAL too.
     if(edge == null) return '<span class="status-none">\u2014</span>';
-    if(Math.abs(edge) >= 1.5) return '<span class="status-pill status-lean">LEAN</span>';
+    const abs = Math.abs(edge);
+    const thinData = gamesUsed != null && gamesUsed < MIN_GAMES_FOR_OFFICIAL;
+    if(abs >= 3.0) return thinData
+      ? '<span class="status-pill status-lean" title="Edge clears our OFFICIAL threshold, but only '+gamesUsed+' real games back this rating -- capped at LEAN until more of the season has been played.">LEAN</span>'
+      : '<span class="status-pill status-official">OFFICIAL</span>';
+    if(abs >= 1.5) return '<span class="status-pill status-lean">LEAN</span>';
     return '<span class="status-none">\u2014</span>';
   }
   function moneylineStatus(ev, gamesUsed){
     if(ev == null) return '<span class="status-none">\u2014</span>';
     const thinData = gamesUsed != null && gamesUsed < MIN_GAMES_FOR_OFFICIAL;
-    if(ev >= 0.05) return thinData
+    if(ev >= 0.10) return thinData
       ? '<span class="status-pill status-lean" title="EV clears our OFFICIAL threshold, but only '+gamesUsed+' real games back this rating -- capped at LEAN until more of the season has been played.">LEAN</span>'
       : '<span class="status-pill status-official">OFFICIAL</span>';
     if(ev >= 0.015) return '<span class="status-pill status-lean">LEAN</span>';
@@ -793,7 +815,7 @@
             <div class="cell-model col-r">${g.model.pred_total.toFixed(1)}</div>
             <div class="cell-edge col-r ${edgeClass(e)}">${fmtSign1(e)}</div>
             <div class="cell-num col-r col-hide">${g.market_source==='live'?'LIVE':'SCHED'}</div>
-            <div class="col-c">${totalStatus(e)}</div>
+            <div class="col-c">${totalStatus(e, g.games_used)}</div>
             <div class="col-c"><button class="track-btn" title="Add to tracker" data-action="add-to-tracker" data-game-id="${g.game_id}" data-market="total">+</button></div>
           </div>`;
         }).join('');
@@ -914,25 +936,31 @@
         const side = e >= 0 ? g.home_team : g.away_team;
         const abs = Math.abs(e);
         const thinData = g.games_used != null && g.games_used < MIN_GAMES_FOR_OFFICIAL;
-        if(abs >= 3){
-          if(thinData) return {tier:'lean', tag:'LEAN', text:`${side} to cover \u2014 edge of ${fmtSign1(e)} pts clears our 3-point OFFICIAL threshold, but only ${g.games_used} real games back this rating -- capped at LEAN until more of the season has been played.`};
-          return {tier:'play', tag:'OFFICIAL', text:`${side} to cover \u2014 edge of ${fmtSign1(e)} pts clears our 3-point threshold.`};
+        if(abs >= 5.0){
+          if(thinData) return {tier:'lean', tag:'LEAN', text:`${side} to cover \u2014 edge of ${fmtSign1(e)} pts clears our 5-point OFFICIAL threshold (real-backtested, see model notes), but only ${g.games_used} real games back this rating -- capped at LEAN until more of the season has been played.`};
+          return {tier:'play', tag:'OFFICIAL', text:`${side} to cover \u2014 edge of ${fmtSign1(e)} pts clears our 5-point threshold.`};
         }
         if(abs >= 1.5) return {tier:'lean', tag:'LEAN', text:`${side} to cover \u2014 edge of ${fmtSign1(e)} pts clears our 1.5-point floor.`};
         return {tier:'none', text:`Edge of ${fmtSign1(e)} pts is under our 1.5-point floor.`};
       }
 
-      // Total is explicitly market-anchored and low-confidence (see the
-      // caveat banner) -- this never shows PLAY, only a soft directional
-      // lean, and says so plainly rather than implying confidence we
-      // haven't shown we have.
+      // Total now has a real, backtested OFFICIAL tier (3.0pts) -- no
+      // longer capped at LEAN-only. See threshold notes near
+      // MIN_GAMES_FOR_OFFICIAL above for the real 2024+2025 profitability
+      // sweep behind this number; it's a genuine early-week-line
+      // phenomenon, not a claim the total model beats CLOSING lines.
       function totalVerdict(){
         const e = g.edges.total_edge;
         if(e == null) return {tier:'none', text:'No live market total for this game yet.'};
         const dir = e >= 0 ? 'OVER' : 'UNDER';
         const abs = Math.abs(e);
-        if(abs >= 1.5) return {tier:'lean', tag:`LEAN ${dir}`, text:`Total model is market-anchored and low-confidence \u2014 treat this as a soft lean, not a play.`};
-        return {tier:'none', text:`Edge of ${fmtSign1(e)} pts is negligible, and the total model is low-confidence regardless.`};
+        const thinData = g.games_used != null && g.games_used < MIN_GAMES_FOR_OFFICIAL;
+        if(abs >= 3.0){
+          if(thinData) return {tier:'lean', tag:`LEAN ${dir}`, text:`Edge of ${fmtSign1(e)} pts clears our 3-point OFFICIAL threshold, but only ${g.games_used} real games back this rating -- capped at LEAN until more of the season has been played.`};
+          return {tier:'play', tag:`OFFICIAL ${dir}`, text:`Edge of ${fmtSign1(e)} pts clears our 3-point threshold -- real signal against early-week lines specifically, per the profitability backtest.`};
+        }
+        if(abs >= 1.5) return {tier:'lean', tag:`LEAN ${dir}`, text:`Edge of ${fmtSign1(e)} pts clears our 1.5-point floor.`};
+        return {tier:'none', text:`Edge of ${fmtSign1(e)} pts is negligible.`};
       }
 
       // Moneyline didn't have its own verdict in this modal before -- only
@@ -942,15 +970,15 @@
       // home EV does NOT by itself mean the away side is +EV (both sides
       // of a well-priced market are commonly slightly -EV due to the
       // book's own margin) -- said explicitly rather than implied.
-      // Thresholds reuse the same 5%/1.5% EV boundaries already used in
+      // Thresholds reuse the same 10%/1.5% EV boundaries already used in
       // the Edge Board's moneylineStatus(), not fresh numbers for this view.
       function moneylineVerdict(){
         const ev = g.edges.home_moneyline_ev;
         if(ev == null) return {tier:'none', text:'No live moneyline price for this game yet.'};
         const thinData = g.games_used != null && g.games_used < MIN_GAMES_FOR_OFFICIAL;
-        if(ev >= 0.05){
-          if(thinData) return {tier:'lean', tag:'LEAN', text:`${g.home_team} ML \u2014 EV of ${fmtSigned(ev)} clears our 5% OFFICIAL threshold, but only ${g.games_used} real games back this rating -- capped at LEAN until more of the season has been played.`};
-          return {tier:'play', tag:'OFFICIAL', text:`${g.home_team} ML \u2014 EV of ${fmtSigned(ev)} per $1 clears our 5% threshold.`};
+        if(ev >= 0.10){
+          if(thinData) return {tier:'lean', tag:'LEAN', text:`${g.home_team} ML \u2014 EV of ${fmtSigned(ev)} clears our 10% OFFICIAL threshold, but only ${g.games_used} real games back this rating -- capped at LEAN until more of the season has been played.`};
+          return {tier:'play', tag:'OFFICIAL', text:`${g.home_team} ML \u2014 EV of ${fmtSigned(ev)} per $1 clears our 10% threshold.`};
         }
         if(ev >= 0.015) return {tier:'lean', tag:'LEAN', text:`${g.home_team} ML \u2014 EV of ${fmtSigned(ev)} per $1 clears our 1.5% floor.`};
         return {tier:'none', text:`${g.home_team} ML's EV of ${fmtSigned(ev)} is under our 1.5% floor \u2014 the away side's EV isn't separately computed here.`};

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-23T16:05:04.944154+00:00",
+  "generated_at": "2026-09-23T17:34:04.544462+00:00",
   "season": 2026,
   "week": 3,
   "model_notes": {
@@ -1112,10 +1112,10 @@
       },
       "market": {
         "spread_line": 3.0,
-        "spread_price": -103,
+        "spread_price": -102,
         "total_line": 45.5,
         "home_moneyline": -148,
-        "away_moneyline": 138,
+        "away_moneyline": 135,
         "home_implied_prob": 0.5968
       },
       "edges": {
@@ -1762,15 +1762,15 @@
         "spread_line": -3.5,
         "spread_price": -105,
         "total_line": 42.5,
-        "home_moneyline": 165,
+        "home_moneyline": 164,
         "away_moneyline": -184,
-        "home_implied_prob": 0.3774
+        "home_implied_prob": 0.3788
       },
       "edges": {
         "spread_edge": 3.76,
         "total_edge": 0.3,
-        "moneyline_edge": 0.1305,
-        "home_moneyline_ev": 0.3457
+        "moneyline_edge": 0.129,
+        "home_moneyline_ev": 0.3407
       },
       "projector": {
         "proj_home_score": 21.5,
@@ -2197,7 +2197,7 @@
         "spread_price": 100,
         "total_line": 48.0,
         "home_moneyline": -410,
-        "away_moneyline": 360,
+        "away_moneyline": 370,
         "home_implied_prob": 0.8039
       },
       "edges": {
@@ -2844,27 +2844,27 @@
       "games_used": 32,
       "model": {
         "pred_home_margin": 3.25,
-        "pred_total": 45.24,
+        "pred_total": 44.24,
         "home_win_prob": 0.5974,
         "home_fair_moneyline": -148.4
       },
       "market": {
         "spread_line": 3.5,
         "spread_price": 106,
-        "total_line": 44.5,
+        "total_line": 44.0,
         "home_moneyline": -168,
-        "away_moneyline": 154,
+        "away_moneyline": 155,
         "home_implied_prob": 0.6269
       },
       "edges": {
         "spread_edge": -0.25,
-        "total_edge": 0.74,
+        "total_edge": 0.24,
         "moneyline_edge": -0.0295,
         "home_moneyline_ev": -0.047
       },
       "projector": {
-        "proj_home_score": 24.2,
-        "proj_away_score": 21.0,
+        "proj_home_score": 23.7,
+        "proj_away_score": 20.5,
         "cover_prob": 0.4923,
         "margin_resid_std": 13.16,
         "distribution": [
@@ -3287,7 +3287,7 @@
         "spread_price": -103,
         "total_line": 41.5,
         "home_moneyline": 195,
-        "away_moneyline": -225,
+        "away_moneyline": -220,
         "home_implied_prob": 0.339
       },
       "edges": {

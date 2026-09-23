@@ -1,0 +1,11 @@
+Building game model table (2021-2025)...
+[weather] 152 future outdoor home games needed weather: 0 live forecast, 123 seasonal history, 29 global fallback.
+2021 done.
+2022 done.
+2023 done.
+2024 done.
+2025 done.
+Downcasting floats.
+Train rows: 1676   Test rows (home rows, 2024+2025): 570
+Matched 0 of 570 test games to a real historical odds snapshot.
+No matches -- check that fetch_historical_odds.py actually ran and team codes align.

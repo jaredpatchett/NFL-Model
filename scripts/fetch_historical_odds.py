@@ -99,17 +99,26 @@ def load_schedule() -> pd.DataFrame:
 
 
 def get_deduplicated_real_games() -> pd.DataFrame:
+    """Backward-compatible wrapper -- the original 2024-2025 case. See
+    get_deduplicated_real_games_for()'s docstring for what this actually does."""
+    return get_deduplicated_real_games_for(OUT_PATH, SEASONS)
+
+
+def get_deduplicated_real_games_for(hist_path: str, seasons: list[int]) -> pd.DataFrame:
     """
     Same dedup/true-week-recovery logic as backtest_profitability.py's
     load_historical_odds() (see that function's docstring for the full
     story of the bug this fixes -- the rolling-window historical odds
     endpoint duplicating games under multiple weeks), but keeps `event_id`
     and each game's own correct target `snapshot_iso`, which that function
-    drops. Needed here so a player-props fetch can reuse the SAME real
-    event_ids already paid for in the game-lines fetch, rather than paying
-    for a second events lookup.
+    drops. Needed here so a player-props fetch (or, later, the props MODEL's
+    implied-total feature) can reuse the SAME real event_ids already paid
+    for in a game-lines fetch, rather than paying for a second events
+    lookup. Generalized to take a path + season list so it works for
+    EITHER the 2024-2025 file or a training-years file (e.g. 2021-2023),
+    not just the original hardcoded case.
     """
-    rows = [json.loads(l) for l in open(OUT_PATH)]
+    rows = [json.loads(l) for l in open(hist_path)]
     raw = pd.DataFrame(rows)
     raw = raw.drop(columns=["season", "week"])  # the original fetch-loop tags -- known buggy, see backtest_profitability.py's load_historical_odds docstring; the schedule merge below supplies the correct ones
     raw["commence_time"] = pd.to_datetime(raw["commence_time"])
@@ -118,7 +127,7 @@ def get_deduplicated_real_games() -> pd.DataFrame:
     raw["away_team"] = raw["away_team"].map(lambda n: TEAM_NAME_TO_ABBR.get(n, n))
 
     sched = load_schedule()
-    sched = sched[(sched["season"].isin(SEASONS)) & (sched["game_type"] == "REG")].copy()
+    sched = sched[(sched["season"].isin(seasons)) & (sched["game_type"] == "REG")].copy()
     sched["gameday"] = pd.to_datetime(sched["gameday"]).dt.date
     sched_key = sched[["season", "week", "gameday", "home_team", "away_team"]].rename(columns={"gameday": "game_date"})
     df = raw.merge(sched_key, on=["game_date", "home_team", "away_team"], how="inner")
@@ -150,22 +159,32 @@ TEAM_NAME_TO_ABBR = {
 
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--seasons", type=int, nargs="+", default=SEASONS,
+                         help="Seasons to fetch, e.g. --seasons 2021 2022 2023. Defaults to 2024/2025.")
+    parser.add_argument("--out", type=str, default=None,
+                         help="Output path. Defaults to ../data/historical_odds_{first}_{last}.jsonl")
+    args = parser.parse_args()
+    seasons = args.seasons
+    out_path = args.out or f"../data/historical_odds_{min(seasons)}_{max(seasons)}.jsonl"
+
     api_key = os.environ.get("ODDS_API_KEY")
     if not api_key:
         print("ODDS_API_KEY not set -- nothing to do.")
         sys.exit(1)
 
     df = load_schedule()
-    schedule = df[(df["season"].isin(SEASONS)) & (df["game_type"] == "REG")]
+    schedule = df[(df["season"].isin(seasons)) & (df["game_type"] == "REG")]
     snapshots = week_snapshot_dates(schedule)
 
     est_cost = len(snapshots) * 10 * len(MARKETS.split(",")) * 1
-    print(f"About to fetch {len(snapshots)} weekly snapshots across {SEASONS}.")
+    print(f"About to fetch {len(snapshots)} weekly snapshots across {seasons}.")
     print(f"Estimated cost: {len(snapshots)} x 10 x {len(MARKETS.split(','))} markets x 1 region "
           f"= ~{est_cost} credits. This is NOT reversible once run.")
 
     out_rows = []
-    os.makedirs(os.path.dirname(OUT_PATH), exist_ok=True)
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
     for _, row in snapshots.iterrows():
         print(f"  Season {row['season']} Week {row['week']}: requesting snapshot {row['snapshot_iso']}...")
         events = fetch_snapshot(row["snapshot_iso"], api_key)
@@ -181,10 +200,10 @@ def main():
             })
         time.sleep(0.3)  # light self-throttle
 
-    with open(OUT_PATH, "w") as f:
+    with open(out_path, "w") as f:
         for r in out_rows:
             f.write(json.dumps(r) + "\n")
-    print(f"\nWrote {len(out_rows)} event snapshots to {OUT_PATH}")
+    print(f"\nWrote {len(out_rows)} event snapshots to {out_path}")
     print("Next: run backtest_profitability.py to grade these against real outcomes.")
 
 

@@ -136,6 +136,7 @@
   }
   .status-official{background:rgba(0,255,156,.16);color:var(--green);box-shadow:0 0 10px rgba(0,255,156,.3);}
   .status-degen,.status-lean{background:rgba(255,201,60,.16);color:var(--amber);}
+  .status-toppick{background:rgba(76,141,255,.16);color:var(--blue);box-shadow:0 0 10px rgba(76,141,255,.25);}
   .status-none{color:var(--text-faint2);font-family:'IBM Plex Mono',monospace;font-size:12px;}
   .board-footnote{padding:10px 16px 4px;font-size:10px;color:var(--text-faint2);font-family:'IBM Plex Mono',monospace;}
 
@@ -444,7 +445,7 @@
         <div class="col-r">RAW&nbsp;EDGE</div><div class="col-r col-hide">IMP&nbsp;TOT</div><div class="col-c">STATUS</div>
       </div>
       <div id="props-body"></div>
-      <div class="board-footnote">MODEL = model's own probability of scoring anytime. MODEL ODDS = that probability expressed as fair American odds, for a quick side-by-side against BEST PRICE (the actual sportsbook line) — informational only, edge/EV are computed from the real probability, not this conversion. BOOK % = BEST PRICE converted back to an implied probability. RAW EDGE = MODEL minus BOOK % — the full model's disagreement with the market. IMP TOT = Vegas-implied point total for this player's team in this game, real market data set before kickoff, not a trailing stat. MU = opponent's position-specific TD-rate-allowed vs league average (real play-by-play, not points allowed) — 1.00 = league average, informational only, not yet a hard qualifier. STATUS: OFFICIAL clears every blueprint check (snap share, red-zone role, regression-risk, and edge/EV thresholds) — the fully disciplined plays. DEGEN means the model still shows real positive edge but something in that screen said no — real value, not a clean bet; hover for exactly why. No pill at all means neither: no real edge either way.</div>
+      <div class="board-footnote">MODEL = model's own probability of scoring anytime. MODEL ODDS = that probability expressed as fair American odds, for a quick side-by-side against BEST PRICE (the actual sportsbook line) — informational only, edge/EV are computed from the real probability, not this conversion. BOOK % = BEST PRICE converted back to an implied probability. RAW EDGE = MODEL minus BOOK % — the full model's disagreement with the market. IMP TOT = Vegas-implied point total for this player's team in this game, real market data set before kickoff, not a trailing stat. MU = opponent's position-specific TD-rate-allowed vs league average (real play-by-play, not points allowed) — 1.00 = league average, informational only, not yet a hard qualifier. STATUS: OFFICIAL clears every blueprint check (snap share, red-zone role, regression-risk, and edge/EV thresholds) — the fully disciplined plays. TOP PICK is the single highest model-confidence player that already clears every real qualification filter but has no live price yet to verify an edge against — a strong candidate, not an edge-verified one, since there's no market price to beat. DEGEN means the model still shows real positive edge but something in that screen said no — real value, not a clean bet; hover for exactly why. No pill at all means neither: no real edge either way.</div>
     </div>
   </div>
 
@@ -1115,6 +1116,16 @@
         if(q.qualifies){
           const tooltip = q.reason_codes.length ? q.reason_codes.join(' \u00B7 ') : 'Clears every blueprint check';
           statusHTML = `<span class="status-pill status-official" title="${tooltip}">OFFICIAL</span>`;
+        } else if(q.tier === 'T'){
+          // Top Pick: the single highest model-confidence player that
+          // already cleared every real hard filter (snap share, red-zone
+          // role, regression check) but has no live price yet to verify an
+          // edge against -- see flag_top_unpriced_pick() in
+          // blueprint_qualification.py. Deliberately its OWN status, not
+          // OFFICIAL: OFFICIAL specifically means "beats a real price,"
+          // and there's no price here to beat.
+          const tooltip = q.reason_codes.length ? q.reason_codes.join(' \u00B7 ') : 'Top model-confidence pick, not yet priced';
+          statusHTML = `<span class="status-pill status-toppick" title="${tooltip}">TOP PICK</span>`;
         } else if(m && m.edge > 0){
           const tooltip = `Model sees real edge, but didn't clear the qualification screen: ${q.reason_codes.join(' \u00B7 ')}`;
           statusHTML = `<span class="status-pill status-degen" title="${tooltip}">DEGEN</span>`;

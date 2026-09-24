@@ -1,0 +1,66 @@
+---
+name: Retrain Props Model with Real 2021-2023 Odds
+# ONE-OFF, MANUAL-ONLY workflow. Fetches real game-lines odds for
+# 2021-2023 (the props model's TRAINING years) so build_real_props_model.py
+# can use real implied team totals during training instead of a
+# league-average-constant placeholder, then reruns the model with them.
+# Cheap relative to the player-props fetches: bulk game-lines endpoint, not
+# per-event -- ~1,620 credits for all three seasons (54 weekly snapshots x
+# 10 x 3 markets x 1 region).
+#
+# Usage: Actions tab -> "Retrain Props Model with Real 2021-2023 Odds" ->
+# Run workflow. Requires data/historical_player_props_2024_2025.jsonl and
+# data/historical_odds_2024_2025.jsonl to already exist (from the earlier
+# "Player Props Profitability Backtest" and "Historical Profitability
+# Backtest" runs) -- this only adds the missing training-years piece.
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-training-odds:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip setuptools
+          pip install --no-deps nfl_data_py
+          pip install pandas numpy pyarrow scikit-learn scipy requests appdirs
+
+      - name: Fetch 2021-2023 historical game odds
+        working-directory: scripts
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        run: |
+          if [ -f ../data/historical_odds_2021_2023.jsonl ]; then
+            echo "data/historical_odds_2021_2023.jsonl already exists -- skipping re-fetch to avoid burning credits again."
+            echo "Delete that file first (via GitHub's web UI) if you actually want a fresh pull."
+          else
+            python fetch_historical_odds.py --seasons 2021 2022 2023
+          fi
+
+      - name: Retrain and test the real props model
+        working-directory: scripts
+        run: python build_real_props_model.py | tee ../data/real_props_model_output.txt
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/historical_odds_2021_2023.jsonl data/real_props_model_output.txt
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Retrain props model with real 2021-2023 implied totals [skip ci]"
+            git push
+          fi

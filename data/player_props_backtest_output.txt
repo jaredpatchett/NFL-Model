@@ -1,0 +1,17 @@
+Loading real player stats (2024+2025)...
+Building leakage-safe trailing averages per stat...
+Loading real historical prop odds...
+Loaded 895 real historical prop lines.
+Matched 866 of 895 prop lines to a real player-week.
+
+  thresh     n    win%     roi%
+     0.0   587   50.6%    -2.6%
+    0.02   530   51.9%    -0.0%
+    0.04   493   51.7%    -0.3%
+    0.06   443   50.8%    -2.4%
+    0.08   408   50.2%    -3.4%
+     0.1   389   50.6%    -2.6%
+    0.15   296   50.3%    -3.3%
+     0.2   202   45.0%   -13.7%
+
+CAVEAT: only the Over price is captured from the real odds fetch -- Under bets in this sweep use an assumed -110, not a real captured price. ROI for Under-side picks is an approximation, not fully real, unlike the win/loss grading itself (which IS real).

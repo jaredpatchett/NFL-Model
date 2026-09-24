@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from blueprint_qualification import qualify
+from blueprint_qualification import qualify, flag_top_unpriced_pick
 
 
 def base_row(**overrides):
@@ -101,6 +101,49 @@ def main():
     r = qualify(base_row(matchup_rating=1.30), model_prob=0.35, market=base_market())
     checks.append(("strong matchup rating -> no matchup reason code",
                     any("Matchup rating" in c for c in r["reason_codes"]), False))
+
+    # ---- flag_top_unpriced_pick: real scenario from a live Week 2 case ----
+    # (K.Walker/J.Cook/D.Henry all had high model probability but failed the
+    # real snap-share hard filter; only J.Gibbs cleared every hard filter
+    # with no live price -- should be the one promoted to tier "T".)
+    def player(name, tier, prob):
+        return {"player_name": name, "qualification": {"tier": tier, "reason_codes": []},
+                "model": {"anytime_td_prob": prob}}
+
+    players = [
+        player("K.Walker", "D", 0.8141),   # failed snap share -> D, never eligible for promotion
+        player("J.Gibbs", "U", 0.7611),    # cleared every hard filter, just unpriced
+        player("J.Cook", "D", 0.7554),     # failed snap share -> D
+        player("D.Henry", "D", 0.7529),    # failed snap share -> D
+        player("S.Barkley", "C", 0.6122),  # has a real price already (Tier C/DEGEN) -- not a "U" candidate
+    ]
+    flag_top_unpriced_pick(players)
+    by_name = {p["player_name"]: p for p in players}
+    checks.append(("only Gibbs (the sole U-tier candidate) gets promoted", by_name["J.Gibbs"]["qualification"]["tier"], "T"))
+    checks.append(("Walker (failed hard filter, tier D) stays D, not promoted", by_name["K.Walker"]["qualification"]["tier"], "D"))
+    checks.append(("Barkley (already priced, tier C) stays C, not touched", by_name["S.Barkley"]["qualification"]["tier"], "C"))
+    checks.append(("Gibbs gets an explanatory reason code",
+                    any("Top Pick" in c for c in by_name["J.Gibbs"]["qualification"]["reason_codes"]), True))
+
+    # Among MULTIPLE unpriced-but-qualified candidates, only the single
+    # highest model-probability one should be promoted.
+    multi = [
+        player("A", "U", 0.55),
+        player("B", "U", 0.70),  # highest -- should be the only one promoted
+        player("C", "U", 0.60),
+    ]
+    flag_top_unpriced_pick(multi)
+    tiers = {p["player_name"]: p["qualification"]["tier"] for p in multi}
+    checks.append(("only the single highest-probability U candidate promoted", tiers, {"A": "U", "B": "T", "C": "U"}))
+
+    # No U-tier candidates at all -> no-op, doesn't crash
+    none_eligible = [player("X", "D", 0.90), player("Y", "C", 0.85)]
+    flag_top_unpriced_pick(none_eligible)
+    checks.append(("no U-tier candidates -> no-op", [p["qualification"]["tier"] for p in none_eligible], ["D", "C"]))
+
+    # Empty list -> no-op, doesn't crash
+    flag_top_unpriced_pick([])
+    checks.append(("empty player list -> no crash", True, True))
 
     print(f"{'check':70s} {'got':>15s} {'want':>15s}  ok")
     print("-" * 108)

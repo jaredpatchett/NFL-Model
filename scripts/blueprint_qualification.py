@@ -175,5 +175,44 @@ def qualify(row, model_prob: float, market: dict | None) -> dict:
             "regression_ratio": regression_ratio_out}
 
 
+def flag_top_unpriced_pick(players: list[dict]) -> None:
+    """
+    Mutates `players` in place: among players sitting at tier "U" (already
+    passed EVERY existing hard qualification filter -- snap share, TD
+    projection, real red-zone role, no regression-risk flag -- just missing
+    a live price to compute an edge against), promotes the single HIGHEST
+    model-probability one to a new tier "T" ("Top Pick").
+
+    WHY THIS IS A SEPARATE TIER, NOT FOLDED INTO OFFICIAL (A/B): OFFICIAL
+    specifically means "beats a real sportsbook price" -- it's an
+    edge-verified claim. A Top Pick has no price to compare against, so
+    there is no edge to verify; it's a model-confidence-plus-real-usage
+    claim instead ("if this had a normal price, we'd expect it to be a
+    live candidate"), which is a meaningfully different, weaker claim.
+    Conflating the two would make "OFFICIAL" stop meaning what it says.
+
+    Deliberately picks only ONE per run (not "everyone above some bar") --
+    added after a live case where 4+ players with 75-81% model TD
+    probability had no price, and simply lowering a threshold would have
+    flagged all of them at once with no real distinction between them;
+    "the single best candidate we can't yet verify" is a more honest,
+    usable signal than a wide, undifferentiated list.
+
+    Does nothing if no player is at tier "U" (nothing to promote) or if
+    `players` is empty.
+    """
+    candidates = [p for p in players if p["qualification"]["tier"] == "U"]
+    if not candidates:
+        return
+    best = max(candidates, key=lambda p: p["model"]["anytime_td_prob"])
+    best["qualification"]["tier"] = "T"
+    best["qualification"]["reason_codes"].append(
+        "Top Pick: highest model-confidence player that already clears every real "
+        "qualification filter (snap share, TD projection, red-zone role, regression check) "
+        "but has no live price yet -- NOT edge-verified, since there's no market price to "
+        "compare against. Re-evaluate once a real price posts."
+    )
+
+
 if __name__ == "__main__":
     print("Run test_blueprint_qualification.py to validate this module.")

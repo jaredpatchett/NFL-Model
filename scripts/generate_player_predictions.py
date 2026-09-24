@@ -226,6 +226,26 @@ def main():
             live_props_renamed[["merge_name", "live_anytime_td_price"]].drop_duplicates(subset=["merge_name"]),
             on="merge_name", how="left",
         )
+        # This is the number that actually matters and was previously
+        # invisible: "Got anytime-TD prices for X player-lines" (above)
+        # only proves the ODDS API RETURNED data -- it says nothing about
+        # whether those names actually matched anything in our own table.
+        # A paid key can be returning plenty of real lines while this merge
+        # silently drops almost all of them on a name-normalization
+        # mismatch, and the log would have looked identical either way
+        # until now. Print the real number so "the fetch is broken" and
+        # "the merge is broken" are no longer indistinguishable from the
+        # log alone.
+        matched = int(upcoming["live_anytime_td_price"].notna().sum())
+        print(f"  Of those {len(live_props)} fetched player-lines, {matched} of "
+              f"{len(upcoming)} candidates in OUR table actually matched one by name.")
+        if len(live_props) > 0 and matched < len(live_props) * 0.3:
+            unmatched_sample = live_props_renamed[
+                ~live_props_renamed["merge_name"].isin(upcoming["merge_name"])
+            ]["merge_name"].head(10).tolist()
+            print(f"  LOW MATCH RATE -- likely a name-normalization mismatch, not a missing-odds "
+                  f"problem. Sample of fetched names that did NOT match anyone in our table: "
+                  f"{unmatched_sample}")
     else:
         upcoming["live_anytime_td_price"] = np.nan
 
@@ -320,6 +340,9 @@ def main():
             "market": market,  # None if no live odds or no name match found
             "qualification": qual,  # the real blueprint-based tier -- see blueprint_qualification.py
         })
+
+    from blueprint_qualification import flag_top_unpriced_pick
+    flag_top_unpriced_pick(players)
 
     live_matched = int((upcoming["price_source"] == "live_api").sum())
     manual_matched = int((upcoming["price_source"] == "manual").sum())

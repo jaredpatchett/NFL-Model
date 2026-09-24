@@ -1,0 +1,19 @@
+Loading training data (2021-2023)...
+Loading test data (2024-2025)...
+Loading real team implied totals (test years, 2024-2025)...
+Loading real team implied totals (train years, 2021-2023)...
+  9228 of 17475 training rows matched a real implied total (52.8%).
+Loading real historical prop odds...
+
+Total matched props across all 3 stats: 398
+  thresh     n    win%     roi%
+     0.0   398   51.8%    -1.3%
+    0.02   363   51.2%    -2.4%
+    0.04   329   50.8%    -3.7%
+    0.06   285   51.9%    -1.4%
+    0.08   248   51.2%    -2.6%
+     0.1   210   52.9%     0.6%
+    0.15   151   57.6%     9.7%
+     0.2    86   57.0%     7.8%
+
+Training used REAL implied totals for 9228/17475 rows (52.8%) -- the earlier league-average-constant limitation is resolved for most of the training set.

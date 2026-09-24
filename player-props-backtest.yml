@@ -1,0 +1,72 @@
+---
+name: Player Props Profitability Backtest
+# ONE-OFF, MANUAL-ONLY workflow, same shape as "Historical Profitability
+# Backtest" but for Track C player props (fetch_historical_player_props.py
+# + backtest_player_props_profitability.py) instead of Track B game lines.
+# Deliberately NOT on a schedule: the props fetch costs real, non-refundable
+# API credits every time it runs (~13,140 for the 438-game 2024+2025 sweep
+# this is scoped for), so it must only run when someone explicitly clicks
+# "Run workflow".
+#
+# Usage: Actions tab -> "Player Props Profitability Backtest" -> Run workflow.
+# Requires data/historical_odds_2024_2025.jsonl to already exist (from a
+# prior "Historical Profitability Backtest" run) -- the props fetch reuses
+# those event IDs instead of paying for a second events lookup.
+# Commits data/historical_player_props_2024_2025.jsonl once fetched, so
+# re-running this workflow later reuses that file instead of re-fetching --
+# delete it manually first (via GitHub's web UI) if you want a fresh pull.
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  player-props-backtest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip setuptools
+          pip install --no-deps nfl_data_py
+          pip install pandas numpy pyarrow scikit-learn scipy requests appdirs
+
+      - name: Fetch historical player props (438 real games)
+        working-directory: scripts
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        run: |
+          if [ ! -f ../data/historical_odds_2024_2025.jsonl ]; then
+            echo "data/historical_odds_2024_2025.jsonl not found -- run 'Historical Profitability Backtest' first, this depends on its output."
+            exit 1
+          fi
+          if [ -f ../data/historical_player_props_2024_2025.jsonl ]; then
+            echo "data/historical_player_props_2024_2025.jsonl already exists -- skipping re-fetch to avoid burning credits again."
+            echo "Delete that file first (via GitHub's web UI) if you actually want a fresh pull."
+          else
+            python fetch_historical_player_props.py
+          fi
+
+      - name: Run player props backtest against real point-in-time odds
+        working-directory: scripts
+        run: python backtest_player_props_profitability.py | tee ../data/player_props_backtest_output.txt
+
+      - name: Commit and push results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/historical_player_props_2024_2025.jsonl data/player_props_backtest_output.txt
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Player props profitability backtest run [skip ci]"
+            git push
+          fi

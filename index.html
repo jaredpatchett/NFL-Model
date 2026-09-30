@@ -132,13 +132,23 @@
   .status-pill{
     display:inline-flex;align-items:center;justify-content:center;padding:3px 9px;min-width:60px;
     border-radius:6px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:700;
-    letter-spacing:.04em;cursor:default;flex:0 0 auto;
+    letter-spacing:.04em;cursor:default;flex:0 0 auto;white-space:nowrap;
   }
   .status-official{background:rgba(0,255,156,.16);color:var(--green);box-shadow:0 0 10px rgba(0,255,156,.3);}
   .status-degen,.status-lean{background:rgba(255,201,60,.16);color:var(--amber);}
   .status-toppick{background:rgba(76,141,255,.16);color:var(--blue);box-shadow:0 0 10px rgba(76,141,255,.25);}
   .status-none{color:var(--text-faint2);font-family:'IBM Plex Mono',monospace;font-size:12px;}
   .board-footnote{padding:10px 16px 4px;font-size:10px;color:var(--text-faint2);font-family:'IBM Plex Mono',monospace;}
+
+  .status-key{
+    display:flex;flex-direction:column;gap:8px;background:var(--panel);border:1px solid var(--line);
+    border-radius:8px;padding:12px 15px;margin-bottom:16px;
+  }
+  .status-key-item{display:flex;align-items:center;gap:10px;}
+  .status-key-item .status-pill{flex:0 0 auto;min-width:76px;}
+  .status-key-text{font-size:11px;color:var(--text-dim);line-height:1.4;}
+  .status-key-text b{color:var(--text);font-weight:700;}
+  @media(max-width:640px){.status-key-item{align-items:flex-start;}}
 
   .grid-lines{grid-template-columns:1.5fr 90px 90px 76px 60px 52px 44px;}
   .track-btn{
@@ -147,7 +157,7 @@
     font-size:15px;font-weight:700;cursor:pointer;line-height:1;
   }
   .track-btn:hover{border-color:var(--blue);color:var(--blue);}
-  .grid-props{grid-template-columns:1.5fr 1fr 60px 70px 70px 88px 66px 66px 70px 52px;}
+  .grid-props{grid-template-columns:1.4fr 1fr 60px 70px 70px 88px 66px 66px 70px 130px;}
   .grid-fantasy{grid-template-columns:1.5fr 60px 1fr 70px 70px 80px 70px;}
 
   .pr-table{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;}
@@ -347,7 +357,7 @@
   @media (max-width:860px){
     .stat-strip{grid-template-columns:repeat(3,1fr);}
     .grid-lines{grid-template-columns:1.1fr 60px 60px 50px 60px 36px;}
-    .grid-props{grid-template-columns:1.3fr 60px 76px 60px 52px;}
+    .grid-props{grid-template-columns:1.1fr 60px 76px 60px 100px;}
     .col-hide{display:none;}
     .pr-head,.pr-row{grid-template-columns:28px 1.3fr 60px 70px;}
     .pr-bar-col{display:none;}
@@ -435,6 +445,11 @@
     </div>
 
     <div class="caveat" id="props-caveat"></div>
+    <div class="status-key" id="status-key">
+      <div class="status-key-item"><span class="status-pill status-official">OFFICIAL</span><span class="status-key-text">Real usage role (snap share, red-zone role, 30%+ model prob) <b>+</b> edge \u2265 6% \u2014 <b>59.3% win rate, +10.3% ROI</b> across 27 real historical bets</span></div>
+      <div class="status-key-item"><span class="status-pill status-degen">DEGEN</span><span class="status-key-text">Real usage role <b>+</b> positive edge under 6% \u2014 <b>~53% win rate, +2.6\u20133.3% ROI</b>, real but thin (n=36\u201362)</span></div>
+      <div class="status-key-item"><span class="status-pill status-toppick">TOP PICK</span><span class="status-key-text">Highest-confidence player with a real role, no live price yet \u2014 not edge-verified</span></div>
+    </div>
     <div class="filters" id="pos-filters"></div>
 
     <div class="board">

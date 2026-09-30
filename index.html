@@ -445,7 +445,7 @@
         <div class="col-r">RAW&nbsp;EDGE</div><div class="col-r col-hide">IMP&nbsp;TOT</div><div class="col-c">STATUS</div>
       </div>
       <div id="props-body"></div>
-      <div class="board-footnote">MODEL = model's own probability of scoring anytime. MODEL ODDS = that probability expressed as fair American odds, for a quick side-by-side against BEST PRICE (the actual sportsbook line) — informational only, edge/EV are computed from the real probability, not this conversion. BOOK % = BEST PRICE converted back to an implied probability. RAW EDGE = MODEL minus BOOK % — the full model's disagreement with the market. IMP TOT = Vegas-implied point total for this player's team in this game, real market data set before kickoff, not a trailing stat. MU = opponent's position-specific TD-rate-allowed vs league average (real play-by-play, not points allowed) — 1.00 = league average, informational only, not yet a hard qualifier. STATUS is now set by REAL BACKTESTED edge thresholds (438 real games, real point-in-time historical odds, not a guess — see scripts/backtest_td_profitability.py): OFFICIAL requires edge ≥8% (32.1% win rate, +38.5% ROI across 53 real historical bets). DEGEN requires edge ≥4% but under 8% (22.0% win rate, +25.3% ROI across 191 bets — real signal, just weaker than the OFFICIAL tier). The exact edge % is shown next to the pill. TOP PICK is the single highest model-confidence player that already clears every real qualification filter but has no live price yet to verify an edge against — a strong candidate, not an edge-verified one, since there's no market price to beat. No pill at all means the edge is under 4%, or there's no live price.</div>
+      <div class="board-footnote">MODEL = model's own probability of scoring anytime. MODEL ODDS = that probability expressed as fair American odds, for a quick side-by-side against BEST PRICE (the actual sportsbook line) — informational only, edge/EV are computed from the real probability, not this conversion. BOOK % = BEST PRICE converted back to an implied probability. RAW EDGE = MODEL minus BOOK % — the full model's disagreement with the market. IMP TOT = Vegas-implied point total for this player's team in this game, real market data set before kickoff, not a trailing stat. MU = opponent's position-specific TD-rate-allowed vs league average (real play-by-play, not points allowed) — 1.00 = league average, informational only, not yet a hard qualifier. STATUS requires REAL USAGE ROLE FIRST (passes the blueprint's hard filters — min 70% snap share, min 5% red-zone role, min 30% model probability — added back after a live case where Travis Hunter, now primarily a defensive player, got flagged OFFICIAL off a 21% model probability purely from long-shot-odds math) THEN a real backtested edge threshold on top (438 real games, real point-in-time historical odds — see scripts/backtest_td_profitability.py, which re-ran the sweep specifically gated on real usage after finding 88.7% of the original unfiltered "edge" signal was bench-player noise): OFFICIAL requires edge ≥6% (59.3% win rate, +10.3% ROI across 27 real historical bets, AFTER excluding that noise). DEGEN requires any positive edge under 6%, still passing the usage-role gate (~53% win rate, +2.6-3.3% ROI, n=36-62 — real but thin). The exact edge % is shown next to the pill. TOP PICK is the single highest model-confidence player that already clears every real qualification filter but has no live price yet to verify an edge against. No pill at all means either the usage-role checks fail (the common case — most players don't have a real role) or there's no live price.</div>
     </div>
   </div>
 
@@ -1108,51 +1108,55 @@
           // that flag no longer determines what's shown as OFFICIAL, so
           // sorting by it would visually contradict the pills on screen.
           const tierRank = p => p.qualification.tier === 'T' ? 3
-            : (p.market && p.market.edge >= 0.08) ? 2
-            : (p.market && p.market.edge >= 0.04) ? 1 : 0;
+            : p.qualification.tier === 'D' ? -1  // hard-fail: sink below even "no status" so real, if-weak, candidates surface above known bench-role noise
+            : (p.market && p.market.edge >= 0.06) ? 2
+            : (p.market && p.market.edge >= 0.0) ? 1 : 0;
           return (tierRank(b) - tierRank(a)) || ((b.market?b.market.edge:-1) - (a.market?a.market.edge:-1)) || (b.model.anytime_td_prob - a.model.anytime_td_prob);
         });
       document.getElementById('props-body').innerHTML = rows.map(p => {
         const m = p.market;
         const q = p.qualification;
-        // REBUILT with real, backtested thresholds (438 real games,
-        // 2024+2025, real point-in-time historical anytime-TD odds -- not
-        // a guess). The real sweep showed a clean, monotonic climb in both
-        // win rate and ROI as edge increases. RAISED from an initial
-        // 0.06/0.02 to 0.08/0.04 after the first live week at 0.06 flagged
-        // 77 of 352 priced players (22%) as OFFICIAL -- roughly 2.6x the
-        // historical rate (105/1270, 8.3%) that threshold was set from.
-        // 0.06 still had the single best raw ROI in the backtest (+48.2%),
-        // but 0.08 trades a modest amount of that (+38.5%) for meaningfully
-        // higher win rate (32.1% vs 26.7%) and roughly half the volume
-        // (53 vs 105 in the historical sample) -- a more conservative,
-        // less volume-sensitive line while the live-vs-historical volume
-        // gap itself is still unexplained (see the conversation this was
-        // tuned in: real week-to-week market variance and a possible minor
-        // historical-odds parsing edge case were both flagged as open,
-        // unresolved possibilities, not confirmed). This REPLACES the
-        // original OFFICIAL logic (blueprint qualification screen pass/
-        // fail, never backtested against real historical odds) -- that
-        // screen fired on real money only once in 3 live weeks and lost,
-        // while this edge-threshold approach has 430+ real backtested bets
-        // behind it. See scripts/backtest_td_profitability.py.
-        const TD_OFFICIAL_EDGE = 0.08;  // real backtested: 32.1% win, +38.5% ROI, n=53
-        const TD_DEGEN_EDGE = 0.04;     // real backtested: 22.0% win, +25.3% ROI, n=191
+        // REBUILT AGAIN after a serious real finding: the edge-only
+        // thresholds above were validated on a backtest sample where 1,127
+        // of 1,270 matched historical bets (88.7%) were bench/deep-role
+        // players that fail the blueprint's own hard usage filters (min
+        // 30% model probability, min 70% snap share, min 5% red-zone
+        // role) -- caught from a real live case (Travis Hunter, now
+        // primarily a defensive player, flagged OFFICIAL off a 21% model
+        // probability purely because long-shot odds inflate edge% for
+        // low-probability players). Re-running the same edge sweep
+        // GATED on also passing those hard filters showed the ROI signal
+        // that looked strong (+38.5% at edge>=0.08) was mostly THAT
+        // bench-player noise -- once filtered to real-role players, only
+        // edge>=0.06 held up with a real, positive, not-tiny-sample
+        // number: 59.3% win rate, +10.3% ROI, n=27. That's what's used
+        // now. See scripts/backtest_td_profitability.py's two-sweep
+        // (unfiltered vs. hard-filter-gated) output for the full picture.
+        const TD_HARD_FAIL = (q.tier === 'D');  // backend already computes this -- same blueprint check, not recomputed here
+        const TD_OFFICIAL_EDGE = 0.06;  // real, hard-filter-gated: 59.3% win, +10.3% ROI, n=27
+        const TD_DEGEN_EDGE = 0.0;      // real, hard-filter-gated floor: ~53% win, +2.6-3.3% ROI, n=36-62 -- thin but real positive signal
         let statusHTML;
         if(q.tier === 'T'){
           // Top Pick: the single highest model-confidence player that
           // already cleared every real hard filter (snap share, red-zone
           // role, regression check) but has no live price yet to verify an
           // edge against -- see flag_top_unpriced_pick() in
-          // blueprint_qualification.py. Unrelated to the edge-threshold
-          // work above (there's no price here to compute an edge from).
+          // blueprint_qualification.py. Already hard-filter-safe by
+          // construction (that function only ever promotes players who
+          // passed the same checks), so no additional gating needed here.
           const tooltip = q.reason_codes.length ? q.reason_codes.join(' \u00B7 ') : 'Top model-confidence pick, not yet priced';
           statusHTML = `<span class="status-pill status-toppick" title="${tooltip}">TOP PICK</span>`;
+        } else if(TD_HARD_FAIL){
+          // Fails real usage checks (thin snap share, no real red-zone
+          // role, or under 30% model probability) -- no status pill at
+          // all, regardless of how large the raw edge% looks. This is
+          // the exact gate that was missing before.
+          statusHTML = `<span class="status-none">\u2014</span>`;
         } else if(m && m.edge >= TD_OFFICIAL_EDGE){
-          const tooltip = `Edge +${(m.edge*100).toFixed(1)}% clears our real-backtested 8% OFFICIAL threshold (32.1% win rate, +38.5% ROI across 53 real historical bets).`;
+          const tooltip = `Real usage role confirmed (passes snap share / red-zone role / TD-probability checks) AND edge +${(m.edge*100).toFixed(1)}% clears our real-backtested 6% OFFICIAL threshold (59.3% win rate, +10.3% ROI across 27 real historical bets, AFTER excluding bench-player noise).`;
           statusHTML = `<span class="status-pill status-official" title="${tooltip}">OFFICIAL <span style="opacity:.7">+${(m.edge*100).toFixed(1)}%</span></span>`;
         } else if(m && m.edge >= TD_DEGEN_EDGE){
-          const tooltip = `Edge +${(m.edge*100).toFixed(1)}% clears our real-backtested 4% floor (22.0% win rate, +25.3% ROI across 191 real historical bets) but not the 8% OFFICIAL threshold.`;
+          const tooltip = `Real usage role confirmed, and edge is positive (+${(m.edge*100).toFixed(1)}%) but under our 6% OFFICIAL threshold -- real but thin/weaker signal (~53% win rate, +2.6-3.3% ROI in the real backtest, n=36-62).`;
           statusHTML = `<span class="status-pill status-degen" title="${tooltip}">DEGEN <span style="opacity:.7">+${(m.edge*100).toFixed(1)}%</span></span>`;
         } else {
           statusHTML = `<span class="status-none">\u2014</span>`;

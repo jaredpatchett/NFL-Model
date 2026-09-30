@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-30T16:25:33.542204+00:00",
+  "generated_at": "2026-09-30T16:34:24.468837+00:00",
   "season": 2026,
   "week": 4,
   "model_notes": {
@@ -101,10 +101,10 @@
         "tier": "A"
       },
       "market": {
-        "anytime_td_price": -210,
-        "implied_prob": 0.6774,
-        "edge": 0.076,
-        "ev": 0.1122,
+        "anytime_td_price": -215,
+        "implied_prob": 0.6825,
+        "edge": 0.0709,
+        "ev": 0.1039,
         "source": "live_api"
       },
       "qualification": {
@@ -879,10 +879,10 @@
         "tier": "B"
       },
       "market": {
-        "anytime_td_price": -125,
-        "implied_prob": 0.5556,
-        "edge": -0.1632,
-        "ev": -0.2938,
+        "anytime_td_price": -130,
+        "implied_prob": 0.5652,
+        "edge": -0.1729,
+        "ev": -0.3059,
         "source": "live_api"
       },
       "qualification": {
@@ -2197,10 +2197,10 @@
         "tier": "B"
       },
       "market": {
-        "anytime_td_price": 130,
-        "implied_prob": 0.4348,
-        "edge": -0.1409,
-        "ev": -0.3241,
+        "anytime_td_price": 120,
+        "implied_prob": 0.4545,
+        "edge": -0.1607,
+        "ev": -0.3534,
         "source": "live_api"
       },
       "qualification": {
@@ -2917,10 +2917,10 @@
         "tier": "B"
       },
       "market": {
-        "anytime_td_price": 240,
-        "implied_prob": 0.2941,
-        "edge": -0.0389,
-        "ev": -0.1323,
+        "anytime_td_price": 235,
+        "implied_prob": 0.2985,
+        "edge": -0.0433,
+        "ev": -0.1451,
         "source": "live_api"
       },
       "qualification": {
@@ -3944,10 +3944,10 @@
         "tier": "C"
       },
       "market": {
-        "anytime_td_price": 250,
-        "implied_prob": 0.2857,
-        "edge": -0.0575,
-        "ev": -0.2014,
+        "anytime_td_price": 255,
+        "implied_prob": 0.2817,
+        "edge": -0.0535,
+        "ev": -0.19,
         "source": "live_api"
       },
       "qualification": {
@@ -4527,10 +4527,10 @@
         "tier": "C"
       },
       "market": {
-        "anytime_td_price": 525,
-        "implied_prob": 0.16,
-        "edge": 0.0548,
-        "ev": 0.3423,
+        "anytime_td_price": 575,
+        "implied_prob": 0.1481,
+        "edge": 0.0666,
+        "ev": 0.4497,
         "source": "live_api"
       },
       "qualification": {
@@ -6290,10 +6290,10 @@
         "tier": "C"
       },
       "market": {
-        "anytime_td_price": 1100,
-        "implied_prob": 0.0833,
-        "edge": 0.0991,
-        "ev": 1.1895,
+        "anytime_td_price": 950,
+        "implied_prob": 0.0952,
+        "edge": 0.0872,
+        "ev": 0.9158,
         "source": "live_api"
       },
       "qualification": {
@@ -6709,10 +6709,10 @@
         "tier": "C"
       },
       "market": {
-        "anytime_td_price": 330,
-        "implied_prob": 0.2326,
-        "edge": -0.0567,
-        "ev": -0.2437,
+        "anytime_td_price": 340,
+        "implied_prob": 0.2273,
+        "edge": -0.0514,
+        "ev": -0.2261,
         "source": "live_api"
       },
       "qualification": {
@@ -13126,10 +13126,10 @@
         "tier": "D"
       },
       "market": {
-        "anytime_td_price": 1600,
-        "implied_prob": 0.0588,
-        "edge": 0.0644,
-        "ev": 1.0951,
+        "anytime_td_price": 2000,
+        "implied_prob": 0.0476,
+        "edge": 0.0756,
+        "ev": 1.588,
         "source": "live_api"
       },
       "qualification": {
@@ -16748,10 +16748,10 @@
         "tier": "D"
       },
       "market": {
-        "anytime_td_price": 800,
-        "implied_prob": 0.1111,
-        "edge": -0.0151,
-        "ev": -0.136,
+        "anytime_td_price": 900,
+        "implied_prob": 0.1,
+        "edge": -0.004,
+        "ev": -0.04,
         "source": "live_api"
       },
       "qualification": {

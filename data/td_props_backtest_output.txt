@@ -1,0 +1,33 @@
+Building player-TD feature table ([2021, 2022, 2023, 2024, 2025])...
+2021 done.
+2022 done.
+2023 done.
+2024 done.
+2025 done.
+Downcasting floats.
+Downcasting floats.
+Downcasting floats.
+Downcasting floats.
+Downcasting floats.
+WARNING: load_weekly([2025]) failed (HTTP Error 404: Not Found) -- skipping that season for name/position lookup only, does not affect core features.
+WARNING: 15 player_id(s) have no position from EITHER weekly data or the ID crosswalk, and will be dropped by the position filter below (real, not usage-related -- likely a genuine data gap for that player_id, worth a manual check if any of these look like they should be active):
+  ['00-0032380', '00-0040547', '00-0038609', '00-0037757', '00-0034678', '00-0033538', '00-0040245', '00-0038645', '00-0036406', '00-0037241', '00-0031279', '00-0035238', '00-0037194', '00-0039459', '00-0039568']
+WARNING: 15 player_id(s) have no player_name from EITHER source -- these will still get a real prediction (name is cosmetic, unlike position which is used as a real feature), but will display as a literal 'NaN' or blank in any downstream UI until this resolves itself. Worth a manual check:
+  ['00-0032380', '00-0040547', '00-0038609', '00-0037757', '00-0034678', '00-0033538', '00-0040245', '00-0038645', '00-0036406', '00-0037241', '00-0031279', '00-0035238', '00-0037194', '00-0039459', '00-0039568']
+Rows after cold-start filter: 19070
+Train rows: 11400   Test rows (2024-2025): 7670
+Out-of-sample AUC on 2024-2025 (sanity check vs the validated 0.70 on 2024 alone): 0.6925
+  0 of 7670 test rows have no full name available -- these can never match a real odds line and will be dropped at the merge step below.
+Loading real historical anytime-TD odds...
+Loaded 3456 real historical TD price rows.
+Matched 1270 of 7670 test player-games to a real historical TD price.
+
+  thresh     n    win%     roi%
+     0.0   430   22.6%    10.1%
+    0.02   311   21.5%    15.4%
+    0.04   191   22.0%    25.3%
+    0.06   105   26.7%    48.2%
+    0.08    53   32.1%    38.5%
+     0.1    28   42.9%   -18.2%
+    0.15     7   42.9%    -0.2%
+     0.2     0   (too few)

@@ -1,0 +1,68 @@
+---
+name: TD Props Profitability Backtest
+# ONE-OFF, MANUAL-ONLY workflow, same shape as the spread/total/ML and
+# player-props profitability backtests -- fetches real point-in-time
+# anytime-TD odds for the same 438 real games (reusing already-paid-for
+# event IDs) and grades the EXACT SAME validated model (2021-2023 train,
+# same LogisticRegression, same features -- AUC 0.70 on held-out 2024)
+# against them. Deliberately NOT on a schedule: the fetch costs real,
+# non-refundable API credits (~4,380 for this sweep).
+#
+# Usage: Actions tab -> "TD Props Profitability Backtest" -> Run workflow.
+# Requires data/historical_odds_2024_2025.jsonl to already exist (from the
+# "Historical Profitability Backtest" run) -- reuses those event IDs.
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  td-profitability-backtest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip setuptools
+          pip install --no-deps nfl_data_py
+          pip install pandas numpy pyarrow scikit-learn scipy requests appdirs
+
+      - name: Fetch historical anytime-TD odds (438 real games)
+        working-directory: scripts
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        run: |
+          if [ ! -f ../data/historical_odds_2024_2025.jsonl ]; then
+            echo "data/historical_odds_2024_2025.jsonl not found -- run 'Historical Profitability Backtest' first, this depends on its output."
+            exit 1
+          fi
+          if [ -f ../data/historical_td_odds_2024_2025.jsonl ]; then
+            echo "data/historical_td_odds_2024_2025.jsonl already exists -- skipping re-fetch to avoid burning credits again."
+            echo "Delete that file first (via GitHub's web UI) if you actually want a fresh pull."
+          else
+            python fetch_historical_td_odds.py
+          fi
+
+      - name: Run TD profitability backtest against real point-in-time odds
+        working-directory: scripts
+        run: python backtest_td_profitability.py | tee ../data/td_props_backtest_output.txt
+
+      - name: Commit and push results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/historical_td_odds_2024_2025.jsonl data/td_props_backtest_output.txt
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "TD props profitability backtest run [skip ci]"
+            git push
+          fi

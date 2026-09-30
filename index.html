@@ -445,7 +445,7 @@
         <div class="col-r">RAW&nbsp;EDGE</div><div class="col-r col-hide">IMP&nbsp;TOT</div><div class="col-c">STATUS</div>
       </div>
       <div id="props-body"></div>
-      <div class="board-footnote">MODEL = model's own probability of scoring anytime. MODEL ODDS = that probability expressed as fair American odds, for a quick side-by-side against BEST PRICE (the actual sportsbook line) — informational only, edge/EV are computed from the real probability, not this conversion. BOOK % = BEST PRICE converted back to an implied probability. RAW EDGE = MODEL minus BOOK % — the full model's disagreement with the market. IMP TOT = Vegas-implied point total for this player's team in this game, real market data set before kickoff, not a trailing stat. MU = opponent's position-specific TD-rate-allowed vs league average (real play-by-play, not points allowed) — 1.00 = league average, informational only, not yet a hard qualifier. STATUS is now set by REAL BACKTESTED edge thresholds (438 real games, real point-in-time historical odds, not a guess — see scripts/backtest_td_profitability.py): OFFICIAL requires edge ≥6% (26.7% win rate, +48.2% ROI across 105 real historical bets — the real peak). DEGEN requires edge ≥2% but under 6% (21.5% win rate, +15.4% ROI across 311 bets — real signal, just weaker than the OFFICIAL tier). The exact edge % is shown next to the pill. TOP PICK is the single highest model-confidence player that already clears every real qualification filter but has no live price yet to verify an edge against — a strong candidate, not an edge-verified one, since there's no market price to beat. No pill at all means the edge is under 2%, or there's no live price.</div>
+      <div class="board-footnote">MODEL = model's own probability of scoring anytime. MODEL ODDS = that probability expressed as fair American odds, for a quick side-by-side against BEST PRICE (the actual sportsbook line) — informational only, edge/EV are computed from the real probability, not this conversion. BOOK % = BEST PRICE converted back to an implied probability. RAW EDGE = MODEL minus BOOK % — the full model's disagreement with the market. IMP TOT = Vegas-implied point total for this player's team in this game, real market data set before kickoff, not a trailing stat. MU = opponent's position-specific TD-rate-allowed vs league average (real play-by-play, not points allowed) — 1.00 = league average, informational only, not yet a hard qualifier. STATUS is now set by REAL BACKTESTED edge thresholds (438 real games, real point-in-time historical odds, not a guess — see scripts/backtest_td_profitability.py): OFFICIAL requires edge ≥8% (32.1% win rate, +38.5% ROI across 53 real historical bets). DEGEN requires edge ≥4% but under 8% (22.0% win rate, +25.3% ROI across 191 bets — real signal, just weaker than the OFFICIAL tier). The exact edge % is shown next to the pill. TOP PICK is the single highest model-confidence player that already clears every real qualification filter but has no live price yet to verify an edge against — a strong candidate, not an edge-verified one, since there's no market price to beat. No pill at all means the edge is under 4%, or there's no live price.</div>
     </div>
   </div>
 
@@ -1108,8 +1108,8 @@
           // that flag no longer determines what's shown as OFFICIAL, so
           // sorting by it would visually contradict the pills on screen.
           const tierRank = p => p.qualification.tier === 'T' ? 3
-            : (p.market && p.market.edge >= 0.06) ? 2
-            : (p.market && p.market.edge >= 0.02) ? 1 : 0;
+            : (p.market && p.market.edge >= 0.08) ? 2
+            : (p.market && p.market.edge >= 0.04) ? 1 : 0;
           return (tierRank(b) - tierRank(a)) || ((b.market?b.market.edge:-1) - (a.market?a.market.edge:-1)) || (b.model.anytime_td_prob - a.model.anytime_td_prob);
         });
       document.getElementById('props-body').innerHTML = rows.map(p => {
@@ -1118,18 +1118,26 @@
         // REBUILT with real, backtested thresholds (438 real games,
         // 2024+2025, real point-in-time historical anytime-TD odds -- not
         // a guess). The real sweep showed a clean, monotonic climb in both
-        // win rate and ROI as edge increases: 22.6%/+10.1% at edge>=0,
-        // rising to 26.7%/+48.2% at edge>=0.06 (n=105) -- the real peak,
-        // before the sample thins out to noise at 0.10+ (n<30). This
-        // REPLACES the previous OFFICIAL logic (which used only the
-        // blueprint qualification screen's pass/fail, never backtested
-        // against real historical odds) -- that screen's own hard filters
-        // (snap share, red-zone role, regression check) turned out to
-        // fire on real money only once in 3 live weeks and lose, while
-        // this edge-threshold approach has 430+ real backtested bets
+        // win rate and ROI as edge increases. RAISED from an initial
+        // 0.06/0.02 to 0.08/0.04 after the first live week at 0.06 flagged
+        // 77 of 352 priced players (22%) as OFFICIAL -- roughly 2.6x the
+        // historical rate (105/1270, 8.3%) that threshold was set from.
+        // 0.06 still had the single best raw ROI in the backtest (+48.2%),
+        // but 0.08 trades a modest amount of that (+38.5%) for meaningfully
+        // higher win rate (32.1% vs 26.7%) and roughly half the volume
+        // (53 vs 105 in the historical sample) -- a more conservative,
+        // less volume-sensitive line while the live-vs-historical volume
+        // gap itself is still unexplained (see the conversation this was
+        // tuned in: real week-to-week market variance and a possible minor
+        // historical-odds parsing edge case were both flagged as open,
+        // unresolved possibilities, not confirmed). This REPLACES the
+        // original OFFICIAL logic (blueprint qualification screen pass/
+        // fail, never backtested against real historical odds) -- that
+        // screen fired on real money only once in 3 live weeks and lost,
+        // while this edge-threshold approach has 430+ real backtested bets
         // behind it. See scripts/backtest_td_profitability.py.
-        const TD_OFFICIAL_EDGE = 0.06;  // real backtested peak: 26.7% win, +48.2% ROI, n=105
-        const TD_DEGEN_EDGE = 0.02;     // real backtested floor for a worthwhile signal: 21.5% win, +15.4% ROI, n=311
+        const TD_OFFICIAL_EDGE = 0.08;  // real backtested: 32.1% win, +38.5% ROI, n=53
+        const TD_DEGEN_EDGE = 0.04;     // real backtested: 22.0% win, +25.3% ROI, n=191
         let statusHTML;
         if(q.tier === 'T'){
           // Top Pick: the single highest model-confidence player that
@@ -1141,10 +1149,10 @@
           const tooltip = q.reason_codes.length ? q.reason_codes.join(' \u00B7 ') : 'Top model-confidence pick, not yet priced';
           statusHTML = `<span class="status-pill status-toppick" title="${tooltip}">TOP PICK</span>`;
         } else if(m && m.edge >= TD_OFFICIAL_EDGE){
-          const tooltip = `Edge +${(m.edge*100).toFixed(1)}% clears our real-backtested 6% OFFICIAL threshold (peak ROI zone: 26.7% win rate, +48.2% ROI across 105 real historical bets).`;
+          const tooltip = `Edge +${(m.edge*100).toFixed(1)}% clears our real-backtested 8% OFFICIAL threshold (32.1% win rate, +38.5% ROI across 53 real historical bets).`;
           statusHTML = `<span class="status-pill status-official" title="${tooltip}">OFFICIAL <span style="opacity:.7">+${(m.edge*100).toFixed(1)}%</span></span>`;
         } else if(m && m.edge >= TD_DEGEN_EDGE){
-          const tooltip = `Edge +${(m.edge*100).toFixed(1)}% clears our real-backtested 2% floor (21.5% win rate, +15.4% ROI across 311 real historical bets) but not the 6% OFFICIAL threshold.`;
+          const tooltip = `Edge +${(m.edge*100).toFixed(1)}% clears our real-backtested 4% floor (22.0% win rate, +25.3% ROI across 191 real historical bets) but not the 8% OFFICIAL threshold.`;
           statusHTML = `<span class="status-pill status-degen" title="${tooltip}">DEGEN <span style="opacity:.7">+${(m.edge*100).toFixed(1)}%</span></span>`;
         } else {
           statusHTML = `<span class="status-none">\u2014</span>`;

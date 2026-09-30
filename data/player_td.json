@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-30T15:55:55.884749+00:00",
+  "generated_at": "2026-09-30T16:07:46.787662+00:00",
   "season": 2026,
   "week": 4,
   "model_notes": {
@@ -615,10 +615,10 @@
         "tier": "A"
       },
       "market": {
-        "anytime_td_price": -105,
-        "implied_prob": 0.5122,
-        "edge": -0.055,
-        "ev": -0.1073,
+        "anytime_td_price": -110,
+        "implied_prob": 0.5238,
+        "edge": -0.0666,
+        "ev": -0.1271,
         "source": "live_api"
       },
       "qualification": {
@@ -1205,16 +1205,18 @@
         "tier": "B"
       },
       "market": {
-        "anytime_td_price": 180,
-        "implied_prob": 0.3571,
-        "edge": 0.0033,
-        "ev": 0.0093,
+        "anytime_td_price": 175,
+        "implied_prob": 0.3636,
+        "edge": -0.0032,
+        "ev": -0.0087,
         "source": "live_api"
       },
       "qualification": {
         "qualifies": false,
-        "tier": "C",
-        "reason_codes": [],
+        "tier": "D",
+        "reason_codes": [
+          "Model projection does not exceed market implied probability"
+        ],
         "regression_ratio": 1.812
       }
     },
@@ -1420,10 +1422,10 @@
         "tier": "B"
       },
       "market": {
-        "anytime_td_price": 150,
-        "implied_prob": 0.4,
-        "edge": -0.0607,
-        "ev": -0.1518,
+        "anytime_td_price": 155,
+        "implied_prob": 0.3922,
+        "edge": -0.0529,
+        "ev": -0.1349,
         "source": "live_api"
       },
       "qualification": {
@@ -1458,17 +1460,18 @@
         "tier": "B"
       },
       "market": {
-        "anytime_td_price": 200,
-        "implied_prob": 0.3333,
-        "edge": 0.0029,
-        "ev": 0.0087,
+        "anytime_td_price": 190,
+        "implied_prob": 0.3448,
+        "edge": -0.0086,
+        "ev": -0.0249,
         "source": "live_api"
       },
       "qualification": {
         "qualifies": false,
-        "tier": "C",
+        "tier": "D",
         "reason_codes": [
-          "Matchup rating 1.04 below 1.10 preferred (informational only, not yet a disqualifier)"
+          "Matchup rating 1.04 below 1.10 preferred (informational only, not yet a disqualifier)",
+          "Model projection does not exceed market implied probability"
         ],
         "regression_ratio": 0.769
       }
@@ -1673,10 +1676,10 @@
         "tier": "B"
       },
       "market": {
-        "anytime_td_price": 170,
-        "implied_prob": 0.3704,
-        "edge": -0.06,
-        "ev": -0.162,
+        "anytime_td_price": 165,
+        "implied_prob": 0.3774,
+        "edge": -0.067,
+        "ev": -0.1775,
         "source": "live_api"
       },
       "qualification": {
@@ -1929,10 +1932,10 @@
         "tier": "B"
       },
       "market": {
-        "anytime_td_price": 290,
-        "implied_prob": 0.2564,
-        "edge": 0.0418,
-        "ev": 0.1628,
+        "anytime_td_price": 300,
+        "implied_prob": 0.25,
+        "edge": 0.0482,
+        "ev": 0.1927,
         "source": "live_api"
       },
       "qualification": {
@@ -3179,10 +3182,10 @@
         "tier": "C"
       },
       "market": {
-        "anytime_td_price": 290,
-        "implied_prob": 0.2564,
-        "edge": -0.0073,
-        "ev": -0.0285,
+        "anytime_td_price": 285,
+        "implied_prob": 0.2597,
+        "edge": -0.0106,
+        "ev": -0.0409,
         "source": "live_api"
       },
       "qualification": {
@@ -3554,10 +3557,10 @@
         "tier": "C"
       },
       "market": {
-        "anytime_td_price": 225,
-        "implied_prob": 0.3077,
-        "edge": -0.0666,
-        "ev": -0.2163,
+        "anytime_td_price": 235,
+        "implied_prob": 0.2985,
+        "edge": -0.0574,
+        "ev": -0.1922,
         "source": "live_api"
       },
       "qualification": {
@@ -5830,10 +5833,10 @@
         "tier": "C"
       },
       "market": {
-        "anytime_td_price": 310,
-        "implied_prob": 0.2439,
-        "edge": -0.0516,
-        "ev": -0.2115,
+        "anytime_td_price": 300,
+        "implied_prob": 0.25,
+        "edge": -0.0577,
+        "ev": -0.2308,
         "source": "live_api"
       },
       "qualification": {
@@ -5843,8 +5846,7 @@
           "Snap share below 70% threshold",
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
-          "Model projection does not exceed market implied probability",
-          "Outside preferred price range (+120/+300)"
+          "Model projection does not exceed market implied probability"
         ],
         "regression_ratio": 2.304
       }
@@ -7084,10 +7086,10 @@
         "tier": "C"
       },
       "market": {
-        "anytime_td_price": 480,
-        "implied_prob": 0.1724,
-        "edge": -0.0012,
-        "ev": -0.0072,
+        "anytime_td_price": 500,
+        "implied_prob": 0.1667,
+        "edge": 0.0045,
+        "ev": 0.0271,
         "source": "live_api"
       },
       "qualification": {
@@ -7098,7 +7100,6 @@
           "TD projection below 30% threshold",
           "No meaningful red-zone role",
           "Matchup rating 1.02 below 1.10 preferred (informational only, not yet a disqualifier)",
-          "Model projection does not exceed market implied probability",
           "Outside preferred price range (+120/+300)"
         ],
         "regression_ratio": 0.0
@@ -7270,10 +7271,10 @@
         "tier": "C"
       },
       "market": {
-        "anytime_td_price": 420,
-        "implied_prob": 0.1923,
-        "edge": -0.0215,
-        "ev": -0.1119,
+        "anytime_td_price": 430,
+        "implied_prob": 0.1887,
+        "edge": -0.0179,
+        "ev": -0.0948,
         "source": "live_api"
       },
       "qualification": {
@@ -7827,10 +7828,10 @@
         "tier": "C"
       },
       "market": {
-        "anytime_td_price": 2200,
-        "implied_prob": 0.0435,
-        "edge": 0.1206,
-        "ev": 2.7746,
+        "anytime_td_price": 2000,
+        "implied_prob": 0.0476,
+        "edge": 0.1165,
+        "ev": 2.4464,
         "source": "live_api"
       },
       "qualification": {
@@ -9300,10 +9301,10 @@
         "tier": "D"
       },
       "market": {
-        "anytime_td_price": 500,
-        "implied_prob": 0.1667,
-        "edge": -0.018,
-        "ev": -0.1081,
+        "anytime_td_price": 525,
+        "implied_prob": 0.16,
+        "edge": -0.0113,
+        "ev": -0.0709,
         "source": "live_api"
       },
       "qualification": {
@@ -11194,10 +11195,10 @@
         "tier": "D"
       },
       "market": {
-        "anytime_td_price": 2000,
-        "implied_prob": 0.0476,
-        "edge": 0.0872,
-        "ev": 1.8322,
+        "anytime_td_price": 1900,
+        "implied_prob": 0.05,
+        "edge": 0.0849,
+        "ev": 1.6974,
         "source": "live_api"
       },
       "qualification": {
@@ -12107,10 +12108,10 @@
         "tier": "D"
       },
       "market": {
-        "anytime_td_price": 750,
-        "implied_prob": 0.1176,
-        "edge": 0.0117,
-        "ev": 0.0992,
+        "anytime_td_price": 700,
+        "implied_prob": 0.125,
+        "edge": 0.0043,
+        "ev": 0.0345,
         "source": "live_api"
       },
       "qualification": {
@@ -13162,10 +13163,10 @@
         "tier": "D"
       },
       "market": {
-        "anytime_td_price": 1800,
-        "implied_prob": 0.0526,
-        "edge": 0.0706,
-        "ev": 1.3415,
+        "anytime_td_price": 1600,
+        "implied_prob": 0.0588,
+        "edge": 0.0644,
+        "ev": 1.0951,
         "source": "live_api"
       },
       "qualification": {
@@ -14907,10 +14908,10 @@
         "tier": "D"
       },
       "market": {
-        "anytime_td_price": 950,
-        "implied_prob": 0.0952,
-        "edge": 0.014,
-        "ev": 0.1474,
+        "anytime_td_price": 1000,
+        "implied_prob": 0.0909,
+        "edge": 0.0184,
+        "ev": 0.2021,
         "source": "live_api"
       },
       "qualification": {
@@ -15050,10 +15051,10 @@
         "tier": "D"
       },
       "market": {
-        "anytime_td_price": 3500,
-        "implied_prob": 0.0278,
-        "edge": 0.0801,
-        "ev": 2.8852,
+        "anytime_td_price": 3000,
+        "implied_prob": 0.0323,
+        "edge": 0.0757,
+        "ev": 2.3456,
         "source": "live_api"
       },
       "qualification": {
@@ -15345,10 +15346,10 @@
         "tier": "D"
       },
       "market": {
-        "anytime_td_price": 1300,
-        "implied_prob": 0.0714,
-        "edge": 0.0336,
-        "ev": 0.4709,
+        "anytime_td_price": 1350,
+        "implied_prob": 0.069,
+        "edge": 0.0361,
+        "ev": 0.5234,
         "source": "live_api"
       },
       "qualification": {
@@ -16778,10 +16779,10 @@
         "tier": "D"
       },
       "market": {
-        "anytime_td_price": 850,
-        "implied_prob": 0.1053,
-        "edge": -0.0093,
-        "ev": -0.088,
+        "anytime_td_price": 800,
+        "implied_prob": 0.1111,
+        "edge": -0.0151,
+        "ev": -0.136,
         "source": "live_api"
       },
       "qualification": {
@@ -17257,10 +17258,10 @@
         "tier": "D"
       },
       "market": {
-        "anytime_td_price": 1400,
-        "implied_prob": 0.0667,
-        "edge": 0.0232,
-        "ev": 0.3473,
+        "anytime_td_price": 1300,
+        "implied_prob": 0.0714,
+        "edge": 0.0184,
+        "ev": 0.2574,
         "source": "live_api"
       },
       "qualification": {
@@ -17375,10 +17376,10 @@
         "tier": "D"
       },
       "market": {
-        "anytime_td_price": 3000,
-        "implied_prob": 0.0323,
-        "edge": 0.057,
-        "ev": 1.768,
+        "anytime_td_price": 2500,
+        "implied_prob": 0.0385,
+        "edge": 0.0508,
+        "ev": 1.3216,
         "source": "live_api"
       },
       "qualification": {

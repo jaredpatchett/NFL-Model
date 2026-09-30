@@ -29,6 +29,7 @@ from nfl_data import load_pbp, load_snaps, load_id_crosswalk
 from features import build_player_week_features
 from fetch_historical_odds import TEAM_NAME_TO_ABBR
 import odds_api
+from blueprint_qualification import qualify
 
 TEST_SEASONS = [2024, 2025]
 HIST_TD_PATH = "../data/historical_td_odds_2024_2025.jsonl"
@@ -146,9 +147,43 @@ def main():
     df["edge"] = df["model_prob"] - df["market_implied_prob"]
     df["result"] = df["scored_td"].map({1: "WIN", 0: "LOSS"})
 
-    print(f"\n{'thresh':>8}{'n':>6}{'win%':>8}{'roi%':>9}")
+    # Real, important gap found in a live run: the deployed OFFICIAL/DEGEN
+    # logic uses edge% ALONE, with none of the blueprint's own hard usage
+    # filters (min 30% model probability, min 70% snap share, min 5%
+    # red-zone role) -- those exist specifically to stop thin-usage bench
+    # players from qualifying, and a live check showed exactly that failure:
+    # backup TEs/WRs at 12-16% model probability, deep-bench snap shares,
+    # flagged OFFICIAL purely because long-shot odds (+2000, +3000+) make
+    # small absolute probability edges look large in percentage terms.
+    # Re-running the SAME edge sweep gated on ALSO passing those hard
+    # filters, rather than assuming edge% alone still means what it did in
+    # the unfiltered backtest -- the point of testing this instead of just
+    # adding the filter and hoping.
+    def hard_fail(r):
+        q = qualify(r, r["model_prob"], None)
+        return q["tier"] == "D"
+    df["hard_fail"] = df.apply(hard_fail, axis=1)
+    print(f"\n{df['hard_fail'].sum()} of {len(df)} matched rows fail the blueprint's hard usage filters "
+          f"(thin snap share, no real red-zone role, or model prob under 30%) -- these are exactly the "
+          f"kind of long-shot bench players the live check flagged.")
+
+    print(f"\n=== UNFILTERED (edge% alone, current live logic) ===")
+    print(f"{'thresh':>8}{'n':>6}{'win%':>8}{'roi%':>9}")
     for t in [0.0, 0.02, 0.04, 0.06, 0.08, 0.10, 0.15, 0.20]:
         g = df[df["edge"] >= t]  # signed, positive-only -- same convention as the live blueprint (only bet when model > market)
+        n = len(g)
+        if n < 5:
+            print(f"{t:>8}{n:>6}   (too few)")
+            continue
+        w = (g["result"] == "WIN").sum()
+        profit = sum(american_profit(r["hist_price"]) if r["result"] == "WIN" else -1.0 for _, r in g.iterrows())
+        print(f"{t:>8}{n:>6}{w/n*100:>7.1f}%{profit/n*100:>8.1f}%")
+
+    print(f"\n=== FILTERED (edge% AND passes hard usage/role filters -- the proposed fix) ===")
+    df_filtered = df[~df["hard_fail"]]
+    print(f"{'thresh':>8}{'n':>6}{'win%':>8}{'roi%':>9}")
+    for t in [0.0, 0.02, 0.04, 0.06, 0.08, 0.10, 0.15, 0.20]:
+        g = df_filtered[df_filtered["edge"] >= t]
         n = len(g)
         if n < 5:
             print(f"{t:>8}{n:>6}   (too few)")

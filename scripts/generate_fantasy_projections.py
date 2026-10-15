@@ -731,7 +731,11 @@ def main():
             "target_week": int(r["target_week"]),
             "headshot_url": r.get("headshot_url"),
             "team_logo_url": team_logos.get(r["team"]),
-            "games_played": int(r.get("games", r["trailing_games"])),
+            # "games" comes from the left-merge with `percentiles`, so the
+            # column always EXISTS but is NaN for players with no matching
+            # season-average row -- .get()'s default never fires for that.
+            # Fall back to trailing_games explicitly on NaN.
+            "games_played": int(r["trailing_games"]) if pd.isna(r.get("games")) else int(r["games"]),
             "display_season": None if pd.isna(r.get("display_season")) else int(r["display_season"]),
             "trailing_avg_pts": None if pd.isna(r["trailing_avg_pts"]) else round(float(r["trailing_avg_pts"]), 2),
             "trailing_games": int(r["trailing_games"]),

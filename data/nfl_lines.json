@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-10T20:06:32.804467+00:00",
+  "generated_at": "2026-11-11T19:56:30.243019+00:00",
   "season": 2026,
   "week": 10,
   "model_notes": {
@@ -19,7 +19,7 @@
       "games_used": 136,
       "model": {
         "pred_home_margin": 4.48,
-        "pred_total": 42.02,
+        "pred_total": 41.95,
         "home_win_prob": 0.6342,
         "home_fair_moneyline": -173.4
       },
@@ -27,19 +27,19 @@
         "spread_line": 2.5,
         "spread_price": -105,
         "total_line": 41.5,
-        "home_moneyline": -127,
+        "home_moneyline": -134,
         "away_moneyline": 120,
-        "home_implied_prob": 0.5595
+        "home_implied_prob": 0.5726
       },
       "edges": {
         "spread_edge": 1.98,
-        "total_edge": 0.52,
-        "moneyline_edge": 0.0748,
-        "home_moneyline_ev": 0.1337
+        "total_edge": 0.45,
+        "moneyline_edge": 0.0616,
+        "home_moneyline_ev": 0.1075
       },
       "projector": {
         "proj_home_score": 23.2,
-        "proj_away_score": 18.8,
+        "proj_away_score": 18.7,
         "cover_prob": 0.5603,
         "margin_resid_std": 13.07,
         "distribution": [
@@ -81,7 +81,7 @@
           },
           {
             "bin_start": -21,
-            "prob": 0.01708
+            "prob": 0.01709
           },
           {
             "bin_start": -18,
@@ -93,7 +93,7 @@
           },
           {
             "bin_start": -12,
-            "prob": 0.04749
+            "prob": 0.0475
           },
           {
             "bin_start": -9,
@@ -101,11 +101,11 @@
           },
           {
             "bin_start": -6,
-            "prob": 0.07223
+            "prob": 0.07224
           },
           {
             "bin_start": -3,
-            "prob": 0.08233
+            "prob": 0.08234
           },
           {
             "bin_start": 0,
@@ -121,19 +121,19 @@
           },
           {
             "bin_start": 9,
-            "prob": 0.08224
+            "prob": 0.08223
           },
           {
             "bin_start": 12,
-            "prob": 0.07211
+            "prob": 0.0721
           },
           {
             "bin_start": 15,
-            "prob": 0.05999
+            "prob": 0.05998
           },
           {
             "bin_start": 18,
-            "prob": 0.04736
+            "prob": 0.04735
           },
           {
             "bin_start": 21,
@@ -450,29 +450,29 @@
       "market_source": "live",
       "games_used": 136,
       "model": {
-        "pred_home_margin": -3.75,
-        "pred_total": 45.86,
-        "home_win_prob": 0.3872,
-        "home_fair_moneyline": 158.3
+        "pred_home_margin": -3.74,
+        "pred_total": 45.88,
+        "home_win_prob": 0.3873,
+        "home_fair_moneyline": 158.2
       },
       "market": {
         "spread_line": -3.0,
-        "spread_price": 103,
+        "spread_price": 107,
         "total_line": 45.5,
-        "home_moneyline": 155,
-        "away_moneyline": -175,
-        "home_implied_prob": 0.3922
+        "home_moneyline": 159,
+        "away_moneyline": -176,
+        "home_implied_prob": 0.3861
       },
       "edges": {
-        "spread_edge": -0.75,
-        "total_edge": 0.36,
-        "moneyline_edge": -0.0049,
-        "home_moneyline_ev": -0.0126
+        "spread_edge": -0.74,
+        "total_edge": 0.38,
+        "moneyline_edge": 0.0012,
+        "home_moneyline_ev": 0.0032
       },
       "projector": {
         "proj_home_score": 21.1,
         "proj_away_score": 24.8,
-        "cover_prob": 0.4773,
+        "cover_prob": 0.4774,
         "margin_resid_std": 13.07,
         "distribution": [
           {
@@ -501,47 +501,47 @@
           },
           {
             "bin_start": -39,
-            "prob": 0.0033
+            "prob": 0.00329
           },
           {
             "bin_start": -36,
-            "prob": 0.0058
+            "prob": 0.00579
           },
           {
             "bin_start": -33,
-            "prob": 0.00967
+            "prob": 0.00966
           },
           {
             "bin_start": -30,
-            "prob": 0.01531
+            "prob": 0.0153
           },
           {
             "bin_start": -27,
-            "prob": 0.023
+            "prob": 0.02298
           },
           {
             "bin_start": -24,
-            "prob": 0.03277
+            "prob": 0.03276
           },
           {
             "bin_start": -21,
-            "prob": 0.04432
+            "prob": 0.0443
           },
           {
             "bin_start": -18,
-            "prob": 0.05687
+            "prob": 0.05685
           },
           {
             "bin_start": -15,
-            "prob": 0.06925
+            "prob": 0.06923
           },
           {
             "bin_start": -12,
-            "prob": 0.08001
+            "prob": 0.07999
           },
           {
             "bin_start": -9,
-            "prob": 0.08771
+            "prob": 0.0877
           },
           {
             "bin_start": -6,
@@ -553,39 +553,39 @@
           },
           {
             "bin_start": 0,
-            "prob": 0.08435
+            "prob": 0.08436
           },
           {
             "bin_start": 3,
-            "prob": 0.07496
+            "prob": 0.07498
           },
           {
             "bin_start": 6,
-            "prob": 0.06321
+            "prob": 0.06323
           },
           {
             "bin_start": 9,
-            "prob": 0.05058
+            "prob": 0.0506
           },
           {
             "bin_start": 12,
-            "prob": 0.0384
+            "prob": 0.03842
           },
           {
             "bin_start": 15,
-            "prob": 0.02767
+            "prob": 0.02768
           },
           {
             "bin_start": 18,
-            "prob": 0.01891
+            "prob": 0.01892
           },
           {
             "bin_start": 21,
-            "prob": 0.01227
+            "prob": 0.01228
           },
           {
             "bin_start": 24,
-            "prob": 0.00755
+            "prob": 0.00756
           },
           {
             "bin_start": 27,
@@ -593,11 +593,11 @@
           },
           {
             "bin_start": 30,
-            "prob": 0.00244
+            "prob": 0.00245
           },
           {
             "bin_start": 33,
-            "prob": 0.00128
+            "prob": 0.00129
           },
           {
             "bin_start": 36,
@@ -643,7 +643,7 @@
           },
           {
             "label": "Weather / venue",
-            "contribution": -0.02
+            "contribution": -0.01
           },
           {
             "label": "Pace",
@@ -666,29 +666,29 @@
       "market_source": "live",
       "games_used": 136,
       "model": {
-        "pred_home_margin": -4.37,
-        "pred_total": 39.77,
-        "home_win_prob": 0.3689,
+        "pred_home_margin": -4.38,
+        "pred_total": 40.74,
+        "home_win_prob": 0.3688,
         "home_fair_moneyline": 171.1
       },
       "market": {
-        "spread_line": -4.5,
-        "spread_price": -105,
-        "total_line": 40.0,
-        "home_moneyline": 195,
-        "away_moneyline": -225,
-        "home_implied_prob": 0.339
+        "spread_line": -5.0,
+        "spread_price": -103,
+        "total_line": 40.5,
+        "home_moneyline": 200,
+        "away_moneyline": -230,
+        "home_implied_prob": 0.3333
       },
       "edges": {
-        "spread_edge": 0.13,
-        "total_edge": -0.23,
-        "moneyline_edge": 0.0299,
-        "home_moneyline_ev": 0.0882
+        "spread_edge": 0.62,
+        "total_edge": 0.24,
+        "moneyline_edge": 0.0355,
+        "home_moneyline_ev": 0.1065
       },
       "projector": {
-        "proj_home_score": 17.7,
-        "proj_away_score": 22.1,
-        "cover_prob": 0.5038,
+        "proj_home_score": 18.2,
+        "proj_away_score": 22.6,
+        "cover_prob": 0.519,
         "margin_resid_std": 13.07,
         "distribution": [
           {
@@ -713,7 +713,7 @@
           },
           {
             "bin_start": -42,
-            "prob": 0.00203
+            "prob": 0.00204
           },
           {
             "bin_start": -39,
@@ -721,7 +721,7 @@
           },
           {
             "bin_start": -36,
-            "prob": 0.00648
+            "prob": 0.00649
           },
           {
             "bin_start": -33,
@@ -733,27 +733,27 @@
           },
           {
             "bin_start": -27,
-            "prob": 0.02488
+            "prob": 0.02489
           },
           {
             "bin_start": -24,
-            "prob": 0.03507
+            "prob": 0.03508
           },
           {
             "bin_start": -21,
-            "prob": 0.04691
+            "prob": 0.04692
           },
           {
             "bin_start": -18,
-            "prob": 0.05953
+            "prob": 0.05954
           },
           {
             "bin_start": -15,
-            "prob": 0.07169
+            "prob": 0.0717
           },
           {
             "bin_start": -12,
-            "prob": 0.08192
+            "prob": 0.08193
           },
           {
             "bin_start": -9,
@@ -765,7 +765,7 @@
           },
           {
             "bin_start": -3,
-            "prob": 0.08922
+            "prob": 0.08921
           },
           {
             "bin_start": 0,
@@ -773,15 +773,15 @@
           },
           {
             "bin_start": 3,
-            "prob": 0.07264
+            "prob": 0.07263
           },
           {
             "bin_start": 6,
-            "prob": 0.06059
+            "prob": 0.06058
           },
           {
             "bin_start": 9,
-            "prob": 0.04795
+            "prob": 0.04794
           },
           {
             "bin_start": 12,
@@ -793,11 +793,11 @@
           },
           {
             "bin_start": 18,
-            "prob": 0.01735
+            "prob": 0.01734
           },
           {
             "bin_start": 21,
-            "prob": 0.01113
+            "prob": 0.01112
           },
           {
             "bin_start": 24,
@@ -813,7 +813,7 @@
           },
           {
             "bin_start": 33,
-            "prob": 0.00112
+            "prob": 0.00111
           },
           {
             "bin_start": 36,
@@ -879,28 +879,28 @@
       "games_used": 136,
       "model": {
         "pred_home_margin": 2.55,
-        "pred_total": 40.95,
+        "pred_total": 42.97,
         "home_win_prob": 0.5774,
         "home_fair_moneyline": -136.6
       },
       "market": {
-        "spread_line": 3.5,
-        "spread_price": -105,
+        "spread_line": 3.0,
+        "spread_price": -109,
         "total_line": 42.5,
-        "home_moneyline": -168,
-        "away_moneyline": 157,
-        "home_implied_prob": 0.6269
+        "home_moneyline": -155,
+        "away_moneyline": 145,
+        "home_implied_prob": 0.6078
       },
       "edges": {
-        "spread_edge": -0.95,
-        "total_edge": -1.55,
-        "moneyline_edge": -0.0495,
-        "home_moneyline_ev": -0.0789
+        "spread_edge": -0.45,
+        "total_edge": 0.47,
+        "moneyline_edge": -0.0305,
+        "home_moneyline_ev": -0.0502
       },
       "projector": {
-        "proj_home_score": 21.7,
-        "proj_away_score": 19.2,
-        "cover_prob": 0.471,
+        "proj_home_score": 22.8,
+        "proj_away_score": 20.2,
+        "cover_prob": 0.4863,
         "margin_resid_std": 13.07,
         "distribution": [
           {
@@ -945,19 +945,19 @@
           },
           {
             "bin_start": -21,
-            "prob": 0.02214
+            "prob": 0.02215
           },
           {
             "bin_start": -18,
-            "prob": 0.03172
+            "prob": 0.03173
           },
           {
             "bin_start": -15,
-            "prob": 0.04312
+            "prob": 0.04313
           },
           {
             "bin_start": -12,
-            "prob": 0.05562
+            "prob": 0.05563
           },
           {
             "bin_start": -9,
@@ -1097,28 +1097,28 @@
       "games_used": 136,
       "model": {
         "pred_home_margin": 3.88,
-        "pred_total": 40.79,
+        "pred_total": 38.8,
         "home_win_prob": 0.6167,
         "home_fair_moneyline": -160.9
       },
       "market": {
-        "spread_line": 2.5,
+        "spread_line": 3.5,
         "spread_price": -107,
-        "total_line": 40.5,
-        "home_moneyline": -136,
-        "away_moneyline": 125,
-        "home_implied_prob": 0.5763
+        "total_line": 38.0,
+        "home_moneyline": -192,
+        "away_moneyline": 170,
+        "home_implied_prob": 0.6575
       },
       "edges": {
-        "spread_edge": 1.38,
-        "total_edge": 0.29,
-        "moneyline_edge": 0.0404,
-        "home_moneyline_ev": 0.0701
+        "spread_edge": 0.38,
+        "total_edge": 0.8,
+        "moneyline_edge": -0.0408,
+        "home_moneyline_ev": -0.0621
       },
       "projector": {
-        "proj_home_score": 22.3,
-        "proj_away_score": 18.5,
-        "cover_prob": 0.542,
+        "proj_home_score": 21.3,
+        "proj_away_score": 17.5,
+        "cover_prob": 0.5116,
         "margin_resid_std": 13.07,
         "distribution": [
           {
@@ -1163,11 +1163,11 @@
           },
           {
             "bin_start": -21,
-            "prob": 0.01858
+            "prob": 0.01857
           },
           {
             "bin_start": -18,
-            "prob": 0.02724
+            "prob": 0.02723
           },
           {
             "bin_start": -15,
@@ -1211,11 +1211,11 @@
           },
           {
             "bin_start": 15,
-            "prob": 0.05743
+            "prob": 0.05744
           },
           {
             "bin_start": 18,
-            "prob": 0.04486
+            "prob": 0.04487
           },
           {
             "bin_start": 21,
@@ -1223,11 +1223,11 @@
           },
           {
             "bin_start": 24,
-            "prob": 0.02338
+            "prob": 0.02339
           },
           {
             "bin_start": 27,
-            "prob": 0.0156
+            "prob": 0.01561
           },
           {
             "bin_start": 30,
@@ -1239,7 +1239,7 @@
           },
           {
             "bin_start": 36,
-            "prob": 0.00338
+            "prob": 0.00339
           },
           {
             "bin_start": 39,
@@ -1318,23 +1318,23 @@
         "home_fair_moneyline": -123.6
       },
       "market": {
-        "spread_line": 1.5,
-        "spread_price": 100,
+        "spread_line": 2.5,
+        "spread_price": -107,
         "total_line": 49.0,
-        "home_moneyline": -112,
-        "away_moneyline": 102,
-        "home_implied_prob": 0.5283
+        "home_moneyline": -132,
+        "away_moneyline": 120,
+        "home_implied_prob": 0.569
       },
       "edges": {
-        "spread_edge": 0.23,
+        "spread_edge": -0.77,
         "total_edge": 0.18,
-        "moneyline_edge": 0.0245,
-        "home_moneyline_ev": 0.0463
+        "moneyline_edge": -0.0162,
+        "home_moneyline_ev": -0.0284
       },
       "projector": {
         "proj_home_score": 25.5,
         "proj_away_score": 23.7,
-        "cover_prob": 0.5071,
+        "cover_prob": 0.4766,
         "margin_resid_std": 13.07,
         "distribution": [
           {
@@ -1531,29 +1531,29 @@
       "market_source": "live",
       "games_used": 136,
       "model": {
-        "pred_home_margin": -8.31,
-        "pred_total": 50.72,
-        "home_win_prob": 0.2623,
-        "home_fair_moneyline": 281.2
+        "pred_home_margin": -8.32,
+        "pred_total": 50.64,
+        "home_win_prob": 0.2621,
+        "home_fair_moneyline": 281.5
       },
       "market": {
-        "spread_line": -8.0,
-        "spread_price": -109,
+        "spread_line": -7.5,
+        "spread_price": 104,
         "total_line": 51.0,
         "home_moneyline": 370,
-        "away_moneyline": -435,
+        "away_moneyline": -420,
         "home_implied_prob": 0.2128
       },
       "edges": {
-        "spread_edge": -0.31,
-        "total_edge": -0.28,
-        "moneyline_edge": 0.0496,
-        "home_moneyline_ev": 0.2329
+        "spread_edge": -0.82,
+        "total_edge": -0.36,
+        "moneyline_edge": 0.0494,
+        "home_moneyline_ev": 0.2321
       },
       "projector": {
         "proj_home_score": 21.2,
         "proj_away_score": 29.5,
-        "cover_prob": 0.4904,
+        "cover_prob": 0.475,
         "margin_resid_std": 13.07,
         "distribution": [
           {
@@ -1582,7 +1582,7 @@
           },
           {
             "bin_start": -45,
-            "prob": 0.00247
+            "prob": 0.00248
           },
           {
             "bin_start": -42,
@@ -1594,35 +1594,35 @@
           },
           {
             "bin_start": -36,
-            "prob": 0.01238
+            "prob": 0.01239
           },
           {
             "bin_start": -33,
-            "prob": 0.01906
+            "prob": 0.01908
           },
           {
             "bin_start": -30,
-            "prob": 0.02786
+            "prob": 0.02788
           },
           {
             "bin_start": -27,
-            "prob": 0.03863
+            "prob": 0.03865
           },
           {
             "bin_start": -24,
-            "prob": 0.05082
+            "prob": 0.05085
           },
           {
             "bin_start": -21,
-            "prob": 0.06345
+            "prob": 0.06348
           },
           {
             "bin_start": -18,
-            "prob": 0.07517
+            "prob": 0.07519
           },
           {
             "bin_start": -15,
-            "prob": 0.0845
+            "prob": 0.08451
           },
           {
             "bin_start": -12,
@@ -1630,47 +1630,47 @@
           },
           {
             "bin_start": -9,
-            "prob": 0.09122
+            "prob": 0.09121
           },
           {
             "bin_start": -6,
-            "prob": 0.0876
+            "prob": 0.08758
           },
           {
             "bin_start": -3,
-            "prob": 0.07982
+            "prob": 0.0798
           },
           {
             "bin_start": 0,
-            "prob": 0.06902
+            "prob": 0.06899
           },
           {
             "bin_start": 3,
-            "prob": 0.05663
+            "prob": 0.0566
           },
           {
             "bin_start": 6,
-            "prob": 0.04408
+            "prob": 0.04406
           },
           {
             "bin_start": 9,
-            "prob": 0.03256
+            "prob": 0.03254
           },
           {
             "bin_start": 12,
-            "prob": 0.02283
+            "prob": 0.02281
           },
           {
             "bin_start": 15,
-            "prob": 0.01518
+            "prob": 0.01517
           },
           {
             "bin_start": 18,
-            "prob": 0.00958
+            "prob": 0.00957
           },
           {
             "bin_start": 21,
-            "prob": 0.00574
+            "prob": 0.00573
           },
           {
             "bin_start": 24,
@@ -1678,7 +1678,7 @@
           },
           {
             "bin_start": 27,
-            "prob": 0.00176
+            "prob": 0.00175
           },
           {
             "bin_start": 30,
@@ -1750,28 +1750,28 @@
       "games_used": 136,
       "model": {
         "pred_home_margin": -10.38,
-        "pred_total": 46.44,
-        "home_win_prob": 0.2134,
-        "home_fair_moneyline": 368.6
+        "pred_total": 46.47,
+        "home_win_prob": 0.2135,
+        "home_fair_moneyline": 368.3
       },
       "market": {
         "spread_line": -10.5,
-        "spread_price": -103,
+        "spread_price": -102,
         "total_line": 46.5,
-        "home_moneyline": 475,
-        "away_moneyline": -500,
-        "home_implied_prob": 0.1739
+        "home_moneyline": 440,
+        "away_moneyline": -535,
+        "home_implied_prob": 0.1852
       },
       "edges": {
         "spread_edge": 0.12,
-        "total_edge": -0.06,
-        "moneyline_edge": 0.0395,
-        "home_moneyline_ev": 0.2271
+        "total_edge": -0.03,
+        "moneyline_edge": 0.0283,
+        "home_moneyline_ev": 0.153
       },
       "projector": {
         "proj_home_score": 18.0,
         "proj_away_score": 28.4,
-        "cover_prob": 0.5035,
+        "cover_prob": 0.5037,
         "margin_resid_std": 13.07,
         "distribution": [
           {
@@ -1792,7 +1792,7 @@
           },
           {
             "bin_start": -51,
-            "prob": 0.00106
+            "prob": 0.00105
           },
           {
             "bin_start": -48,
@@ -1808,39 +1808,39 @@
           },
           {
             "bin_start": -39,
-            "prob": 0.01071
+            "prob": 0.0107
           },
           {
             "bin_start": -36,
-            "prob": 0.01677
+            "prob": 0.01676
           },
           {
             "bin_start": -33,
-            "prob": 0.02491
+            "prob": 0.02489
           },
           {
             "bin_start": -30,
-            "prob": 0.0351
+            "prob": 0.03508
           },
           {
             "bin_start": -27,
-            "prob": 0.04694
+            "prob": 0.04692
           },
           {
             "bin_start": -24,
-            "prob": 0.05957
+            "prob": 0.05955
           },
           {
             "bin_start": -21,
-            "prob": 0.07173
+            "prob": 0.07171
           },
           {
             "bin_start": -18,
-            "prob": 0.08195
+            "prob": 0.08193
           },
           {
             "bin_start": -15,
-            "prob": 0.08884
+            "prob": 0.08883
           },
           {
             "bin_start": -12,
@@ -1848,43 +1848,43 @@
           },
           {
             "bin_start": -9,
-            "prob": 0.0892
+            "prob": 0.08921
           },
           {
             "bin_start": -6,
-            "prob": 0.08262
+            "prob": 0.08263
           },
           {
             "bin_start": -3,
-            "prob": 0.07261
+            "prob": 0.07263
           },
           {
             "bin_start": 0,
-            "prob": 0.06055
+            "prob": 0.06057
           },
           {
             "bin_start": 3,
-            "prob": 0.04791
+            "prob": 0.04793
           },
           {
             "bin_start": 6,
-            "prob": 0.03597
+            "prob": 0.03599
           },
           {
             "bin_start": 9,
-            "prob": 0.02562
+            "prob": 0.02564
           },
           {
             "bin_start": 12,
-            "prob": 0.01732
+            "prob": 0.01734
           },
           {
             "bin_start": 15,
-            "prob": 0.01111
+            "prob": 0.01112
           },
           {
             "bin_start": 18,
-            "prob": 0.00676
+            "prob": 0.00677
           },
           {
             "bin_start": 21,
@@ -1938,7 +1938,7 @@
           },
           {
             "label": "Weather / venue",
-            "contribution": -0.02
+            "contribution": -0.01
           },
           {
             "label": "Pace",
@@ -1964,29 +1964,29 @@
       "market_source": "schedule_fallback",
       "games_used": 136,
       "model": {
-        "pred_home_margin": -6.88,
-        "pred_total": 40.91,
-        "home_win_prob": 0.2993,
-        "home_fair_moneyline": 234.1
+        "pred_home_margin": -6.87,
+        "pred_total": 39.94,
+        "home_win_prob": 0.2996,
+        "home_fair_moneyline": 233.8
       },
       "market": {
         "spread_line": -9.5,
         "spread_price": null,
-        "total_line": 40.5,
-        "home_moneyline": 350.0,
-        "away_moneyline": -455.0,
-        "home_implied_prob": 0.2222
+        "total_line": 39.5,
+        "home_moneyline": 330.0,
+        "away_moneyline": -425.0,
+        "home_implied_prob": 0.2326
       },
       "edges": {
-        "spread_edge": 2.62,
-        "total_edge": 0.41,
-        "moneyline_edge": 0.0771,
-        "home_moneyline_ev": 0.347
+        "spread_edge": 2.63,
+        "total_edge": 0.44,
+        "moneyline_edge": 0.067,
+        "home_moneyline_ev": 0.2881
       },
       "projector": {
-        "proj_home_score": 17.0,
-        "proj_away_score": 23.9,
-        "cover_prob": 0.5795,
+        "proj_home_score": 16.5,
+        "proj_away_score": 23.4,
+        "cover_prob": 0.5798,
         "margin_resid_std": 13.07,
         "distribution": [
           {
@@ -2019,43 +2019,43 @@
           },
           {
             "bin_start": -39,
-            "prob": 0.00594
+            "prob": 0.00593
           },
           {
             "bin_start": -36,
-            "prob": 0.00988
+            "prob": 0.00987
           },
           {
             "bin_start": -33,
-            "prob": 0.0156
+            "prob": 0.01558
           },
           {
             "bin_start": -30,
-            "prob": 0.02338
+            "prob": 0.02336
           },
           {
             "bin_start": -27,
-            "prob": 0.03325
+            "prob": 0.03322
           },
           {
             "bin_start": -24,
-            "prob": 0.04486
+            "prob": 0.04483
           },
           {
             "bin_start": -21,
-            "prob": 0.05743
+            "prob": 0.0574
           },
           {
             "bin_start": -18,
-            "prob": 0.06977
+            "prob": 0.06973
           },
           {
             "bin_start": -15,
-            "prob": 0.08042
+            "prob": 0.08039
           },
           {
             "bin_start": -12,
-            "prob": 0.08796
+            "prob": 0.08794
           },
           {
             "bin_start": -9,
@@ -2063,47 +2063,47 @@
           },
           {
             "bin_start": -6,
-            "prob": 0.0899
+            "prob": 0.08991
           },
           {
             "bin_start": -3,
-            "prob": 0.084
+            "prob": 0.08403
           },
           {
             "bin_start": 0,
-            "prob": 0.07448
+            "prob": 0.07451
           },
           {
             "bin_start": 3,
-            "prob": 0.06266
+            "prob": 0.0627
           },
           {
             "bin_start": 6,
-            "prob": 0.05003
+            "prob": 0.05006
           },
           {
             "bin_start": 9,
-            "prob": 0.03789
+            "prob": 0.03793
           },
           {
             "bin_start": 12,
-            "prob": 0.02724
+            "prob": 0.02726
           },
           {
             "bin_start": 15,
-            "prob": 0.01858
+            "prob": 0.0186
           },
           {
             "bin_start": 18,
-            "prob": 0.01202
+            "prob": 0.01204
           },
           {
             "bin_start": 21,
-            "prob": 0.00738
+            "prob": 0.00739
           },
           {
             "bin_start": 24,
-            "prob": 0.0043
+            "prob": 0.00431
           },
           {
             "bin_start": 27,
@@ -2157,7 +2157,7 @@
           },
           {
             "label": "Weather / venue",
-            "contribution": 0.03
+            "contribution": 0.04
           },
           {
             "label": "Pace",
@@ -2183,27 +2183,27 @@
       "games_used": 136,
       "model": {
         "pred_home_margin": -6.8,
-        "pred_total": 43.18,
+        "pred_total": 41.18,
         "home_win_prob": 0.3014,
         "home_fair_moneyline": 231.7
       },
       "market": {
         "spread_line": -6.5,
-        "spread_price": -107,
+        "spread_price": -105,
         "total_line": 40.5,
         "home_moneyline": 250,
-        "away_moneyline": -265,
+        "away_moneyline": -280,
         "home_implied_prob": 0.2857
       },
       "edges": {
         "spread_edge": -0.3,
-        "total_edge": 2.68,
+        "total_edge": 0.68,
         "moneyline_edge": 0.0157,
         "home_moneyline_ev": 0.0551
       },
       "projector": {
-        "proj_home_score": 18.2,
-        "proj_away_score": 25.0,
+        "proj_home_score": 17.2,
+        "proj_away_score": 24.0,
         "cover_prob": 0.4909,
         "margin_resid_std": 13.07,
         "distribution": [
@@ -2402,27 +2402,27 @@
       "model": {
         "pred_home_margin": -2.57,
         "pred_total": 55.89,
-        "home_win_prob": 0.422,
-        "home_fair_moneyline": 136.9
+        "home_win_prob": 0.4219,
+        "home_fair_moneyline": 137.0
       },
       "market": {
-        "spread_line": -3.5,
-        "spread_price": -105,
+        "spread_line": -4.0,
+        "spread_price": -107,
         "total_line": 55.5,
-        "home_moneyline": 183,
+        "home_moneyline": 185,
         "away_moneyline": -205,
-        "home_implied_prob": 0.3534
+        "home_implied_prob": 0.3509
       },
       "edges": {
-        "spread_edge": 0.93,
+        "spread_edge": 1.43,
         "total_edge": 0.39,
-        "moneyline_edge": 0.0687,
-        "home_moneyline_ev": 0.1944
+        "moneyline_edge": 0.0711,
+        "home_moneyline_ev": 0.2025
       },
       "projector": {
         "proj_home_score": 26.7,
         "proj_away_score": 29.2,
-        "cover_prob": 0.5284,
+        "cover_prob": 0.5435,
         "margin_resid_std": 13.07,
         "distribution": [
           {
@@ -2459,43 +2459,43 @@
           },
           {
             "bin_start": -33,
-            "prob": 0.00796
+            "prob": 0.00797
           },
           {
             "bin_start": -30,
-            "prob": 0.01287
+            "prob": 0.01288
           },
           {
             "bin_start": -27,
-            "prob": 0.01973
+            "prob": 0.01974
           },
           {
             "bin_start": -24,
-            "prob": 0.02871
+            "prob": 0.02872
           },
           {
             "bin_start": -21,
-            "prob": 0.03963
+            "prob": 0.03964
           },
           {
             "bin_start": -18,
-            "prob": 0.05191
+            "prob": 0.05192
           },
           {
             "bin_start": -15,
-            "prob": 0.06451
+            "prob": 0.06452
           },
           {
             "bin_start": -12,
-            "prob": 0.07608
+            "prob": 0.07609
           },
           {
             "bin_start": -9,
-            "prob": 0.08514
+            "prob": 0.08515
           },
           {
             "bin_start": -6,
-            "prob": 0.0904
+            "prob": 0.09041
           },
           {
             "bin_start": -3,
@@ -2507,27 +2507,27 @@
           },
           {
             "bin_start": 3,
-            "prob": 0.079
+            "prob": 0.07899
           },
           {
             "bin_start": 6,
-            "prob": 0.068
+            "prob": 0.06799
           },
           {
             "bin_start": 9,
-            "prob": 0.05554
+            "prob": 0.05553
           },
           {
             "bin_start": 12,
-            "prob": 0.04304
+            "prob": 0.04303
           },
           {
             "bin_start": 15,
-            "prob": 0.03165
+            "prob": 0.03164
           },
           {
             "bin_start": 18,
-            "prob": 0.02209
+            "prob": 0.02208
           },
           {
             "bin_start": 21,
@@ -2535,11 +2535,11 @@
           },
           {
             "bin_start": 24,
-            "prob": 0.00919
+            "prob": 0.00918
           },
           {
             "bin_start": 27,
-            "prob": 0.00548
+            "prob": 0.00547
           },
           {
             "bin_start": 30,
@@ -2617,28 +2617,28 @@
       "games_used": 136,
       "model": {
         "pred_home_margin": 1.81,
-        "pred_total": 49.75,
+        "pred_total": 49.73,
         "home_win_prob": 0.555,
         "home_fair_moneyline": -124.7
       },
       "market": {
         "spread_line": 3.5,
-        "spread_price": -105,
+        "spread_price": -103,
         "total_line": 49.5,
         "home_moneyline": -180,
-        "away_moneyline": 170,
+        "away_moneyline": 161,
         "home_implied_prob": 0.6429
       },
       "edges": {
         "spread_edge": -1.69,
-        "total_edge": 0.25,
-        "moneyline_edge": -0.0879,
+        "total_edge": 0.23,
+        "moneyline_edge": -0.0878,
         "home_moneyline_ev": -0.1367
       },
       "projector": {
         "proj_home_score": 25.8,
         "proj_away_score": 24.0,
-        "cover_prob": 0.4484,
+        "cover_prob": 0.4485,
         "margin_resid_std": 13.07,
         "distribution": [
           {
@@ -2683,7 +2683,7 @@
           },
           {
             "bin_start": -21,
-            "prob": 0.02433
+            "prob": 0.02432
           },
           {
             "bin_start": -18,
@@ -2691,19 +2691,19 @@
           },
           {
             "bin_start": -15,
-            "prob": 0.04616
+            "prob": 0.04615
           },
           {
             "bin_start": -12,
-            "prob": 0.05877
+            "prob": 0.05876
           },
           {
             "bin_start": -9,
-            "prob": 0.071
+            "prob": 0.07099
           },
           {
             "bin_start": -6,
-            "prob": 0.08139
+            "prob": 0.08138
           },
           {
             "bin_start": -3,
@@ -2727,11 +2727,11 @@
           },
           {
             "bin_start": 12,
-            "prob": 0.06134
+            "prob": 0.06135
           },
           {
             "bin_start": 15,
-            "prob": 0.0487
+            "prob": 0.04871
           },
           {
             "bin_start": 18,
@@ -2739,7 +2739,7 @@
           },
           {
             "bin_start": 21,
-            "prob": 0.02622
+            "prob": 0.02623
           },
           {
             "bin_start": 24,
@@ -2836,28 +2836,28 @@
       "games_used": 136,
       "model": {
         "pred_home_margin": 4.72,
-        "pred_total": 38.61,
-        "home_win_prob": 0.6412,
-        "home_fair_moneyline": -178.7
+        "pred_total": 38.56,
+        "home_win_prob": 0.641,
+        "home_fair_moneyline": -178.6
       },
       "market": {
-        "spread_line": 5.5,
-        "spread_price": -105,
+        "spread_line": 4.5,
+        "spread_price": 100,
         "total_line": 38.5,
-        "home_moneyline": -218,
-        "away_moneyline": 200,
-        "home_implied_prob": 0.6855
+        "home_moneyline": -198,
+        "away_moneyline": 186,
+        "home_implied_prob": 0.6644
       },
       "edges": {
-        "spread_edge": -0.78,
-        "total_edge": 0.11,
-        "moneyline_edge": -0.0444,
-        "home_moneyline_ev": -0.0647
+        "spread_edge": 0.22,
+        "total_edge": 0.06,
+        "moneyline_edge": -0.0234,
+        "home_moneyline_ev": -0.0352
       },
       "projector": {
-        "proj_home_score": 21.7,
+        "proj_home_score": 21.6,
         "proj_away_score": 16.9,
-        "cover_prob": 0.4763,
+        "cover_prob": 0.5067,
         "margin_resid_std": 13.07,
         "distribution": [
           {
@@ -2890,43 +2890,43 @@
           },
           {
             "bin_start": -27,
-            "prob": 0.00637
+            "prob": 0.00638
           },
           {
             "bin_start": -24,
-            "prob": 0.01053
+            "prob": 0.01054
           },
           {
             "bin_start": -21,
-            "prob": 0.01651
+            "prob": 0.01653
           },
           {
             "bin_start": -18,
-            "prob": 0.02458
+            "prob": 0.02459
           },
           {
             "bin_start": -15,
-            "prob": 0.0347
+            "prob": 0.03472
           },
           {
             "bin_start": -12,
-            "prob": 0.0465
+            "prob": 0.04652
           },
           {
             "bin_start": -9,
-            "prob": 0.05911
+            "prob": 0.05913
           },
           {
             "bin_start": -6,
-            "prob": 0.07131
+            "prob": 0.07133
           },
           {
             "bin_start": -3,
-            "prob": 0.08163
+            "prob": 0.08164
           },
           {
             "bin_start": 0,
-            "prob": 0.08866
+            "prob": 0.08867
           },
           {
             "bin_start": 3,
@@ -2934,39 +2934,39 @@
           },
           {
             "bin_start": 6,
-            "prob": 0.08936
+            "prob": 0.08935
           },
           {
             "bin_start": 9,
-            "prob": 0.08292
+            "prob": 0.08291
           },
           {
             "bin_start": 12,
-            "prob": 0.07301
+            "prob": 0.07299
           },
           {
             "bin_start": 15,
-            "prob": 0.061
+            "prob": 0.06098
           },
           {
             "bin_start": 18,
-            "prob": 0.04836
+            "prob": 0.04834
           },
           {
             "bin_start": 21,
-            "prob": 0.03638
+            "prob": 0.03636
           },
           {
             "bin_start": 24,
-            "prob": 0.02597
+            "prob": 0.02595
           },
           {
             "bin_start": 27,
-            "prob": 0.01759
+            "prob": 0.01757
           },
           {
             "bin_start": 30,
-            "prob": 0.0113
+            "prob": 0.01129
           },
           {
             "bin_start": 33,
@@ -2974,7 +2974,7 @@
           },
           {
             "bin_start": 36,
-            "prob": 0.00399
+            "prob": 0.00398
           },
           {
             "bin_start": 39,

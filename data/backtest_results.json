@@ -1,65 +1,65 @@
 {
-  "generated_at": "2026-11-13T20:09:02.064258+00:00",
+  "generated_at": "2026-11-17T21:26:00.109042+00:00",
   "note": "Track B and Track A and Track C have real logged-prediction-vs-outcome results below.",
   "track_b": {
-    "n_available": 137,
+    "n_available": 150,
     "ats_all": {
-      "n_bets": 134,
-      "wins": 64,
-      "losses": 70,
+      "n_bets": 147,
+      "wins": 72,
+      "losses": 75,
       "pushes": 3,
-      "win_pct": 47.8,
-      "roi_pct": -8.82
+      "win_pct": 49.0,
+      "roi_pct": -6.49
     },
     "ats_edge_filtered": {
-      "n_bets": 134,
-      "wins": 64,
-      "losses": 70,
+      "n_bets": 147,
+      "wins": 72,
+      "losses": 75,
       "pushes": 3,
-      "win_pct": 47.8,
-      "roi_pct": -8.82
+      "win_pct": 49.0,
+      "roi_pct": -6.49
     },
     "totals_all": {
-      "n_bets": 137,
-      "wins": 61,
-      "losses": 76,
+      "n_bets": 150,
+      "wins": 71,
+      "losses": 79,
       "pushes": 0,
-      "win_pct": 44.5,
-      "roi_pct": -15.0
+      "win_pct": 47.3,
+      "roi_pct": -9.64
     },
     "moneyline_all": {
-      "n_bets": 136,
-      "wins": 86,
-      "losses": 50,
+      "n_bets": 149,
+      "wins": 95,
+      "losses": 54,
       "pushes": 1,
-      "win_pct": 63.2,
-      "roi_pct": -1.61
+      "win_pct": 63.8,
+      "roi_pct": -1.62
     }
   },
   "track_a": {
-    "n_available": 2081,
-    "hit_rate": 0.2268140317155214,
-    "mean_predicted_prob": 0.22888342143200383,
-    "auc": 0.7006305895861205,
-    "log_loss": 0.49022546848437326,
-    "brier": 0.15879466814992793,
-    "n_priced_bets": 1326,
-    "roi_all_pct": 23.65,
-    "n_positive_edge_bets": 686,
-    "roi_positive_edge_pct": 44.92
+    "n_available": 2296,
+    "hit_rate": 0.2264808362369338,
+    "mean_predicted_prob": 0.22850770905923348,
+    "auc": 0.6978484494109494,
+    "log_loss": 0.4900715020984957,
+    "brier": 0.15848570117160277,
+    "n_priced_bets": 1528,
+    "roi_all_pct": 23.04,
+    "n_positive_edge_bets": 794,
+    "roi_positive_edge_pct": 44.63
   },
   "track_c": {
-    "n_available": 2502,
-    "mae": 3.957,
-    "rmse": 5.767,
-    "bias": -1.065,
+    "n_available": 2784,
+    "mae": 3.986,
+    "rmse": 5.845,
+    "bias": -1.097,
     "market_blended": {
-      "n": 1560,
-      "mae": 4.346
+      "n": 1752,
+      "mae": 4.379
     },
     "trailing_avg_fallback": {
-      "n": 942,
-      "mae": 3.312
+      "n": 1032,
+      "mae": 3.32
     }
   }
 }

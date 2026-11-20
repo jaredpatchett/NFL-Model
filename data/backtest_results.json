@@ -1,65 +1,65 @@
 {
-  "generated_at": "2026-11-19T21:04:23.527644+00:00",
+  "generated_at": "2026-11-20T20:50:29.471631+00:00",
   "note": "Track B and Track A and Track C have real logged-prediction-vs-outcome results below.",
   "track_b": {
-    "n_available": 150,
+    "n_available": 151,
     "ats_all": {
-      "n_bets": 147,
+      "n_bets": 148,
       "wins": 72,
-      "losses": 75,
+      "losses": 76,
       "pushes": 3,
-      "win_pct": 49.0,
-      "roi_pct": -6.49
+      "win_pct": 48.6,
+      "roi_pct": -7.13
     },
     "ats_edge_filtered": {
-      "n_bets": 147,
+      "n_bets": 148,
       "wins": 72,
-      "losses": 75,
+      "losses": 76,
       "pushes": 3,
-      "win_pct": 49.0,
-      "roi_pct": -6.49
+      "win_pct": 48.6,
+      "roi_pct": -7.13
     },
     "totals_all": {
-      "n_bets": 150,
+      "n_bets": 151,
       "wins": 71,
-      "losses": 79,
+      "losses": 80,
       "pushes": 0,
-      "win_pct": 47.3,
-      "roi_pct": -9.64
+      "win_pct": 47.0,
+      "roi_pct": -10.23
     },
     "moneyline_all": {
-      "n_bets": 149,
-      "wins": 95,
+      "n_bets": 150,
+      "wins": 96,
       "losses": 54,
       "pushes": 1,
-      "win_pct": 63.8,
-      "roi_pct": -1.62
+      "win_pct": 64.0,
+      "roi_pct": -1.52
     }
   },
   "track_a": {
-    "n_available": 2296,
-    "hit_rate": 0.2264808362369338,
-    "mean_predicted_prob": 0.22850770905923348,
-    "auc": 0.6978484494109494,
-    "log_loss": 0.4900715020984957,
-    "brier": 0.15848570117160277,
+    "n_available": 2317,
+    "hit_rate": 0.22572291756581786,
+    "mean_predicted_prob": 0.22820461804056968,
+    "auc": 0.6974960085775614,
+    "log_loss": 0.4892953457767625,
+    "brier": 0.15816110074665515,
     "n_priced_bets": 1528,
     "roi_all_pct": 23.04,
     "n_positive_edge_bets": 794,
     "roi_positive_edge_pct": 44.63
   },
   "track_c": {
-    "n_available": 2784,
-    "mae": 3.986,
-    "rmse": 5.845,
-    "bias": -1.097,
+    "n_available": 2806,
+    "mae": 3.983,
+    "rmse": 5.836,
+    "bias": -1.087,
     "market_blended": {
-      "n": 1752,
-      "mae": 4.379
+      "n": 1771,
+      "mae": 4.374
     },
     "trailing_avg_fallback": {
-      "n": 1032,
-      "mae": 3.32
+      "n": 1035,
+      "mae": 3.313
     }
   }
 }
